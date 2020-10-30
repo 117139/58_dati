@@ -2,13 +2,27 @@
   "pages": [
     "pages/index/index",
     "pages/my/my",
-    "pages/about/about"
+    "pages/about/about",
+    "pages/shenqin/shenqin",
+    "pages/fabu_category/fabu_category",
+    "pages/fabu_tiankong/fabu_tiankong",
+    "pages/fabu_duoxuan/fabu_duoxuan",
+    "pages/fabu_piliang/fabu_piliang",
+    "pages/fabu/fabu",
+    "pages/login/login",
+    "pages/fabu_huadong/fabu_huadong",
+    "pages/fabu_paixu/fabu_paixu",
+    "pages/fabu2/fabu2",
+    "pages/fabu3/fabu3",
+    "pages/my_fabu/my_fabu",
+    "pages/fabu_xq/fabu_xq",
+    "pages/dati/dati"
   ],
   "subPackages": [],
   "window": {
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "uni-app",
-    "navigationBarBackgroundColor": "#F8F8F8",
+    "navigationBarBackgroundColor": "#fff",
     "backgroundColor": "#F8F8F8"
   },
   "tabBar": {
@@ -33,5 +47,5 @@
   "usingComponents": {
     "cu-custom": "/colorui/components/cu-custom"
   },
-  "sitemapLocation": "sitemap60.json"
+  "sitemapLocation": "sitemap21.json"
 }

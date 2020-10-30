@@ -67,6 +67,7 @@
 	color: #959595;
 }
 .search_int.data-v-57280228{
+	min-width: 0;
 	background: rgba(0,0,0,0);
 	font-size: 26rpx;
 	-webkit-box-flex: 1;
@@ -74,7 +75,7 @@
 	        flex: 1;
 }
 .search_r.data-v-57280228{
-	width: 100rpx;
+	width: 130rpx;
 	height: 72rpx;
 	-webkit-box-flex: 0;
 	-webkit-flex: none;
@@ -89,7 +90,8 @@
 	-webkit-justify-content: space-between;
 	        justify-content: space-between;
 	color: #fff;
-	padding-left: 30rpx;
+	padding-left: 20rpx;
+	box-sizing: border-box;
 }
 .search_r text.data-v-57280228{
 	font-size: 15rpx;

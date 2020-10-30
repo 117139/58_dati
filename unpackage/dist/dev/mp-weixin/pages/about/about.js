@@ -167,6 +167,20 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 var _service = _interopRequireDefault(__webpack_require__(/*! ../../service.js */ 8));
 var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };} //
 //
@@ -204,15 +218,22 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
 //
 //
 //
-var _default = { data: function data() {return { title: '隐私协议', type: 0, datas: '' };}, onLoad: function onLoad(Option) {var that = this;console.log(Option);if (Option.type == 'yszc') {that.type = Option.type;that.title = '隐私协议';uni.setNavigationBarTitle({ title: '隐私协议' });}if (Option.type == 'about') {that.type = Option.type;that.title = '关于我们';uni.setNavigationBarTitle({ title: '关于我们' });}if (Option.type == 3) {that.type = Option.type;that.title = '用户协议';}if (Option.type == 4) {that.type = Option.type;
-      that.title = '自动续费服务规则';
-    }
-    // this.getdata()
-  },
-  methods: {
-    getdata: function getdata() {
-
-      ///api/info/list
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+var _default = { data: function data() {return { title: '隐私协议', type: 0, datas: '' };}, onLoad: function onLoad(Option) {var that = this;console.log(Option);if (Option.type == 'yszc') {that.type = Option.type;that.title = '隐私协议';uni.setNavigationBarTitle({ title: '隐私协议' });}if (Option.type == 'about') {that.type = Option.type;that.title = '关于我们';uni.setNavigationBarTitle({ title: '关于我们' });}if (Option.type == 'sm') {that.type = Option.type;that.title = '使用说明';uni.setNavigationBarTitle({ title: '使用说明' });}if (Option.type == 3) {that.type = Option.type;that.title = '用户协议';}if (Option.type == 4) {that.type = Option.type;that.title = '自动续费服务规则';} // this.getdata()
+  }, methods: { getdata: function getdata() {///api/info/list
       var that = this;
       var data = {
         keyword: 'Privacy_agreement' };

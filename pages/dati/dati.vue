@@ -19,10 +19,11 @@
 					</view>
 					<!-- 单选 -->
 					<view class="ans_list" v-if="item.type==1">
-						<view class="ans_li" v-for="(item,idx) in 4">
+						<view class="ans_li" v-for="(item1,idx1) in item.answer" @tap="danxuan(item1,$event)" :data-idx="idx1">
 							<view class="ans_tit dis_flex">
 								<view class="ans_xzicon">
-									<image src="../../static/images/danxuan.png"></image>
+									<image v-if="item1.jieguo==idx1" src="../../static/images/danxuan1.png"></image>
+									<image v-else src="../../static/images/danxuan.png"></image>
 								</view>
 								<view class="ans_xztext">风云，风云伙食费</view>
 							</view>
@@ -34,7 +35,7 @@
 					</view>
 					<!-- 多选 -->
 					<view class="ans_list" v-if="item.type==2">
-						<view class="ans_li" v-for="(item,idx) in 8">
+						<view class="ans_li" v-for="(item1,idx1) in item.answer">
 							<view class="ans_tit dis_flex">
 								<view class="ans_xzicon">
 									<image src="../../static/images/duoxuan.png"></image>
@@ -101,6 +102,7 @@
 </template>
 
 <script>
+	import Vue from 'vue'
 	import service from '../../service.js';
 	import {
 		mapState,
@@ -224,6 +226,10 @@
 			...mapMutations(['setnew_problem']),
 			sliderChange(e) {
 				console.log(e)
+			},
+			danxuan(item,index){
+				console.log(item)
+				Vue.set(item, 'jieguo', index); //为item添加不存在的属性，需要使用vue提供的Vue.set( object, key, value )方法
 			},
 			sub() {
 				uni.showModal({

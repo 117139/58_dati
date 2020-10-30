@@ -8034,10 +8034,9 @@ var gologin = function gologin() {
 };
 
 var jump = function jump(e) {
-  console.log(e.currentTarget.dataset.type);
+  // console.log(e.currentTarget.dataset.type)
   var datas = e.currentTarget.dataset;
   if (datas.login) {
-    console.log(datas.haslogin);
     if (!datas.haslogin) {
       uni.navigateTo({
         url: '../login/login' });
@@ -8055,6 +8054,10 @@ var jump = function jump(e) {
   }
   if (datas.type == 2) {
     uni.switchTab({
+      url: datas.url });
+
+  } else if (datas.type == 3) {
+    uni.redirectTo({
       url: datas.url });
 
   } else {
@@ -8476,8 +8479,13 @@ var store = new _vuex.default.Store({
     phone: '',
     token: '',
     laheiArr: [],
-    uuid: '' },
+    uuid: '',
 
+
+
+    new_xz: [], //批量操作
+    new_problem: '' //新问题
+  },
   mutations: {
     setuuid: function setuuid(state, uuid) {
       state.uuid = uuid || 'h5';
@@ -8510,6 +8518,16 @@ var store = new _vuex.default.Store({
     logout: function logout(state) {
       state.userName = "游客";
       state.hasLogin = false;
+    },
+
+    // ****************************************
+    //评论操作
+    setnew_xz: function setnew_xz(state, new_xz) {
+      state.new_xz = new_xz || [];
+    },
+    //新题
+    setnew_problem: function setnew_problem(state, new_problem) {
+      state.new_problem = new_problem || [];
     } } });var _default =
 
 
