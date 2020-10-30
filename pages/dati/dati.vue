@@ -97,7 +97,6 @@
 		<view class="sub_box">
 			<view class="sub_btn" @tap="sub">确认提交</view>
 		</view>
-		
 	</view>
 </template>
 
