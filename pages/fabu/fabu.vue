@@ -94,11 +94,11 @@
 				<view class="problem_cz">
 					<view><text class="iconfont icon-bianji"></text>编辑</view>
 					<text>|</text>
-					<view><text class="iconfont icon-shangyi"></text>上移</view>
+					<view @click="px_up(item,index)"><text class="iconfont icon-shangyi"></text>上移</view>
 					<text>|</text>
-					<view><text class="iconfont icon-xiayi"></text>下移</view>
+					<view @click="px_down(item,index)"><text class="iconfont icon-xiayi"></text>下移</view>
 					<text>|</text>
-					<view><text class="iconfont icon-del"></text>删除</view>
+					<view @click="pro_del(index)"><text class="iconfont icon-del"></text>删除</view>
 				</view>
 			</view>
 
@@ -228,6 +228,7 @@
 </template>
 
 <script>
+	import Vue from 'vue'
 	import service from '../../service.js';
 	import {
 		mapState,
@@ -352,7 +353,59 @@
 			sliderChange(e) {
 				console.log(e)
 			},
+			px_up(item,idx){
+				if(idx==0){
+					return
+				}
+				var that =this
+				// var newarr=item.answer
+				var temp = JSON.parse(JSON.stringify(item));
+				// newarr[idx] =newarr[idx-1];
+				// newarr[idx-1] = temp;
+				console.log('px_up')
+				var idx_1=idx*1-1
+				Vue.set(that.datas, idx, that.datas[idx-1])
+				Vue.set(that.datas, idx_1, temp)
+				
+			},
+			px_down(item,idx){
+				if(idx==this.datas.length-1){
+					return
+				}
+				var that =this
+				// var newarr=item.answer
+				var temp = JSON.parse(JSON.stringify(item));
+				// newarr[idx] =newarr[idx+1];
+				// newarr[idx+1] = temp;
+				
+				// console.log('datas')
+				// console.log(item)
+				// console.log(idx)
+				console.log('px_down')
+				var idx_1=idx*1+1
+				Vue.set(that.datas, idx, that.datas[idx+1])
+				Vue.set(that.datas, idx_1, temp)
+				
+			},
+			pro_del(idx){
+				uni.showModal({
+					title: '提示',
+					content:'是否确认删除此题？',
+					success: function(res) {
+						if (res.confirm) {
+							console.log('用户点击确定');
+							uni.showToast({
+								icon:'none',
+								title:'操作成功'
+							})
+						} else if (res.cancel) {
+							console.log('用户点击取消');
+						}
+					}
+				})
+			},
 			sub() {
+				console.log(this.datas)
 				uni.showModal({
 					title: '请仔细确认发布内容，发布后不可修改',
 					success: function(res) {

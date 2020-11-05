@@ -4,8 +4,8 @@ import event from 'common/event.js'
 // 管理账号信息
 const USERS_KEY = 'USERS_KEY';
 const STATE_KEY = 'STATE_KEY';
-const IPurl = 'http://www.fangmomo.net/';
-const imgurl = 'http://www.fangmomo.net/';
+const IPurl = 'http://192.168.133.103:81/api/';
+const imgurl = 'http://192.168.133.103:81/';
 
 /**
  * 请求头

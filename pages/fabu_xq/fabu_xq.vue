@@ -12,7 +12,7 @@
 			</view>
 		</view>
 		<view class="down_btns">
-			<view>下载统计</view>
+			<view @tap="down_fuc">下载统计</view>
 		</view>
 		<view class="down_tip">注：详细内容下载统计后查看</view>
 		<view class="hx10" style="margin-top: 50upx;"></view>
@@ -240,6 +240,24 @@
 			...mapMutations(['setnew_problem']),
 			sliderChange(e) {
 				console.log(e)
+			},
+			down_fuc(){
+				return
+				uni.downloadFile({
+				    url: 'http://http://192.168.133.103:81/', //仅为示例，并非真实的资源
+				    success: (res) => {
+				        if (res.statusCode === 200) {
+				            console.log('下载成功');
+										 uni.saveFile({
+										      tempFilePath: res.tempFilePath,
+										      success: function (res) {
+														console.log(res)
+										        var savedFilePath = res.savedFilePath;
+										      }
+										    });
+				        }
+				    }
+				});
 			},
 			sub() {
 				uni.showModal({

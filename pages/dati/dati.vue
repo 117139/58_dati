@@ -19,10 +19,10 @@
 					</view>
 					<!-- 单选 -->
 					<view class="ans_list" v-if="item.type==1">
-						<view class="ans_li" v-for="(item1,idx1) in item.answer" @tap="danxuan(item1,$event)" :data-idx="idx1">
+						<view class="ans_li" v-for="(item1,idx1) in item.answer" @tap="danxuan(item,$event)" :data-idx="idx1">
 							<view class="ans_tit dis_flex">
 								<view class="ans_xzicon">
-									<image v-if="item1.jieguo==idx1" src="../../static/images/danxuan1.png"></image>
+									<image v-if="item.jieguo==idx1" src="../../static/images/danxuan1.png"></image>
 									<image v-else src="../../static/images/danxuan.png"></image>
 								</view>
 								<view class="ans_xztext">风云，风云伙食费</view>
@@ -35,10 +35,11 @@
 					</view>
 					<!-- 多选 -->
 					<view class="ans_list" v-if="item.type==2">
-						<view class="ans_li" v-for="(item1,idx1) in item.answer">
+						<view class="ans_li" v-for="(item1,idx1) in item.answer"  @tap="duoxuan(item,$event)" :data-idx="idx1">
 							<view class="ans_tit dis_flex">
 								<view class="ans_xzicon">
-									<image src="../../static/images/duoxuan.png"></image>
+									<image v-if="getduoxuan(item,idx1)" :data-index="index" :data-idx="idx1" src="../../static/images/duoxuan1.png"></image>
+									<image v-else src="../../static/images/duoxuan.png"></image>
 								</view>
 								<view class="ans_xztext">风云，风云伙食费</view>
 							</view>
@@ -46,20 +47,20 @@
 					</view>
 					<!-- 填空 -->
 					<view class="ans_list" v-if="item.type==3">
-						<textarea></textarea>
+						<textarea v-model="item.jieguo"></textarea>
 					</view>
 					<!-- 排序 -->
 					<view class="ans_list" v-if="item.type==4">
-						<view class="ans_li" v-for="(item,idx) in 8">
+						<view class="ans_li" v-for="(item1,idx1) in item.answer">
 							<view class="ans_tit dis_flex">
 
 								<view class="ans_xztext">
-									檀中穴檀中穴檀中穴檀中穴檀中穴檀中穴檀中穴檀中穴
+									{{item1.title}}
 								</view>
-								<view class="ans_xzicon">
+								<view v-if="idx1!=0" class="ans_xzicon" @click="px_up(item,idx1)">
 									<text class="iconfont icon-shangyi"></text>
 								</view>
-								<view class="ans_xzicon">
+								<view  v-if="idx1!=item.answer.length-1" class="ans_xzicon" @click="px_down(item,idx1)">
 									<text class="iconfont icon-xiayi"></text>
 								</view>
 							</view>
@@ -77,7 +78,7 @@
 								<view>好（0）</view>
 								<view>不好（100）</view>
 							</view>
-							<slider value="50" min='0' max="100" @change="sliderChange" activeColor="linear-gradient(-89deg, #65AEE1, #326CFA)"
+							<slider value="50" min='0' max="100" @change="sliderChange" :data-idx="index" activeColor="linear-gradient(-89deg, #65AEE1, #326CFA)"
 							 backgroundColor="#ECEBF1" block-color="#8A6DE9" block-size="10" step="10" />
 							<view class="step_d">
 								<view class="step_d_li"><text>0</text></view>
@@ -182,19 +183,23 @@
 						},
 						type: 4,
 						answer: [{
-								title: '风云风云风云风云',
+								title: '1风云风云风云风云',
+								id:'1',
 								img: []
 							},
 							{
-								title: '风云风云风云风云',
+								title: '2风云风云风云风云',
+								id:'2',
 								img: []
 							},
 							{
-								title: '风云风云风云风云',
+								title: '3风云风云风云风云',
+								id:'3',
 								img: []
 							},
 							{
-								title: '风云风云风云风云',
+								title: '4风云风云风云风云',
+								id:'4',
 								img: []
 							},
 						]
@@ -221,15 +226,94 @@
 		},
 		computed: {
 			...mapState(['new_problem']),
+			
 		},
 		methods: {
 			...mapMutations(['setnew_problem']),
 			sliderChange(e) {
-				console.log(e)
+				var that =this
+				console.log(e.detail.value)
+				var idxs=e.currentTarget.dataset.idx
+				Vue.set(that.datas[idxs], 'jieguo', e.detail.value)
+				console.log(that.datas)
 			},
+			//单选
 			danxuan(item,index){
-				console.log(item)
-				Vue.set(item, 'jieguo', index); //为item添加不存在的属性，需要使用vue提供的Vue.set( object, key, value )方法
+				Vue.set(item, 'jieguo', index.currentTarget.dataset.idx); //为item添加不存在的属性，需要使用vue提供的Vue.set( object, key, value )方法
+				console.log(this.datas)
+				
+			},
+			//多选
+			duoxuan(item,index){
+				var jgarr=item.jieguo||[]
+				var datas=index.currentTarget.dataset
+				var isdx=jgarr.indexOf(datas.idx);
+				// console.log(isdx)
+				if(isdx!=-1){
+					jgarr=jgarr.splice(isdx,1)
+				}else{
+					jgarr.push(datas.idx)
+				}
+				Vue.set(item, 'jieguo', jgarr); //为item添加不存在的属性，需要使用vue提供的Vue.set( object, key, value )方法
+				// console.log(this.datas)
+			},
+			getduoxuan(item,idx1){
+				// var datas=e.currentTarget.dataset
+				// console.log('e')
+				// console.log(item)
+				// console.log('datas',datas)
+				if(!item.jieguo){
+					return false
+				}else{
+					var jgarr=item.jieguo
+					// console.log(jgarr)
+					// console.log(idx1)
+					var idx1=idx1+''
+					// var idx=datas.currentTarget.dataset.idx
+					var isdx=jgarr.indexOf(idx1);
+					// console.log(isdx)
+					if(isdx!=-1){
+						return true
+					}else{
+						return false
+					}
+					
+				}
+			},
+			px_up(item,idx){
+				var newarr=item.answer
+				var temp = JSON.parse(JSON.stringify(newarr[idx]));
+				// newarr[idx] =newarr[idx-1];
+				// newarr[idx-1] = temp;
+				console.log('px_up')
+				var idx_1=idx*1-1
+				Vue.set(item.answer, idx, newarr[idx-1])
+				Vue.set(item.answer, idx_1, temp)
+				var jieguo=[]
+				for(var i=0;i<item.answer.length;i++){
+					jieguo.push(item.answer[i].id)
+				}
+				Vue.set(item, 'jieguo', jieguo)
+			},
+			px_down(item,idx){
+				var newarr=item.answer
+				var temp = JSON.parse(JSON.stringify(newarr[idx]));
+				// newarr[idx] =newarr[idx+1];
+				// newarr[idx+1] = temp;
+				
+				// console.log('datas')
+				// console.log(item)
+				// console.log(idx)
+				console.log('px_down')
+				var idx_1=idx*1+1
+				Vue.set(item.answer, idx, newarr[idx+1])
+				Vue.set(item.answer, idx_1, temp)
+				var jieguo=[]
+				for(var i=0;i<item.answer.length;i++){
+					jieguo.push(item.answer[i].id)
+				}
+				Vue.set(item, 'jieguo', jieguo)
+				 console.log(item)
 			},
 			sub() {
 				uni.showModal({

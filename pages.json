@@ -120,7 +120,9 @@
 			}
 
 		}
-	],
+	    
+       
+    ],
 	"tabBar": {
 		"color": "#C4C9D5",
 		"selectedColor": "#5373FF",
