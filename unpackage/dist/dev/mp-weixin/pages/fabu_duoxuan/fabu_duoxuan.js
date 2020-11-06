@@ -212,7 +212,16 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
 //
 //
 var that;var _default = { data: function data() {return { id: '', problem: { "title": "", "img": [] }, "type": "1", //问题类别1：单选题  2：多选题  3：填空题  4：排序题  5：滑动题
-      "answer": [] };}, onLoad: function onLoad(option) {that = this;if (option.type) {this.type = option.type;} else {this.type = 1;}if (this.type == 1) {uni.setNavigationBarTitle({ title: '单选题' });}if (this.type == 2) {uni.setNavigationBarTitle({ title: '多选题' });}if (this.type == 4) {uni.setNavigationBarTitle({ title: '排序题' });}},
+      "answer": [], idx: -1, btnkg: 0 };}, onLoad: function onLoad(option) {that = this;if (option.type) {this.type = option.type;} else {this.type = 1;}if (this.type == 1) {uni.setNavigationBarTitle({ title: '单选题' });}if (this.type == 2) {uni.setNavigationBarTitle({ title: '多选题' });}if (this.type == 4) {uni.setNavigationBarTitle({ title: '排序题' });}console.log(this.bj_prodata);
+    if (this.bj_prodata.datas) {
+      this.problem = this.bj_prodata.datas.problem;
+      this.answer = this.bj_prodata.datas.answer;
+      this.type = this.bj_prodata.datas.type;
+      this.idx = this.bj_prodata.idx;
+    }
+  },
+
+
   onShow: function onShow() {
     console.log(this.new_xz);
     if (this.new_xz.length > 0) {
@@ -224,10 +233,10 @@ var that;var _default = { data: function data() {return { id: '', problem: { "ti
 
   },
   computed: _objectSpread({},
-  (0, _vuex.mapState)(['new_xz'])),
+  (0, _vuex.mapState)(['new_xz', 'bj_prodata'])),
 
   methods: _objectSpread(_objectSpread({},
-  (0, _vuex.mapMutations)(['setnew_problem', 'setnew_xz'])), {}, {
+  (0, _vuex.mapMutations)(['setnew_problem', 'setnew_xz', 'edit_problem'])), {}, {
     del_ans: function del_ans(e) {
       var that = this;
       console.log(e.currentTarget.dataset.idx);
@@ -298,13 +307,32 @@ var that;var _default = { data: function data() {return { id: '', problem: { "ti
         /*}*/
 
       }
-      var datas = {
-        problem: this.problem,
-        "type": this.type, //问题类别1：单选题  2：多选题  3：填空题  4：排序题  5：滑动题
-        "answer": this.answer };
+      if (that.btnkg == 1) {
 
-      console.log(datas);
-      this.setnew_problem(datas);
+        return;
+      }
+      that.btnkg = 1;
+      if (this.idx == -1) {
+
+        var datas = {
+          problem: this.problem,
+          "type": this.type, //问题类别1：单选题  2：多选题  3：填空题  4：排序题  5：滑动题
+          "answer": this.answer };
+
+        console.log(datas);
+        this.setnew_problem(datas);
+      } else {
+        var datas = {
+          problem: this.problem,
+          "type": this.type, //问题类别1：单选题  2：多选题  3：填空题  4：排序题  5：滑动题
+          "answer": this.answer };
+
+        var edit_data = {
+          idx: that.idx,
+          datas: datas };
+
+        this.edit_problem(edit_data);
+      }
       setTimeout(function () {
         uni.navigateBack({
           delta: 1 });

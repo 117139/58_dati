@@ -4,6 +4,9 @@
 			"path": "pages/index/index",
 			"style": {
 				"navigationBarTextStyle": "black",
+				"app-plus": {
+					"bounce": "false" // 取消APP端iOS回弹,避免与下拉刷新冲突 (可统一配在 'globalStyle')
+				},
 				"navigationStyle": "custom"
 			}
 		},
@@ -116,6 +119,13 @@
 			"path": "pages/dati/dati",
 			"style": {
 				"navigationBarTitleText": "详情",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/login_tel/login_tel",
+			"style": {
+				"navigationBarTitleText": "绑定手机",
 				"enablePullDownRefresh": false
 			}
 

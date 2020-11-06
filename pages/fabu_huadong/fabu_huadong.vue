@@ -65,7 +65,9 @@
 					"max_num": "100",
 					"max_text": "非常好",
 					"step_size": "1"
-				}
+				},
+				idx:-1,
+				btnkg:0
 			}
 		},
 		onLoad(option) {
@@ -75,14 +77,20 @@
 			}else{
 				this.type=5
 			}
-			
+			console.log(this.bj_prodata)
+			if(this.bj_prodata.datas){
+				this.problem=this.bj_prodata.datas.problem
+				this.answer=this.bj_prodata.datas.answer
+				this.type=this.bj_prodata.datas.type
+				this.idx=this.bj_prodata.idx
+			}
 		},
 		onShow(){},
 		computed: {
-			...mapState(['new_xz']),
+			...mapState(['new_xz','bj_prodata']),
 		},
 		methods: {
-			...mapMutations(['setnew_problem','setnew_xz']),
+			...mapMutations(['setnew_problem','setnew_xz','edit_problem']),
 			
 			sub(){
 				var that =this
@@ -128,22 +136,44 @@
 					})
 					return
 				}
+				
 				var step_l=that.answer.max_num-that.answer.min_num
 				var step_size=that.answer.step_size
-				if( step_size<1 || step_l%step_size!=0){
+				if( step_size<0 ||step_size==0 || step_l%step_size!=0){
 					uni.showToast({
 						icon:'none',
 						title:'步长，取值必须大于 0，并且可被(最大值 - 最小值)整除'
 					})
+					return
 				}
-				var datas={
-					problem: this.problem,
-					"type": this.type, //问题类别1：单选题  2：多选题  3：填空题  4：排序题  5：滑动题
-					"answer": this.answer
+				if(that.btnkg==1){
+					
+					return
 				}
-				console.log(datas)
-				this.setnew_problem(datas)
-				return
+				that.btnkg=1
+				if(this.idx==-1){
+					
+					var datas={
+						problem: this.problem,
+						"type": this.type, //问题类别1：单选题  2：多选题  3：填空题  4：排序题  5：滑动题
+						"answer": this.answer
+					}
+					console.log(datas)
+					this.setnew_problem(datas)
+				}else{
+					var datas={
+						problem: this.problem,
+						"type": this.type, //问题类别1：单选题  2：多选题  3：填空题  4：排序题  5：滑动题
+						"answer": this.answer
+					}
+					var edit_data={
+						idx:that.idx,
+						datas:datas,
+					}
+					this.edit_problem(edit_data)
+				}
+				
+				// return
 				setTimeout(()=>{
 					uni.navigateBack({
 						delta:1

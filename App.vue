@@ -49,7 +49,7 @@
 					// #endif
 				}
 			})
-			
+			service.wxlogin()
 		},
 		onShow: function() {
 			console.log('App Show')
@@ -66,7 +66,7 @@
 				var that=this
 					if(that.hasLogin){
 						setTimeout(function (){
-								that.dandian()
+								// that.dandian()
 						},5000)
 					}
 				
@@ -146,5 +146,12 @@
 	    display: -webkit-box;
 	    -webkit-line-clamp: 4;
 	    -webkit-box-orient: vertical;
+	}
+	.data_last{
+		line-height: 100rpx;
+		text-align: center;
+		width: 100%;
+		font-size: 24rpx;
+		color: #666;
 	}
 </style>

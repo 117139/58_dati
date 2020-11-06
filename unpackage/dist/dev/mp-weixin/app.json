@@ -1,6 +1,7 @@
 {
   "pages": [
     "pages/index/index",
+    "pages/fabu3/fabu3",
     "pages/my/my",
     "pages/about/about",
     "pages/shenqin/shenqin",
@@ -13,10 +14,10 @@
     "pages/fabu_huadong/fabu_huadong",
     "pages/fabu_paixu/fabu_paixu",
     "pages/fabu2/fabu2",
-    "pages/fabu3/fabu3",
     "pages/my_fabu/my_fabu",
     "pages/fabu_xq/fabu_xq",
-    "pages/dati/dati"
+    "pages/dati/dati",
+    "pages/login_tel/login_tel"
   ],
   "subPackages": [],
   "window": {
@@ -46,6 +47,5 @@
   },
   "usingComponents": {
     "cu-custom": "/colorui/components/cu-custom"
-  },
-  "sitemapLocation": "sitemap21.json"
+  }
 }

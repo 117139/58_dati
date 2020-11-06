@@ -4,9 +4,11 @@ import event from 'common/event.js'
 // 管理账号信息
 const USERS_KEY = 'USERS_KEY';
 const STATE_KEY = 'STATE_KEY';
-const IPurl = 'http://192.168.133.103:81/api/';
-const imgurl = 'http://192.168.133.103:81/';
+const IPurl = 'https://datixcx.com.aa.800123456.top/api/';
+const imgurl = 'https://datixcx.com.aa.800123456.top/';
 
+// appid:wx4c41cc50c5a53df9
+// appid:wx49a560f7feac0feb   cj
 /**
  * 请求头
  */
@@ -234,13 +236,14 @@ const wxlogin=function (num){
 	                      console.log('登录成功')
 	                      console.log(res.data)
 												//获取手机号
-												// if(!res.data.phone){
-												// 	uni.navigateTo({
-												// 		url:'/pages/getTel/getTel'
-												// 	})
-												// 	return
-												// }
-												store.commit('login', res.data.data)
+												if(!res.data.data.phone){
+													uni.redirectTo({
+														url:'/pages/login_tel/login_tel'
+													})
+													return
+												}
+												store.commit('logindata', res.data.data)
+												store.commit('login', res.data.data.nickname)
 	                      uni.setStorageSync('token', res.data.data.userToken)
 	                      uni.setStorageSync('loginmsg', res.data.data)
 												

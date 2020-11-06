@@ -167,6 +167,18 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 var _service = _interopRequireDefault(__webpack_require__(/*! ../../service.js */ 8));
 var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function ownKeys(object, enumerableOnly) {var keys = Object.keys(object);if (Object.getOwnPropertySymbols) {var symbols = Object.getOwnPropertySymbols(object);if (enumerableOnly) symbols = symbols.filter(function (sym) {return Object.getOwnPropertyDescriptor(object, sym).enumerable;});keys.push.apply(keys, symbols);}return keys;}function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};if (i % 2) {ownKeys(Object(source), true).forEach(function (key) {_defineProperty(target, key, source[key]);});} else if (Object.getOwnPropertyDescriptors) {Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));} else {ownKeys(Object(source)).forEach(function (key) {Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));});}}return target;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}var _default =
 
@@ -189,24 +201,37 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
       autoplay: true,
       interval: 3000,
       duration: 500,
-      PageScroll: '' };
+      PageScroll: '',
+      page: 1,
+      size: 15,
+      search_key: '',
+      sort: 1,
+      triggered: true, //设置当前下拉刷新状态
+      data_last: false };
 
   },
   onLoad: function onLoad() {
     var yhxy = uni.getStorageSync('yhxy');
-    if (!yhxy) {
-      this.yhxy = true;
-    }
-
-
+    // if (!yhxy) {
+    // 	this.yhxy = true
+    // }
+    this._freshing = false;
+    // setTimeout(() => {
+    // 	this.triggered = true;
+    // }, 1000)
+    // this.onRetry()
+    this.getdata(1);
   },
   onPageScroll: function onPageScroll(e) {
     console.log(e);
     this.PageScroll = e.scrollTop;
 
   },
+  onShareAppMessage: function onShareAppMessage() {
+
+  },
   computed: _objectSpread(_objectSpread({},
-  (0, _vuex.mapState)(['hasLogin', 'forcedLogin', 'userName'])), {}, {
+  (0, _vuex.mapState)(['hasLogin', 'forcedLogin', 'userName', 'loginDatas'])), {}, {
     style0: function style0() {
       var StatusBar = this.StatusBar;
       var CustomBar = this.CustomBar;
@@ -232,20 +257,51 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
     style2: function style2() {
       var StatusBar = this.StatusBar;
       var CustomBar = this.CustomBar;
-      var style = "padding-top:".concat(CustomBar, "px;");
+      var style = "top:".concat(CustomBar + StatusBar + 50, "px;");
 
       return style;
     } }),
 
   onPullDownRefresh: function onPullDownRefresh() {
     console.log('下拉');
-    this.getdata();
+    this.onRetry();
   },
   onReachBottom: function onReachBottom() {
     console.log('上拉');
   },
   methods: _objectSpread(_objectSpread({},
-  (0, _vuex.mapMutations)(['login', 'logindata', 'logout', 'setplatform'])), {}, {
+  (0, _vuex.mapMutations)(['login', 'logindata', 'logout', 'setplatform', 'setfj_data'])), {}, {
+    onPulling: function onPulling(e) {
+      console.log("onpulling", e);
+    },
+    onRefresh: function onRefresh() {
+      if (this._freshing) return;
+      this._freshing = true;
+      this.onRetry();
+      // setTimeout(()=>{
+      // 	this.triggered=false
+      // 	this._freshing =false
+      // },1000)
+    },
+    onRestore: function onRestore() {
+      this.triggered = 'restore'; // 需要重置
+      console.log("onRestore");
+    },
+    onAbort: function onAbort() {
+      console.log("onAbort");
+    },
+    paixu: function paixu() {
+      if (this.sort == 1) {
+        this.sort = 2;
+      } else if (this.sort == 2) {
+        this.sort = 1;
+      }
+      this.onRetry();
+    },
+    onRetry: function onRetry() {
+      this.page = 1;
+      this.getdata();
+    },
     xy_on: function xy_on() {
       this.yhxy = false;
       uni.setStorageSync('yhxy', 'true');
@@ -261,11 +317,15 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
       ///api/info/list
       var that = this;
       var data = {
-        keyword: 'Privacy_agreement' };
+        token: that.loginDatas.userToken,
+        page: that.page,
+        size: that.size,
+        title: that.search_key,
+        sort: that.sort };
 
 
       //selectSaraylDetailByUserCard
-      var jkurl = '/api/info/list';
+      var jkurl = '/';
       uni.showLoading({
         title: '正在获取数据' });
 
@@ -279,8 +339,8 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
           if (typeof datas == 'string') {
             datas = JSON.parse(datas);
           }
-          // console.log(datas)
-          that.datas_xy = datas;
+          console.log(datas);
+          that.datas = datas;
 
 
         } else {
@@ -317,19 +377,32 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
     getimg: function getimg(img) {
       return _service.default.getimg(img);
     },
-    getdata: function getdata() {
-      ///api/info/list
+    getdata: function getdata(num) {
       var that = this;
+      if (that.data_last) {
+        return;
+      }
       var data = {
-        keyword: 'banner,' };
+        token: that.loginDatas.userToken || '',
+        page: that.page,
+        size: that.size,
+        title: that.search_key,
+        sort: that.sort };
+
 
       //selectSaraylDetailByUserCard
-      var jkurl = '/api/info/list';
+      var jkurl = '/';
       uni.showLoading({
         title: '正在获取数据' });
 
       _service.default.get(jkurl, data,
       function (res) {
+        console.log('获取到数据');
+        console.log(res.data);
+        if (!num) {
+          that.triggered = false;
+          that._freshing = false;
+        }
 
         if (res.data.code == 1) {
           var datas = res.data.data;
@@ -339,8 +412,20 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
             datas = JSON.parse(datas);
           }
           console.log(datas);
-          that.datas = datas;
+          if (res.data.fj_data) {
+            that.setfj_data(res.data.fj_data);
+          }
+          if (that.page == 1) {
 
+            that.datas = datas;
+          } else {
+            if (datas.length == 0) {
+              that.data_last = true;
+              return;
+            }
+            that.datas = that.datas.concat(datas);
+          }
+          that.page++;
 
         } else {
           if (res.data.msg) {
@@ -357,7 +442,10 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
         }
       },
       function (err) {
-
+        if (!num) {
+          that.triggered = false;
+          that._freshing = false;
+        }
         if (err.data.msg) {
           uni.showToast({
             icon: 'none',

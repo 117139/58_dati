@@ -23,9 +23,29 @@ const store = new Vuex.Store({
 		
 		
 		new_xz:[],    //批量操作
-		new_problem:'' //新问题
+		new_problem:'' ,//新问题
+		ls_prodata:'',
+		ls_pro_yh:'',
+		fj_data:'',
+		bj_prodata:''
 	},
 	mutations: {
+		edit_problem(state, bj_prodata){//编辑问题
+			state.bj_prodata = bj_prodata || '';
+		},
+		setls_prodata(state, ls_prodata) {  //设置问题临时数据
+			state.ls_prodata = ls_prodata || '';
+		},
+		setls_pro_yh(state, ls_pro_yh) {  //设置问题调研用户临时数据
+			state.ls_pro_yh = ls_pro_yh || '';
+		},
+		clearls_pro(state, ls_pro_yh){//清除数据
+			state.ls_prodata =''
+			state.ls_pro_yh = ''
+		},
+		setfj_data(state, fj_data) {
+			state.fj_data = fj_data || '';
+		},
 		setuuid(state, uuid) {
 			state.uuid = uuid || 'h5';
 		},

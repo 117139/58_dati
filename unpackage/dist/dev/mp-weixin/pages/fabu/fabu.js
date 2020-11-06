@@ -360,6 +360,17 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
+
+
+
+
+
+
+
+
+var _vue = _interopRequireDefault(__webpack_require__(/*! vue */ 2));
 var _service = _interopRequireDefault(__webpack_require__(/*! ../../service.js */ 8));
 var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function ownKeys(object, enumerableOnly) {var keys = Object.keys(object);if (Object.getOwnPropertySymbols) {var symbols = Object.getOwnPropertySymbols(object);if (enumerableOnly) symbols = symbols.filter(function (sym) {return Object.getOwnPropertyDescriptor(object, sym).enumerable;});keys.push.apply(keys, symbols);}return keys;}function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};if (i % 2) {ownKeys(Object(source), true).forEach(function (key) {_defineProperty(target, key, source[key]);});} else if (Object.getOwnPropertyDescriptors) {Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));} else {ownKeys(Object(source)).forEach(function (key) {Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));});}}return target;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}var _default =
 
@@ -368,7 +379,11 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
 {
   data: function data() {
     return {
-      datas: [{
+      dy_title: '',
+      dy_explain: '',
+      dy_addition_explain: '',
+      datas: [],
+      datas_ceshi: [{
         problem: {
           title: '在紧急情况下为伤员止血时，须先用压迫法止血后再根据出血情况改用其他止血法。',
           img: [] },
@@ -473,25 +488,169 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
 
 
   },
+  onUnload: function onUnload() {
+    this.setnew_problem('');
+    this.edit_problem('');
+    this.clearls_pro('');
+  },
   onShow: function onShow() {
+    var that = this;
     console.log(this.new_problem);
+    if (this.new_problem.problem) {
+      this.datas.push(this.new_problem);
+      this.setnew_problem('');
+    }
+
+    if (that.bj_prodata && that.bj_prodata.datas) {
+      var newdata = JSON.parse(JSON.stringify(this.bj_prodata.datas));
+      console.log('newdata');
+      console.log(this.bj_prodata);
+      console.log(newdata);
+      var edit_idx = this.bj_prodata.idx;
+      _vue.default.set(that.datas, edit_idx, newdata);
+      // that.datas[edit_idx]=newdata
+      console.log(that.datas);
+      this.edit_problem('');
+    }
   },
   computed: _objectSpread({},
-  (0, _vuex.mapState)(['new_problem'])),
+  (0, _vuex.mapState)(['new_problem', 'bj_prodata'])),
 
   methods: _objectSpread(_objectSpread({},
-  (0, _vuex.mapMutations)(['setnew_problem'])), {}, {
+  (0, _vuex.mapMutations)(['setnew_problem', 'edit_problem', 'setls_prodata'])), {}, {
+    pveimg: function pveimg(e) {
+      _service.default.pveimg(e);
+    },
     sliderChange: function sliderChange(e) {
       console.log(e);
     },
+    px_up: function px_up(item, idx) {
+      if (idx == 0) {
+        return;
+      }
+      var that = this;
+      // var newarr=item.answer
+      var temp = JSON.parse(JSON.stringify(item));
+      // newarr[idx] =newarr[idx-1];
+      // newarr[idx-1] = temp;
+      console.log('px_up');
+      var idx_1 = idx * 1 - 1;
+      _vue.default.set(that.datas, idx, that.datas[idx - 1]);
+      _vue.default.set(that.datas, idx_1, temp);
+
+    },
+    px_down: function px_down(item, idx) {
+      if (idx == this.datas.length - 1) {
+        return;
+      }
+      var that = this;
+      // var newarr=item.answer
+      var temp = JSON.parse(JSON.stringify(item));
+      // newarr[idx] =newarr[idx+1];
+      // newarr[idx+1] = temp;
+
+      // console.log('datas')
+      // console.log(item)
+      // console.log(idx)
+      console.log('px_down');
+      var idx_1 = idx * 1 + 1;
+      _vue.default.set(that.datas, idx, that.datas[idx + 1]);
+      _vue.default.set(that.datas, idx_1, temp);
+
+    },
+    pro_edit: function pro_edit(item, idx) {
+      var that = this;
+      console.log(item.type);
+      var edit_data = {
+        idx: idx,
+        datas: item };
+
+      that.edit_problem(edit_data);
+      if (item.type == 3) {
+        uni.navigateTo({
+          url: '/pages/fabu_tiankong/fabu_tiankong?type=3' });
+
+      } else if (item.type == 5) {
+        uni.navigateTo({
+          url: '/pages/fabu_huadong/fabu_huadong?type=5' });
+
+      } else {
+        uni.navigateTo({
+          url: '/pages/fabu_duoxuan/fabu_duoxuan?type=' + item.type });
+
+      }
+    },
+    pro_del: function pro_del(idx) {
+      var that = this;
+      uni.showModal({
+        title: '提示',
+        content: '是否确认删除此题？',
+        success: function success(res) {
+          if (res.confirm) {
+            console.log('用户点击确定');
+            uni.showToast({
+              icon: 'none',
+              title: '操作成功' });
+
+            that.datas.splice(idx, 1);
+          } else if (res.cancel) {
+            console.log('用户点击取消');
+          }
+        } });
+
+    },
     sub: function sub() {
+      var that = this;
+      console.log(this.datas);
+      if (!that.dy_title) {
+        uni.showToast({
+          icon: 'none',
+          title: '请输入调研标题' });
+
+        return;
+      }
+      if (!that.dy_explain) {
+        uni.showToast({
+          icon: 'none',
+          title: '请输入调研说明' });
+
+        return;
+      }
+      if (!that.dy_addition_explain) {
+        uni.showToast({
+          icon: 'none',
+          title: '请输入调研附加说明' });
+
+        return;
+      }
+      if (that.datas.length == 0) {
+        uni.showToast({
+          icon: 'none',
+          title: '请添加问题' });
+
+        return;
+      }
+      var ls_data = {
+        dy_title: that.dy_title,
+        dy_explain: that.dy_explain,
+        dy_addition_explain: that.dy_addition_explain,
+        datas: that.datas };
+
+      this.setls_prodata(ls_data);
       uni.showModal({
         title: '请仔细确认发布内容，发布后不可修改',
         success: function success(res) {
           if (res.confirm) {
             console.log('用户点击确定');
+
             uni.navigateTo({
               url: '../fabu2/fabu2' });
+
+
+
+
+
+
 
           } else if (res.cancel) {
             console.log('用户点击取消');

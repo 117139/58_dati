@@ -157,16 +157,26 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
 //
 //
 //
-var that;var _default = { data: function data() {return { problem: '', type: '' };}, onLoad: function onLoad(option) {that = this;
+var that;var _default = { data: function data() {return { problem: '', type: '', idx: -1, btnkg: 0 };},
+  onLoad: function onLoad(option) {
+    that = this;
     if (option.type) {
       this.type = option.type;
     } else {
       this.type = 1;
     }
-
+    console.log(this.bj_prodata);
+    if (this.bj_prodata.datas) {
+      this.problem = this.bj_prodata.datas.problem.title;
+      this.type = this.bj_prodata.datas.type;
+      this.idx = this.bj_prodata.idx;
+    }
   },
+  computed: _objectSpread({},
+  (0, _vuex.mapState)(['bj_prodata'])),
+
   methods: _objectSpread(_objectSpread({},
-  (0, _vuex.mapMutations)(['setnew_problem', 'setnew_xz'])), {}, {
+  (0, _vuex.mapMutations)(['setnew_problem', 'setnew_xz', 'edit_problem'])), {}, {
     sub: function sub() {
       if (!this.problem) {
         uni.showToast({
@@ -175,11 +185,33 @@ var that;var _default = { data: function data() {return { problem: '', type: '' 
 
         return;
       }
-      var datas = {
-        problem: this.problem,
-        "type": this.type //问题类别1：单选题  2：多选题  3：填空题  4：排序题  5：滑动题
-      };
-      this.setnew_problem(datas);
+      if (that.btnkg == 1) {
+
+        return;
+      }
+      that.btnkg = 1;
+      if (this.idx == -1) {
+        var datas = {
+          problem: {
+            title: this.problem },
+
+          "type": this.type //问题类别1：单选题  2：多选题  3：填空题  4：排序题  5：滑动题
+        };
+        this.setnew_problem(datas);
+      } else {
+        var datas = {
+          problem: {
+            title: this.problem },
+
+          "type": this.type //问题类别1：单选题  2：多选题  3：填空题  4：排序题  5：滑动题
+        };
+        var edit_data = {
+          idx: that.idx,
+          datas: datas };
+
+        this.edit_problem(edit_data);
+      }
+
       uni.navigateBack({
         delta: 1 });
 

@@ -6,6 +6,7 @@ page.data-v-757ec752 {
 .dy_times.data-v-757ec752 {
 	width: 100%;
 	padding: 0 30rpx;
+	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
 	border-bottom: 6rpx solid #f7f7f7;
 	background: #fff;
@@ -39,6 +40,7 @@ page.data-v-757ec752 {
 	font-size: 28rpx;
 	color: #999;
 	padding: 35rpx 0;
+	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
 	border-bottom: 3rpx solid rgba(0, 0, 0, 0);
 	cursor: pointer;
@@ -50,6 +52,7 @@ page.data-v-757ec752 {
 .times_boxs.data-v-757ec752 {
 	width: 100%;
 	padding: 30rpx;
+	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
 	margin-bottom: 5rpx;
 	background: #fff;
@@ -74,10 +77,13 @@ page.data-v-757ec752 {
 .btns view.data-v-757ec752 {
 	width: 303rpx;
 	height: 83rpx;
+	background: -webkit-gradient(linear, left top, right top, from(rgba(61, 127, 255, 0.91)), to(rgba(60, 142, 255, 0.91)));
 	background: -webkit-linear-gradient(left, rgba(61, 127, 255, 0.91), rgba(60, 142, 255, 0.91));
 	background: linear-gradient(90deg, rgba(61, 127, 255, 0.91), rgba(60, 142, 255, 0.91));
-	box-shadow: 0px 0px 10rpx 0px rgba(0, 0, 0, 0.18);
-	border-radius: 42rpx;
+	-webkit-box-shadow: 0px 0px 10rpx 0px rgba(0, 0, 0, 0.18);
+	        box-shadow: 0px 0px 10rpx 0px rgba(0, 0, 0, 0.18);
+	-webkit-border-radius: 42rpx;
+	        border-radius: 42rpx;
 	display: -webkit-box;
 	display: -webkit-flex;
 	display: flex;
@@ -100,6 +106,7 @@ page.data-v-757ec752 {
 	margin-bottom: 80rpx;
 	width: 100%;
 	padding: 0 30rpx;
+	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
 }
 .shuoming text.data-v-757ec752 {

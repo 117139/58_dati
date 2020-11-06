@@ -21,7 +21,9 @@
 		data() {
 			return {
 				problem:'',
-				type:''
+				type:'',
+				idx:-1,
+				btnkg:0
 			}
 		},
 		onLoad(option) {
@@ -31,10 +33,18 @@
 			}else{
 				this.type=1
 			}
-			
+			console.log(this.bj_prodata)
+			if(this.bj_prodata.datas){
+				this.problem=this.bj_prodata.datas.problem.title
+				this.type=this.bj_prodata.datas.type
+				this.idx=this.bj_prodata.idx
+			}
+		},
+		computed: {
+			...mapState(['bj_prodata']),
 		},
 		methods: {
-			...mapMutations(['setnew_problem','setnew_xz']),
+			...mapMutations(['setnew_problem','setnew_xz','edit_problem']),
 			sub(){
 				if(!this.problem){
 					uni.showToast({
@@ -43,11 +53,33 @@
 					})
 					return
 				}
-				var datas={
-					problem: this.problem,
-					"type": this.type, //问题类别1：单选题  2：多选题  3：填空题  4：排序题  5：滑动题
+				if(that.btnkg==1){
+					
+					return
 				}
-				this.setnew_problem(datas)
+				that.btnkg=1
+				if(this.idx==-1){
+					var datas={
+						problem: {
+							title:this.problem
+						},
+						"type": this.type, //问题类别1：单选题  2：多选题  3：填空题  4：排序题  5：滑动题
+					}
+					this.setnew_problem(datas)
+				}else{
+					var datas={
+						problem: {
+							title:this.problem
+						},
+						"type": this.type, //问题类别1：单选题  2：多选题  3：填空题  4：排序题  5：滑动题
+					}
+					var edit_data={
+						idx:that.idx,
+						datas:datas,
+					}
+					this.edit_problem(edit_data)
+				}
+				
 				uni.navigateBack({
 					delta:1
 				})

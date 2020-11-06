@@ -247,31 +247,28 @@
 			duoxuan(item,index){
 				var jgarr=item.jieguo||[]
 				var datas=index.currentTarget.dataset
-				var isdx=jgarr.indexOf(datas.idx);
+				var isdx=jgarr.indexOf(datas.idx+'');
 				// console.log(isdx)
 				if(isdx!=-1){
 					jgarr=jgarr.splice(isdx,1)
 				}else{
-					jgarr.push(datas.idx)
+					jgarr.push(datas.idx+'')
 				}
 				Vue.set(item, 'jieguo', jgarr); //为item添加不存在的属性，需要使用vue提供的Vue.set( object, key, value )方法
-				// console.log(this.datas)
+				console.log(this.datas)
 			},
 			getduoxuan(item,idx1){
-				// var datas=e.currentTarget.dataset
-				// console.log('e')
-				// console.log(item)
-				// console.log('datas',datas)
+				
 				if(!item.jieguo){
 					return false
 				}else{
 					var jgarr=item.jieguo
-					// console.log(jgarr)
-					// console.log(idx1)
+					console.log(jgarr)
+					console.log(idx1)
 					var idx1=idx1+''
 					// var idx=datas.currentTarget.dataset.idx
 					var isdx=jgarr.indexOf(idx1);
-					// console.log(isdx)
+					console.log(isdx)
 					if(isdx!=-1){
 						return true
 					}else{

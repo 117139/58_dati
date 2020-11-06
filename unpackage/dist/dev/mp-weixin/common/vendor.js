@@ -904,7 +904,7 @@ function initData(vueOptions, context) {
     try {
       data = data.call(context); // 支持 Vue.prototype 上挂的数据
     } catch (e) {
-      if (Object({"VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
+      if (Object({"VUE_APP_NAME":"58_dati","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
         console.warn('根据 Vue 的 data 函数初始化小程序 data 失败，请尽量确保 data 函数中不访问 vm 对象，否则可能影响首次数据渲染速度。', data);
       }
     }
@@ -7331,7 +7331,7 @@ function type(obj) {
 
 function flushCallbacks$1(vm) {
     if (vm.__next_tick_callbacks && vm.__next_tick_callbacks.length) {
-        if (Object({"VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
+        if (Object({"VUE_APP_NAME":"58_dati","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
             var mpInstance = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + vm._uid +
                 ']:flushCallbacks[' + vm.__next_tick_callbacks.length + ']');
@@ -7352,14 +7352,14 @@ function nextTick$1(vm, cb) {
     //1.nextTick 之前 已 setData 且 setData 还未回调完成
     //2.nextTick 之前存在 render watcher
     if (!vm.__next_tick_pending && !hasRenderWatcher(vm)) {
-        if(Object({"VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG){
+        if(Object({"VUE_APP_NAME":"58_dati","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG){
             var mpInstance = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + vm._uid +
                 ']:nextVueTick');
         }
         return nextTick(cb, vm)
     }else{
-        if(Object({"VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG){
+        if(Object({"VUE_APP_NAME":"58_dati","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG){
             var mpInstance$1 = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance$1.is || mpInstance$1.route) + '][' + vm._uid +
                 ']:nextMPTick');
@@ -7445,7 +7445,7 @@ var patch = function(oldVnode, vnode) {
     });
     var diffData = this.$shouldDiffData === false ? data : diff(data, mpData);
     if (Object.keys(diffData).length) {
-      if (Object({"VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
+      if (Object({"VUE_APP_NAME":"58_dati","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
         console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + this._uid +
           ']差量更新',
           JSON.stringify(diffData));
@@ -7908,12 +7908,14 @@ var _event = _interopRequireDefault(__webpack_require__(/*! common/event.js */ 1
 // 管理账号信息
 var USERS_KEY = 'USERS_KEY';
 var STATE_KEY = 'STATE_KEY';
-var IPurl = 'http://www.fangmomo.net/';
-var imgurl = 'http://www.fangmomo.net/';
+var IPurl = 'https://datixcx.com.aa.800123456.top/api/';
+var imgurl = 'https://datixcx.com.aa.800123456.top/';
 
+// appid:wx4c41cc50c5a53df9
+// appid:wx49a560f7feac0feb   cj
 /**
-                                          * 请求头
-                                          */
+ * 请求头
+ */
 var header = {
   'content-type': 'application/x-www-form-urlencoded' };
 
@@ -8138,13 +8140,14 @@ var wxlogin = function wxlogin(num) {
                         console.log('登录成功');
                         console.log(res.data);
                         //获取手机号
-                        // if(!res.data.phone){
-                        // 	uni.navigateTo({
-                        // 		url:'/pages/getTel/getTel'
-                        // 	})
-                        // 	return
-                        // }
-                        _index.default.commit('login', res.data.data);
+                        if (!res.data.data.phone) {
+                          uni.redirectTo({
+                            url: '/pages/login_tel/login_tel' });
+
+                          return;
+                        }
+                        _index.default.commit('logindata', res.data.data);
+                        _index.default.commit('login', res.data.data.nickname);
                         uni.setStorageSync('token', res.data.data.userToken);
                         uni.setStorageSync('loginmsg', res.data.data);
 
@@ -8484,9 +8487,29 @@ var store = new _vuex.default.Store({
 
 
     new_xz: [], //批量操作
-    new_problem: '' //新问题
-  },
+    new_problem: '', //新问题
+    ls_prodata: '',
+    ls_pro_yh: '',
+    fj_data: '',
+    bj_prodata: '' },
+
   mutations: {
+    edit_problem: function edit_problem(state, bj_prodata) {//编辑问题
+      state.bj_prodata = bj_prodata || '';
+    },
+    setls_prodata: function setls_prodata(state, ls_prodata) {//设置问题临时数据
+      state.ls_prodata = ls_prodata || '';
+    },
+    setls_pro_yh: function setls_pro_yh(state, ls_pro_yh) {//设置问题调研用户临时数据
+      state.ls_pro_yh = ls_pro_yh || '';
+    },
+    clearls_pro: function clearls_pro(state, ls_pro_yh) {//清除数据
+      state.ls_prodata = '';
+      state.ls_pro_yh = '';
+    },
+    setfj_data: function setfj_data(state, fj_data) {
+      state.fj_data = fj_data || '';
+    },
     setuuid: function setuuid(state, uuid) {
       state.uuid = uuid || 'h5';
     },

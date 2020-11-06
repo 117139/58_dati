@@ -3,6 +3,7 @@
 	width: 100%;
 	
 	padding:15rpx 30rpx;
+	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
 	background: #FFFFFF;
 }
@@ -10,10 +11,13 @@
 	width: 100%;
 	
 	padding: 30rpx 40rpx;
+	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
 	background: #FFFFFF;
-	box-shadow: 0px 0px 10rpx 0px rgba(0, 0, 0, 0.1);
-	border-radius: 4rpx;
+	-webkit-box-shadow: 0px 0px 10rpx 0px rgba(0, 0, 0, 0.1);
+	        box-shadow: 0px 0px 10rpx 0px rgba(0, 0, 0, 0.1);
+	-webkit-border-radius: 4rpx;
+	        border-radius: 4rpx;
 	text-align: center;
 	font-size: 34rpx;
 	color: #333;
@@ -33,6 +37,7 @@
 .problem_msg.data-v-0757d774 {
 	width: 100%;
 	padding: 0 30rpx;
+	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
 	padding-top: 30rpx;
 }
@@ -214,10 +219,13 @@
 .sub_btn.data-v-0757d774 {
 	width: 603rpx;
 	height: 80rpx;
+	background: -webkit-gradient(linear, left top, right top, from(#65AEE1), to(#326CFA));
 	background: -webkit-linear-gradient(left, #65AEE1, #326CFA);
 	background: linear-gradient(90deg, #65AEE1, #326CFA);
-	box-shadow: 0px 0px 7rpx 0px rgba(67, 130, 243, 0.1);
-	border-radius: 40px;
+	-webkit-box-shadow: 0px 0px 7rpx 0px rgba(67, 130, 243, 0.1);
+	        box-shadow: 0px 0px 7rpx 0px rgba(67, 130, 243, 0.1);
+	-webkit-border-radius: 40px;
+	        border-radius: 40px;
 	font-size: 32rpx;
 	color: #fff;
 	display: -webkit-box;
@@ -233,10 +241,13 @@
 .xz_add_btn.data-v-0757d774 {
 	width: 215rpx;
 	height: 83rpx;
+	background: -webkit-gradient(linear, left top, right top, from(rgba(61, 127, 255, 0.91)), to(rgba(60, 142, 255, 0.91)));
 	background: -webkit-linear-gradient(left, rgba(61, 127, 255, 0.91), rgba(60, 142, 255, 0.91));
 	background: linear-gradient(90deg, rgba(61, 127, 255, 0.91), rgba(60, 142, 255, 0.91));
-	box-shadow: 0px 0px 10rpx 0px rgba(0, 0, 0, 0.18);
-	border-radius: 42rpx;
+	-webkit-box-shadow: 0px 0px 10rpx 0px rgba(0, 0, 0, 0.18);
+	        box-shadow: 0px 0px 10rpx 0px rgba(0, 0, 0, 0.18);
+	-webkit-border-radius: 42rpx;
+	        border-radius: 42rpx;
 	display: -webkit-box;
 	display: -webkit-flex;
 	display: flex;

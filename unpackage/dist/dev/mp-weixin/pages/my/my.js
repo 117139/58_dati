@@ -97,6 +97,15 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
+  var m0 =
+    _vm.hasLogin && _vm.loginDatas.dy_status == 3
+      ? _vm.gettime(_vm.loginDatas.dy_start_status)
+      : null
+  var m1 =
+    _vm.hasLogin && _vm.loginDatas.dy_status == 3
+      ? _vm.gettime(_vm.loginDatas.dy_start_status)
+      : null
+
   if (!_vm._isMounted) {
     _vm.e0 = function($event) {
       _vm.fk_show = true
@@ -106,6 +115,16 @@ var render = function() {
       _vm.fk_show = false
     }
   }
+
+  _vm.$mp.data = Object.assign(
+    {},
+    {
+      $root: {
+        m0: m0,
+        m1: m1
+      }
+    }
+  )
 }
 var recyclableRender = false
 var staticRenderFns = []
@@ -194,6 +213,17 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 var _service = _interopRequireDefault(__webpack_require__(/*! ../../service.js */ 8));
 var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function ownKeys(object, enumerableOnly) {var keys = Object.keys(object);if (Object.getOwnPropertySymbols) {var symbols = Object.getOwnPropertySymbols(object);if (enumerableOnly) symbols = symbols.filter(function (sym) {return Object.getOwnPropertyDescriptor(object, sym).enumerable;});keys.push.apply(keys, symbols);}return keys;}function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};if (i % 2) {ownKeys(Object(source), true).forEach(function (key) {_defineProperty(target, key, source[key]);});} else if (Object.getOwnPropertyDescriptors) {Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));} else {ownKeys(Object(source)).forEach(function (key) {Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));});}}return target;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}var _default =
 
@@ -228,13 +258,16 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
 
 
   },
+  onShow: function onShow() {
+    _service.default.wxlogin();
+  },
   onPageScroll: function onPageScroll(e) {
     console.log(e);
     this.PageScroll = e.scrollTop;
 
   },
   computed: _objectSpread(_objectSpread({},
-  (0, _vuex.mapState)(['hasLogin', 'forcedLogin', 'userName'])), {}, {
+  (0, _vuex.mapState)(['hasLogin', 'forcedLogin', 'userName', 'loginDatas', 'fj_data'])), {}, {
 
     style0: function style0() {
       var StatusBar = this.StatusBar;
@@ -269,6 +302,21 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
   },
   methods: _objectSpread(_objectSpread({},
   (0, _vuex.mapMutations)(['login', 'logindata', 'logout', 'setplatform'])), {}, {
+    gettime: function gettime(time) {
+      var time = new Date(time * 1000);
+      var year = time.getFullYear();
+      var month = time.getMonth() + 1;
+      var date = time.getDate();
+      var hour = time.getHours();
+      var minute = time.getMinutes();
+      var second = time.getSeconds();
+      month = month < 10 ? "0" + month : month;
+      date = date < 10 ? "0" + date : date;
+      hour = hour < 10 ? "0" + hour : hour;
+      minute = minute < 10 ? "0" + minute : minute;
+      second = second < 10 ? "0" + second : second;
+      return year + '-' + month + '-' + date;
+    },
     call: function call(e) {
       console.log(e);
       _service.default.call(e);

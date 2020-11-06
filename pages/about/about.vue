@@ -3,7 +3,7 @@
 	
 		<view v-if="datas&&datas.body" class="xieyi_main" v-html="datas.body">
 		</view>
-		<view v-else-if="type=='about'" class="xieyi_main"  >
+		<view v-else-if="type=='about'" class="xieyi_main" v-html="fj_data.about" >
 			<view style="font-size: 45upx;font-weight: bold;text-align: center;margin-bottom: 40upx;">“答题小程序”关于我们</view>
 			<view style="margin-bottom: 40upx;">欢迎您使用“答题小程序”软件及相关服务</view>
 			
@@ -80,6 +80,7 @@
 				uni.setNavigationBarTitle({
 					title:'关于我们'
 				})
+				console.log(that.fj_data)
 			}
 			if(Option.type=='sm'){
 				that.type=Option.type
@@ -98,6 +99,10 @@
 			}
 			// this.getdata()
 		},
+		computed: {
+			...mapState(['hasLogin', 'forcedLogin', 'userName', 'loginDatas','fj_data']),
+		},
+		
 		methods: {
 			getdata(){
 				

@@ -4,6 +4,7 @@
 	height: 94rpx;
 	border-bottom: 1px solid #EDEDED;
 	padding: 0 30rpx;
+	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
 	display: -webkit-box;
 	display: -webkit-flex;
@@ -26,6 +27,7 @@
 .problem_msg.data-v-f329d474 {
 	width: 100%;
 	padding: 0 30rpx;
+	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
 	padding-top: 30rpx;
 }
@@ -91,11 +93,15 @@
 	display: -webkit-box;
 	display: -webkit-flex;
 	display: flex;
+	-webkit-flex-wrap: wrap;
+	        flex-wrap: wrap;
 }
 .ans_file image.data-v-f329d474 {
 
 	width: 158rpx;
 	height: 158rpx;
+	margin-right: 15rpx;
+	margin-bottom: 15rpx;
 }
 .ans_list textarea.data-v-f329d474 {
 	width: 100%;
@@ -201,16 +207,21 @@
 	-webkit-box-pack: center;
 	-webkit-justify-content: center;
 	        justify-content: center;
-	/* position: fixed;
-	bottom: 0; */
+	position: fixed;
+	bottom: 0;
+	z-index: 800;
+	background: #fff;
 }
 .sub_btn.data-v-f329d474 {
 	width: 603rpx;
 	height: 80rpx;
+	background: -webkit-gradient(linear, left top, right top, from(#65AEE1), to(#326CFA));
 	background: -webkit-linear-gradient(left, #65AEE1, #326CFA);
 	background: linear-gradient(90deg, #65AEE1, #326CFA);
-	box-shadow: 0px 0px 7rpx 0px rgba(67, 130, 243, 0.1);
-	border-radius: 40px;
+	-webkit-box-shadow: 0px 0px 7rpx 0px rgba(67, 130, 243, 0.1);
+	        box-shadow: 0px 0px 7rpx 0px rgba(67, 130, 243, 0.1);
+	-webkit-border-radius: 40px;
+	        border-radius: 40px;
 	font-size: 32rpx;
 	color: #fff;
 	display: -webkit-box;
@@ -222,14 +233,19 @@
 	-webkit-box-pack: center;
 	-webkit-justify-content: center;
 	        justify-content: center;
+	/* position: fixed;
+	bottom: 0; */
 }
 .xz_add_btn.data-v-f329d474 {
 	width: 215rpx;
 	height: 83rpx;
+	background: -webkit-gradient(linear, left top, right top, from(rgba(61, 127, 255, 0.91)), to(rgba(60, 142, 255, 0.91)));
 	background: -webkit-linear-gradient(left, rgba(61, 127, 255, 0.91), rgba(60, 142, 255, 0.91));
 	background: linear-gradient(90deg, rgba(61, 127, 255, 0.91), rgba(60, 142, 255, 0.91));
-	box-shadow: 0px 0px 10rpx 0px rgba(0, 0, 0, 0.18);
-	border-radius: 42rpx;
+	-webkit-box-shadow: 0px 0px 10rpx 0px rgba(0, 0, 0, 0.18);
+	        box-shadow: 0px 0px 10rpx 0px rgba(0, 0, 0, 0.18);
+	-webkit-border-radius: 42rpx;
+	        border-radius: 42rpx;
 	display: -webkit-box;
 	display: -webkit-flex;
 	display: flex;

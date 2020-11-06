@@ -66,10 +66,10 @@
 			}
 		},
 		computed: {
-			...mapState(['new_problem']),
+			...mapState(['new_problem','ls_prodata']),
 		},
 		methods: {
-			...mapMutations(['setnew_problem']),
+			...mapMutations(['setnew_problem','setls_pro_yh']),
 			sliderChange(e){
 				console.log(e)
 			},
@@ -96,6 +96,7 @@
 					})
 					return
 				}
+				this.setls_pro_yh(arr)
 				// return
 				uni.navigateTo({
 					url:'../fabu3/fabu3'

@@ -201,8 +201,11 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
 
   },
   computed: _objectSpread({},
-  (0, _vuex.mapState)(['hasLogin', 'forcedLogin', 'userName'])),
+  (0, _vuex.mapState)(['hasLogin', 'forcedLogin', 'userName', 'loginDatas'])),
 
+  onLoad: function onLoad() {
+    this.tel = this.loginDatas.phone;
+  },
   methods: {
     sm_fuc: function sm_fuc() {
       this.sm_ty = !this.sm_ty;
@@ -245,13 +248,72 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
 
         return;
       }
-      uni.showToast({
-        icon: 'none',
-        title: '操作成功' });
+      if (!that.sm_ty) {
+        uni.showToast({
+          icon: 'none',
+          title: '请先阅读并同意申请调研者说明' });
 
-      setTimeout(function () {
-        uni.navigateBack();
-      }, 1000);
+        return;
+      }
+      var data = {
+        token: that.loginDatas.userToken,
+        phone: that.loginDatas.phone,
+        dy_start_time: that.time,
+        dy_end_time: that.time1,
+        explain: that.content };
+
+      //selectSaraylDetailByUserCard
+      var jkurl = '/user/applyResearch';
+
+
+      _service.default.post(jkurl, data,
+      function (res) {
+
+        // if (res.data.code == 1) {
+        if (res.data.code == 1) {
+          var datas = res.data.data;
+          console.log(typeof datas);
+
+          if (typeof datas == 'string') {
+            datas = JSON.parse(datas);
+          }
+          uni.showToast({
+            icon: 'none',
+            title: '操作成功' });
+
+          _service.default.wxlogin();
+          setTimeout(function () {
+            uni.navigateBack();
+          }, 1000);
+
+          that.btnkg = 0;
+
+        } else {
+          that.btnkg = 0;
+          if (res.data.msg) {
+            uni.showToast({
+              icon: 'none',
+              title: res.data.msg });
+
+          } else {
+            uni.showToast({
+              icon: 'none',
+              title: '操作失败' });
+
+          }
+        }
+      },
+      function (err) {
+        that.btnkg = 0;
+
+        uni.showToast({
+          icon: 'none',
+          title: '获取数据失败' });
+
+
+      });
+
+
     },
     jump: function jump(e) {
       this.sm_ty = true;

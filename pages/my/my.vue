@@ -3,21 +3,32 @@
 		<view class="head_box" :class="{'cur_H':PageScroll>10}" :style="style">
 			个人中心
 		</view>
-		<view class="my_box">
+		<view v-if="hasLogin" class="my_box">
+			<image class="my_box_bg" src="/static/images/my_01.jpg"></image>
+			<view class="user_box dis_flex aic">
+				<image class="user_tx" :src="loginDatas.avatarurl"></image>
+				<view class="flex_1">
+					<view class="user_name">{{loginDatas.nickname}}</view>
+					<view class="user_time" v-if="loginDatas.dy_status==3">调研者有效期：{{gettime(loginDatas.dy_start_status)}}-{{gettime(loginDatas.dy_start_status)}}</view>
+					<view class="user_time" v-if="loginDatas.dy_status==2">调研者审核状态：待审核</view>
+					<view class="user_time" v-if="loginDatas.dy_status==4">调研者审核状态：审核失败</view>
+				</view>
+			</view>
+		</view>
+		<view v-else class="my_box">
 			<image class="my_box_bg" src="/static/images/my_01.jpg"></image>
 			<view class="user_box dis_flex aic">
 				<image class="user_tx" src="/static/images/tx_m2.jpg"></image>
 				<view class="flex_1">
-					<view class="user_name">调研者</view>
-					<view class="user_time">调研者有效期：2020-10-10</view>
+					<view class="user_name" @tap="jump" data-url="../login/login" >登录/注册</view>
 				</view>
 			</view>
 		</view>
-		<view class="my_sq">
+		<view class="my_sq" v-if="loginDatas.dy_status==1||loginDatas.dy_status==4">
 			<image src="/static/images/mysq_04.png" @tap="jump" data-url="../shenqin/shenqin?type=about" :data-login='false' :data-haslogin='hasLogin'></image>
 		</view>
-		<view class="my_list" @tap="jump" data-url="../my_fabu/my_fabu?type=about" :data-login='false' :data-haslogin='hasLogin'>
-			<view class="my_li">
+		<view class="my_list" >
+			<view v-if="loginDatas.dy_status==3" class="my_li" @tap="jump" data-url="../my_fabu/my_fabu?type=about" :data-login='false' :data-haslogin='hasLogin'>
 				<view class="my_icon"><text class="iconfont icon-fabu"></text></view>
 				<view class="flex_1">我的发布</view>
 				<text class="iconfont icon-next-m"></text>
@@ -37,14 +48,14 @@
 				<view class="flex_1">联系客服</view>
 				<text class="iconfont icon-next-m"></text>
 			</view>
-			<view class="my_li" @tap="jump" data-url="../about/about?type=about" :data-login='false' :data-haslogin='hasLogin'>
+			<view class="my_li" @tap="jump" data-url="../about/about?type=sm" :data-login='false' :data-haslogin='hasLogin'>
 				<view class="my_icon"><text class="iconfont icon-shiyongshuoming"></text></view>
 				<view class="flex_1">使用说明</view>
 				<text class="iconfont icon-next-m"></text>
 			</view>
 			<view class="zzc_box" v-if="fk_show" @tap="fk_show=false">
 				<view class="fk_box"  @tap.stop="">
-					<view class="d1" @tap.stop="call" data-tel="4008888888">400-8888-888</view>
+					<view class="d1" @tap.stop="call" :data-tel="fj_data.relation_phone">{{fj_data.relation_phone}}</view>
 					<view class="d2">客服小程序官方联系方式</view>
 				</view>
 			</view>
@@ -87,13 +98,16 @@
 			
 			
 		},
+		onShow() {
+			service.wxlogin()
+		},
 		onPageScroll(e){
 			console.log(e)
 			this.PageScroll=e.scrollTop
 			
 		},
 		computed: {
-			...mapState(['hasLogin', 'forcedLogin', 'userName']),
+			...mapState(['hasLogin', 'forcedLogin', 'userName','loginDatas','fj_data']),
 			
 			style0() {
 				var StatusBar = this.StatusBar;
@@ -128,6 +142,21 @@
 		},
 		methods: {
 			...mapMutations(['login','logindata','logout','setplatform']),
+			gettime(time){
+				var time = new Date(time*1000);
+				var year = time.getFullYear();
+				var month = time.getMonth() + 1;
+				var date = time.getDate();
+				var hour = time.getHours();
+				var minute = time.getMinutes();
+				var second = time.getSeconds();
+				month = month < 10 ? "0" + month : month;
+				date = date < 10 ? "0" + date : date;
+				hour = hour < 10 ? "0" + hour : hour;
+				minute = minute < 10 ? "0" + minute : minute;
+				second = second < 10 ? "0" + second : second;
+				return  year+'-'+month+'-'+date
+			},
 			call(e){
 				console.log(e)
 				service.call(e)

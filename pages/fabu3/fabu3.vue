@@ -80,9 +80,10 @@
 			}
 		},
 		computed: {
-			...mapState(['hasLogin', 'forcedLogin', 'userName']),
+			...mapState(['hasLogin', 'forcedLogin', 'userName','ls_prodata','ls_pro_yh']),
 		},
 		methods: {
+			...mapMutations(['clearls_pro']),
 			bindTimeChange(e) {
 				console.log(e)
 				this.time = e.target.value

@@ -1,13 +1,13 @@
 <template>
 	<view>
 		<view class="fabu_int">
-			<input type="text" placeholder="请输入调研标题">
+			<input type="text" placeholder="请输入调研标题" v-model="dy_title">
 		</view>
 		<view class="fabu_int">
-			<input type="text" placeholder="请输入调研提示或调研说明">
+			<input type="text" placeholder="请输入调研提示或调研说明" v-model="dy_explain">
 		</view>
 		<view class="fabu_int">
-			<input type="text" placeholder="请输入">
+			<input type="text" placeholder="请输入调研附加说明" v-model="dy_addition_explain">
 		</view>
 		<view class="problem_list">
 
@@ -17,29 +17,38 @@
 						{{index+1}}.{{item.problem.title}}
 						<text>({{item.type==1?'单选题':item.type==2?'多选题':item.type==3?'填空题':item.type==4?'排序题':"滑动题"}})</text>
 					</view>
+					
+					<view v-if="item.problem.img.length>0" class="ans_file">
+						
+						<image v-for="(item1,index) in item.problem.img" :src="item1" @tap="pveimg" :data-src="item1"></image>
+					</view>
 					<!-- 单选 -->
 					<view class="ans_list" v-if="item.type==1">
-						<view class="ans_li" v-for="(item,idx) in 4">
+						<view class="ans_li" v-for="(item1,idx1) in item.answer">
 							<view class="ans_tit dis_flex">
 								<view class="ans_xzicon">
 									<image src="../../static/images/danxuan.png"></image>
 								</view>
-								<view class="ans_xztext">风云，风云伙食费</view>
+								<view class="ans_xztext">{{item1.title}}</view>
 							</view>
-							<view class="ans_file">
+							<view v-if="item1.img.length>0" class="ans_file">
 								<view class="ans_xzicon"> </view>
-								<image src="../../static/images/tx_m2.jpg"></image>
+								<image :src="item1.img[0]"></image>
 							</view>
 						</view>
 					</view>
 					<!-- 多选 -->
 					<view class="ans_list" v-if="item.type==2">
-						<view class="ans_li" v-for="(item,idx) in 8">
+						<view class="ans_li" v-for="(item1,idx1) in item.answer">
 							<view class="ans_tit dis_flex">
 								<view class="ans_xzicon">
 									<image src="../../static/images/duoxuan.png"></image>
 								</view>
-								<view class="ans_xztext">风云，风云伙食费</view>
+								<view class="ans_xztext">{{item1.title}}</view>
+							</view>
+							<view v-if="item1.img.length>0" class="ans_file">
+								<view class="ans_xzicon"> </view>
+								<image :src="item1.img[0]"></image>
 							</view>
 						</view>
 					</view>
@@ -49,11 +58,11 @@
 					</view>
 					<!-- 排序 -->
 					<view class="ans_list" v-if="item.type==4">
-						<view class="ans_li" v-for="(item,idx) in 8">
+						<view class="ans_li" v-for="(item1,idx1) in item.answer">
 							<view class="ans_tit dis_flex">
 
 								<view class="ans_xztext">
-									檀中穴檀中穴檀中穴檀中穴檀中穴檀中穴檀中穴檀中穴
+									{{item1.title}}
 								</view>
 								<view class="ans_xzicon">
 									<text class="iconfont icon-shangyi"></text>
@@ -62,8 +71,8 @@
 									<text class="iconfont icon-xiayi"></text>
 								</view>
 							</view>
-							<view class="ans_file">
-								<image src="../../static/images/tx_m2.jpg"></image>
+							<view v-if="item1.img.length>0" class="ans_file">
+								<image :src="item1.img[0]"></image>
 								<view class="ans_xzicon"> </view>
 								<view class="ans_xzicon"> </view>
 							</view>
@@ -73,18 +82,18 @@
 					<view class="ans_list" v-if="item.type==5">
 						<view class="hd_box">
 							<view class="hd_text dis_flex aic ju_b">
-								<view>好（0）</view>
-								<view>不好（100）</view>
+								<view>{{item.answer.min_text}}（{{item.answer.min_num}}）</view>
+								<view>{{item.answer.max_text}}（{{item.answer.max_num}}）</view>
 							</view>
-							<slider value="50" min='0' max="100" @change="sliderChange" activeColor="linear-gradient(-89deg, #65AEE1, #326CFA)"
-							 backgroundColor="#ECEBF1" block-color="#8A6DE9" block-size="10" step="10" />
+							<slider value="0" :min='item.answer.min_num' :max="item.answer.max_num" @change="sliderChange" activeColor="linear-gradient(-89deg, #65AEE1, #326CFA)"
+							 backgroundColor="#ECEBF1" block-color="#8A6DE9" block-size="10" :step="item.answer.step_size" />
 							<view class="step_d">
-								<view class="step_d_li"><text>0</text></view>
-								<view class="step_d_li"><text>20</text></view>
-								<view class="step_d_li"><text>40</text></view>
-								<view class="step_d_li"><text>60</text></view>
-								<view class="step_d_li"><text>80</text></view>
-								<view class="step_d_li"><text>100</text></view>
+								<view class="step_d_li"><text>{{item.answer.min_num}}</text></view>
+								<view class="step_d_li"><text>{{(item.answer.max_num-item.answer.min_num)*0.2}}</text></view>
+								<view class="step_d_li"><text>{{(item.answer.max_num-item.answer.min_num)*0.4}}</text></view>
+								<view class="step_d_li"><text>{{(item.answer.max_num-item.answer.min_num)*0.6}}</text></view>
+								<view class="step_d_li"><text>{{(item.answer.max_num-item.answer.min_num)*0.8}}</text></view>
+								<view class="step_d_li"><text>{{item.answer.max_num}}</text></view>
 							</view>
 						</view>
 
@@ -92,7 +101,7 @@
 
 				</view>
 				<view class="problem_cz">
-					<view><text class="iconfont icon-bianji"></text>编辑</view>
+					<view @click="pro_edit(item,index)"><text class="iconfont icon-bianji"></text>编辑</view>
 					<text>|</text>
 					<view @click="px_up(item,index)"><text class="iconfont icon-shangyi"></text>上移</view>
 					<text>|</text>
@@ -221,6 +230,7 @@
 		<view class="sub_box">
 			<view class="sub_btn" @tap="sub">确认</view>
 		</view>
+		<view style="width: 100%;height: 160upx;"></view>
 		<view class="xz_add_btn" @tap="jump" data-url="/pages/fabu_category/fabu_category">
 			<text class="iconfont icon-tianjia"></text>添加题目
 		</view>
@@ -237,7 +247,11 @@
 	export default {
 		data() {
 			return {
-				datas: [{
+				dy_title:'',
+				dy_explain:'',
+				dy_addition_explain:'',
+				datas:[],
+				datas_ceshi: [{
 						problem: {
 							title: '在紧急情况下为伤员止血时，须先用压迫法止血后再根据出血情况改用其他止血法。',
 							img: []
@@ -342,14 +356,39 @@
 				]
 			}
 		},
+		onUnload() {
+			this.setnew_problem('')
+			this.edit_problem('')
+			this.clearls_pro('')
+		},
 		onShow() {
+			var that =this
 			console.log(this.new_problem)
+			if(this.new_problem.problem){
+				this.datas.push(this.new_problem)
+				this.setnew_problem('')
+			}
+			
+			if(that.bj_prodata&&that.bj_prodata.datas){
+				var newdata=JSON.parse(JSON.stringify(this.bj_prodata.datas))
+				console.log('newdata')
+				console.log(this.bj_prodata)
+				console.log(newdata)
+				var edit_idx=this.bj_prodata.idx
+				Vue.set(that.datas, edit_idx, newdata)
+				// that.datas[edit_idx]=newdata
+				console.log(that.datas)
+				this.edit_problem('')
+			}
 		},
 		computed: {
-			...mapState(['new_problem']),
+			...mapState(['new_problem','bj_prodata']),
 		},
 		methods: {
-			...mapMutations(['setnew_problem']),
+			...mapMutations(['setnew_problem','edit_problem','setls_prodata']),
+			pveimg(e){
+				service.pveimg(e)
+			},
 			sliderChange(e) {
 				console.log(e)
 			},
@@ -387,7 +426,30 @@
 				Vue.set(that.datas, idx_1, temp)
 				
 			},
+			pro_edit(item,idx){
+				var that =this
+				console.log(item.type)
+				var edit_data={
+					idx:idx,
+					datas:item,
+				}
+				that.edit_problem(edit_data)
+				if(item.type==3){
+					uni.navigateTo({
+						url:'/pages/fabu_tiankong/fabu_tiankong?type=3'
+					})
+				}else if(item.type==5){
+					uni.navigateTo({
+						url:'/pages/fabu_huadong/fabu_huadong?type=5'
+					})
+				}else{
+					uni.navigateTo({
+						url:'/pages/fabu_duoxuan/fabu_duoxuan?type='+item.type
+					})
+				}
+			},
 			pro_del(idx){
+				var that =this
 				uni.showModal({
 					title: '提示',
 					content:'是否确认删除此题？',
@@ -398,6 +460,7 @@
 								icon:'none',
 								title:'操作成功'
 							})
+							that.datas.splice(idx,1)
 						} else if (res.cancel) {
 							console.log('用户点击取消');
 						}
@@ -405,15 +468,58 @@
 				})
 			},
 			sub() {
+				var that =this
 				console.log(this.datas)
+				if(!that.dy_title){
+					uni.showToast({
+						icon:'none',
+						title:'请输入调研标题'
+					})
+					return
+				}	
+				if(!that.dy_explain){
+					uni.showToast({
+						icon:'none',
+						title:'请输入调研说明'
+					})
+					return
+				}	
+				if(!that.dy_addition_explain){
+					uni.showToast({
+						icon:'none',
+						title:'请输入调研附加说明'
+					})
+					return
+				}	
+				if(that.datas.length==0){
+					uni.showToast({
+						icon:'none',
+						title:'请添加问题'
+					})
+					return
+				}
+				var ls_data ={
+					dy_title:that.dy_title,
+					dy_explain:that.dy_explain,
+					dy_addition_explain:that.dy_addition_explain,
+					datas:that.datas,
+				}
+				this.setls_prodata(ls_data)
 				uni.showModal({
 					title: '请仔细确认发布内容，发布后不可修改',
 					success: function(res) {
 						if (res.confirm) {
 							console.log('用户点击确定');
+							// #ifdef MP-WEIXIN
 							uni.navigateTo({
 								url: '../fabu2/fabu2'
 							})
+							// #endif
+							// #ifndef MP-WEIXIN
+							uni.navigateTo({
+								url: '../fabu3/fabu3'
+							})
+							// #endif
 						} else if (res.cancel) {
 							console.log('用户点击取消');
 						}
@@ -522,12 +628,15 @@
 
 	.ans_file {
 		display: flex;
+		flex-wrap: wrap;
 	}
 
 	.ans_file image {
 
 		width: 158upx;
 		height: 158upx;
+		margin-right: 15upx;
+		margin-bottom: 15upx;
 	}
 
 	.ans_list textarea {
@@ -625,8 +734,10 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		/* position: fixed;
-		bottom: 0; */
+		position: fixed;
+		bottom: 0;
+		z-index: 800;
+		background: #fff;
 	}
 
 	.sub_btn {
@@ -640,6 +751,8 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		/* position: fixed;
+		bottom: 0; */
 	}
 
 	.xz_add_btn {

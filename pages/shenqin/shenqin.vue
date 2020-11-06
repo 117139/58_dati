@@ -5,7 +5,7 @@
 			<view class="sq_box1">
 				<view class="sq_li dis_flex aic">
 					<view>手机号</view>
-					<input type="number" placeholder="请输入手机号" v-model="tel">
+					<input type="number" placeholder="请输入手机号" v-model="tel" disabled="">
 				</view>
 				
 				<view class="sq_li dis_flex aic">
@@ -60,7 +60,10 @@
 			}
 		},
 		computed: {
-			...mapState(['hasLogin', 'forcedLogin', 'userName']),
+			...mapState(['hasLogin', 'forcedLogin', 'userName','loginDatas']),
+		},
+		onLoad() {
+			this.tel=this.loginDatas.phone
 		},
 		methods: {
 			sm_fuc(){
@@ -104,13 +107,72 @@
 					})
 					return
 				}
-				uni.showToast({
-					icon: 'none',
-					title: '操作成功'
-				})
-				setTimeout(()=>{
-					uni.navigateBack()
-				},1000)
+				if(!that.sm_ty){
+					uni.showToast({
+						icon: 'none',
+						title: '请先阅读并同意申请调研者说明'
+					})
+					return
+				}
+				var data = {
+					token:that.loginDatas.userToken,
+					phone:that.loginDatas.phone,
+					dy_start_time:that.time,
+					dy_end_time:that.time1,
+					explain:that.content,
+				}
+				//selectSaraylDetailByUserCard
+				var jkurl = '/user/applyResearch'
+				
+				
+				service.post(jkurl, data,
+					function(res) {
+						
+						// if (res.data.code == 1) {
+						if (res.data.code == 1) {
+							var datas = res.data.data
+							console.log(typeof datas)
+							
+							if (typeof datas == 'string') {
+								datas = JSON.parse(datas)
+							}
+							uni.showToast({
+								icon: 'none',
+								title: '操作成功'
+							})
+							service.wxlogin()
+							setTimeout(()=>{
+								uni.navigateBack()
+							},1000)
+								
+								that.btnkg=0
+				
+						} else {
+							that.btnkg=0
+							if (res.data.msg) {
+								uni.showToast({
+									icon: 'none',
+									title: res.data.msg
+								})
+							} else {
+								uni.showToast({
+									icon: 'none',
+									title: '操作失败'
+								})
+							}
+						}
+					},
+					function(err) {
+						that.btnkg=0
+						
+							uni.showToast({
+								icon: 'none',
+								title: '获取数据失败'
+							})
+					
+					}
+				)
+				
 			},
 			jump(e){
 				this.sm_ty=true

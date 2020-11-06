@@ -2,15 +2,18 @@
 .fabu_list.data-v-b99953c8{
 	width: 100%;
 	padding: 20rpx 0;
+	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
 }
 .fabu_li.data-v-b99953c8{
 	width: 100%;
 	min-height: 160rpx;
 	background: #FFFFFF;
-	border-radius: 4rpx;
+	-webkit-border-radius: 4rpx;
+	        border-radius: 4rpx;
 	margin-bottom: 20rpx;
 	padding: 20rpx;
+	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
 	display: -webkit-box;
 	display: -webkit-flex;
@@ -36,6 +39,7 @@
 .dynum_box.data-v-b99953c8{
 	width: 100%;
 	padding: 0 30rpx;
+	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
 	/* height: 100upx; */
 	display: -webkit-box;
@@ -54,6 +58,7 @@
 .down_btns.data-v-b99953c8{
 	width: 100%;
 	padding: 30rpx;
+	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
 	display: -webkit-box;
 	display: -webkit-flex;
@@ -68,10 +73,13 @@
 .down_btns view.data-v-b99953c8{
 	width: 529rpx;
 	height: 80rpx;
+	background: -webkit-gradient(linear, left top, right top, from(#65AEE1), to(#326CFA));
 	background: -webkit-linear-gradient(left, #65AEE1, #326CFA);
 	background: linear-gradient(90deg, #65AEE1, #326CFA);
-	box-shadow: 0px 0px 7rpx 0px rgba(67, 130, 243, 0.1);
-	border-radius: 40rpx;
+	-webkit-box-shadow: 0px 0px 7rpx 0px rgba(67, 130, 243, 0.1);
+	        box-shadow: 0px 0px 7rpx 0px rgba(67, 130, 243, 0.1);
+	-webkit-border-radius: 40rpx;
+	        border-radius: 40rpx;
 	font-size: 32rpx;
 	color: #fff;
 	display: -webkit-box;
@@ -104,6 +112,7 @@
 	width: 100%;
 	height: 100rpx;
 	padding: 0 30rpx;
+	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
 	font-weight: bold;
 	display: -webkit-box;
@@ -119,6 +128,7 @@
 	height: 94rpx;
 	border-bottom: 1px solid #EDEDED;
 	padding: 0 30rpx;
+	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
 	display: -webkit-box;
 	display: -webkit-flex;
@@ -141,6 +151,7 @@
 .problem_msg.data-v-b99953c8 {
 	width: 100%;
 	padding: 0 30rpx;
+	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
 	padding-top: 30rpx;
 }
@@ -322,10 +333,13 @@
 .sub_btn.data-v-b99953c8 {
 	width: 603rpx;
 	height: 80rpx;
+	background: -webkit-gradient(linear, left top, right top, from(#65AEE1), to(#326CFA));
 	background: -webkit-linear-gradient(left, #65AEE1, #326CFA);
 	background: linear-gradient(90deg, #65AEE1, #326CFA);
-	box-shadow: 0px 0px 7rpx 0px rgba(67, 130, 243, 0.1);
-	border-radius: 40px;
+	-webkit-box-shadow: 0px 0px 7rpx 0px rgba(67, 130, 243, 0.1);
+	        box-shadow: 0px 0px 7rpx 0px rgba(67, 130, 243, 0.1);
+	-webkit-border-radius: 40px;
+	        border-radius: 40px;
 	font-size: 32rpx;
 	color: #fff;
 	display: -webkit-box;
@@ -341,10 +355,13 @@
 .xz_add_btn.data-v-b99953c8 {
 	width: 215rpx;
 	height: 83rpx;
+	background: -webkit-gradient(linear, left top, right top, from(rgba(61, 127, 255, 0.91)), to(rgba(60, 142, 255, 0.91)));
 	background: -webkit-linear-gradient(left, rgba(61, 127, 255, 0.91), rgba(60, 142, 255, 0.91));
 	background: linear-gradient(90deg, rgba(61, 127, 255, 0.91), rgba(60, 142, 255, 0.91));
-	box-shadow: 0px 0px 10rpx 0px rgba(0, 0, 0, 0.18);
-	border-radius: 42rpx;
+	-webkit-box-shadow: 0px 0px 10rpx 0px rgba(0, 0, 0, 0.18);
+	        box-shadow: 0px 0px 10rpx 0px rgba(0, 0, 0, 0.18);
+	-webkit-border-radius: 42rpx;
+	        border-radius: 42rpx;
 	display: -webkit-box;
 	display: -webkit-flex;
 	display: flex;

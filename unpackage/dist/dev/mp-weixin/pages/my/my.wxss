@@ -2,7 +2,8 @@
 .content_wrap.data-v-0be17cc6{
 	position: relative;
 	min-height: 100vh;
-	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	        box-sizing: border-box;
 	background: #EDEDED;
 }
 .cu_custom_box.data-v-0be17cc6{
@@ -35,7 +36,8 @@
 	-webkit-box-pack: center;
 	-webkit-justify-content: center;
 	        justify-content: center;
-	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	        box-sizing: border-box;
 	-webkit-transition: all .5s;
 	transition: all .5s;
 }
@@ -60,12 +62,14 @@
 	top: 147rpx;
 	width: 100%;
 	padding: 0 30rpx;
-	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	        box-sizing: border-box;
 }
 .user_tx.data-v-0be17cc6{
 	width: 138rpx;
 	height: 138rpx;
-	border-radius: 50%;
+	-webkit-border-radius: 50%;
+	        border-radius: 50%;
 	margin-right: 22rpx;
 }
 .user_name.data-v-0be17cc6{
@@ -80,7 +84,8 @@
 .my_sq.data-v-0be17cc6{
 	width: 100%;
 	padding: 30rpx;
-	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	        box-sizing: border-box;
 	background: #fff;
 	margin-bottom: 10rpx;
 }
@@ -91,7 +96,8 @@
 .my_list.data-v-0be17cc6{
 	width: 100%;
 	padding: 0 30rpx;
-	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	        box-sizing: border-box;
 	background: #fff;
 }
 .my_li.data-v-0be17cc6{
@@ -157,7 +163,8 @@
 	width: 600rpx;
 	height: 302rpx;
 	background: #FFFFFF;
-	border-radius: 20rpx;
+	-webkit-border-radius: 20rpx;
+	        border-radius: 20rpx;
 }
 .fk_box .d1.data-v-0be17cc6{
 	font-size: 32rpx;

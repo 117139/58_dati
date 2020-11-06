@@ -182,58 +182,63 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var _service = _interopRequireDefault(__webpack_require__(/*! ../../service.js */ 8));
-var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };} //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-var _default = { data: function data() {return { title: '隐私协议', type: 0, datas: '' };}, onLoad: function onLoad(Option) {var that = this;console.log(Option);if (Option.type == 'yszc') {that.type = Option.type;that.title = '隐私协议';uni.setNavigationBarTitle({ title: '隐私协议' });}if (Option.type == 'about') {that.type = Option.type;that.title = '关于我们';uni.setNavigationBarTitle({ title: '关于我们' });}if (Option.type == 'sm') {that.type = Option.type;that.title = '使用说明';uni.setNavigationBarTitle({ title: '使用说明' });}if (Option.type == 3) {that.type = Option.type;that.title = '用户协议';}if (Option.type == 4) {that.type = Option.type;that.title = '自动续费服务规则';} // this.getdata()
-  }, methods: { getdata: function getdata() {///api/info/list
+var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function ownKeys(object, enumerableOnly) {var keys = Object.keys(object);if (Object.getOwnPropertySymbols) {var symbols = Object.getOwnPropertySymbols(object);if (enumerableOnly) symbols = symbols.filter(function (sym) {return Object.getOwnPropertyDescriptor(object, sym).enumerable;});keys.push.apply(keys, symbols);}return keys;}function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};if (i % 2) {ownKeys(Object(source), true).forEach(function (key) {_defineProperty(target, key, source[key]);});} else if (Object.getOwnPropertyDescriptors) {Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));} else {ownKeys(Object(source)).forEach(function (key) {Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));});}}return target;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}var _default =
+
+
+
+{
+  data: function data() {
+    return {
+      title: '隐私协议',
+      type: 0,
+      datas: '' };
+
+  },
+  onLoad: function onLoad(Option) {
+    var that = this;
+    console.log(Option);
+
+
+    if (Option.type == 'yszc') {
+      that.type = Option.type;
+      that.title = '隐私协议';
+      uni.setNavigationBarTitle({
+        title: '隐私协议' });
+
+    }
+    if (Option.type == 'about') {
+      that.type = Option.type;
+      that.title = '关于我们';
+      uni.setNavigationBarTitle({
+        title: '关于我们' });
+
+      console.log(that.fj_data);
+    }
+    if (Option.type == 'sm') {
+      that.type = Option.type;
+      that.title = '使用说明';
+      uni.setNavigationBarTitle({
+        title: '使用说明' });
+
+    }
+    if (Option.type == 3) {
+      that.type = Option.type;
+      that.title = '用户协议';
+    }
+    if (Option.type == 4) {
+      that.type = Option.type;
+      that.title = '自动续费服务规则';
+    }
+    // this.getdata()
+  },
+  computed: _objectSpread({},
+  (0, _vuex.mapState)(['hasLogin', 'forcedLogin', 'userName', 'loginDatas', 'fj_data'])),
+
+
+  methods: {
+    getdata: function getdata() {
+
+      ///api/info/list
       var that = this;
       var data = {
         keyword: 'Privacy_agreement' };
