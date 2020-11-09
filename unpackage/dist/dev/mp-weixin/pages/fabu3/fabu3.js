@@ -213,6 +213,10 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
+
+
 var _service = _interopRequireDefault(__webpack_require__(/*! ../../service.js */ 8));
 var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function ownKeys(object, enumerableOnly) {var keys = Object.keys(object);if (Object.getOwnPropertySymbols) {var symbols = Object.getOwnPropertySymbols(object);if (enumerableOnly) symbols = symbols.filter(function (sym) {return Object.getOwnPropertyDescriptor(object, sym).enumerable;});keys.push.apply(keys, symbols);}return keys;}function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};if (i % 2) {ownKeys(Object(source), true).forEach(function (key) {_defineProperty(target, key, source[key]);});} else if (Object.getOwnPropertyDescriptors) {Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));} else {ownKeys(Object(source)).forEach(function (key) {Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));});}}return target;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}var _default =
 
@@ -223,7 +227,7 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
     return {
       time: '',
       time1: '',
-      add_type: 0,
+      add_type: 1, //1：手动添加  2：随机添加    调研时间类型
       time_list: [{
         "start_time": "",
         "end_time": "" }],
@@ -233,11 +237,12 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
         "end_time": "" },
 
       sm_ty: false,
-      dt_num: 0 };
+      dt_num: 0,
+      btnkg: 0 };
 
   },
   computed: _objectSpread({},
-  (0, _vuex.mapState)(['hasLogin', 'forcedLogin', 'userName', 'ls_prodata', 'ls_pro_yh'])),
+  (0, _vuex.mapState)(['hasLogin', 'forcedLogin', 'userName', 'loginDatas', 'ls_prodata', 'ls_pro_yh'])),
 
   methods: _objectSpread(_objectSpread({},
   (0, _vuex.mapMutations)(['clearls_pro'])), {}, {
@@ -286,9 +291,98 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
       this.time_list.push(newtime);
     },
     sub: function sub() {
-      uni.showToast({
-        icon: 'none',
-        title: '发布成功，等待审核' });
+      var that = this;
+      var datas;
+      if (that.add_type == 1) {
+        if (that.time_list.length == 0) {
+          uni.showToast({
+            icon: 'none',
+            title: '请添加时间' });
+
+          return;
+        }
+        var times = JSON.stringify(that.time_list);
+        datas = {
+          token: that.loginDatas.userToken,
+          dy_title: that.ls_prodata.dy_title,
+          dy_explain: that.ls_prodata.dy_explain,
+          dy_addition_explain: that.ls_prodata.dy_addition_explain,
+          dy_start_time: that.time,
+          dy_end_time: that.time1,
+          problem: JSON.stringify(that.ls_prodata.datas),
+          uids: that.ls_pro_yh,
+          dy_time_type: that.add_type,
+          sd_time: times };
+
+      } else {//随机
+        datas = {
+          token: that.loginDatas.userToken,
+          dy_title: that.ls_prodata.dy_title,
+          dy_explain: that.ls_prodata.dy_explain,
+          dy_addition_explain: that.ls_prodata.dy_addition_explain,
+          dy_start_time: that.time,
+          dy_end_time: that.time1,
+          problem: JSON.stringify(that.ls_prodata.datas),
+          uids: that.ls_pro_yh,
+          dy_time_type: that.add_type,
+          sj_start_time: that.sj_time.start_time,
+          sj_end_time: that.sj_time.end_time,
+          sj_number: that.dt_num };
+
+      }
+
+      var jkurl = '/user/research/add';
+
+      if (this.btnkg == 1) {
+        return;
+      }
+      this.btnkg = 1;
+      uni.showLoading({
+        title: '正在提交' });
+
+      // 单个请求
+      _service.default.P_post(jkurl, datas).then(function (res) {
+        that.btn_kg = 0;
+        console.log(res);
+        if (res.code == 1) {
+          var datas = res.data;
+          console.log(typeof datas);
+
+          if (typeof datas == 'string') {
+            datas = JSON.parse(datas);
+          }
+          uni.showToast({
+            icon: 'none',
+            title: '发布成功，等待审核' });
+
+          setTimeout(function () {
+            uni.navigateBack({
+              delta: 3 });
+
+          }, 1000);
+        } else {
+          that.btnkg = 0;
+          if (res.msg) {
+            uni.showToast({
+              icon: 'none',
+              title: res.msg });
+
+          } else {
+            uni.showToast({
+              icon: 'none',
+              title: '操作失败' });
+
+          }
+        }
+      }).catch(function (e) {
+        that.btn_kg = 0;
+        console.log(e);
+        uni.showToast({
+          icon: 'none',
+          title: '获取数据失败' });
+
+      });
+
 
     },
     jump: function jump(e) {

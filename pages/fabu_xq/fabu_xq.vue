@@ -3,12 +3,12 @@
 		<view class="hx10"></view>
 		<view class="fabu_list">
 			<view class="fabu_li">
-				<view class=" fabu_name">北京大学生的就业时间与高等教育改革调研研燕究与分分析。</view>
-				<view class="fabu_time">2020-09-23 12：00：00</view>
+				<view class=" fabu_name">{{title}}</view>
+				<view class="fabu_time">{{create_time}}</view>
 			</view>
 			<view class="dynum_box">
-				<view>200人参与</view>
-				<view>调研次数：500次</view>
+				<view>{{participation_man?participation_man:0}}人参与</view>
+				<view>调研次数：{{research_number?research_number:0}}次</view>
 			</view>
 		</view>
 		<view class="down_btns">
@@ -18,13 +18,13 @@
 		<view class="hx10" style="margin-top: 50upx;"></view>
 		<view class="fabu_msg">发布信息</view>
 		<view class="fabu_int">
-			<input style="color: #333;" type="text" :disabled="true" value="调研标题">
+			<input style="color: #333;" type="text" :disabled="true" :value="title">
 		</view>
 		<view class="fabu_int">
-			<input style="color: #333;" type="text"  :disabled="true" value="调研提示或调研说明">
+			<input style="color: #333;" type="text"  :disabled="true" :value="explain">
 		</view>
 		<view class="fabu_int">
-			<input style="color: #333;" type="text"  :disabled="true" value="xxx">
+			<input style="color: #333;" type="text"  :disabled="true" :value="addition_explain">
 		</view>
 		<view class="problem_list">
 
@@ -32,31 +32,31 @@
 				<view class="problem_msg">
 					<view class="problem_tit">
 						{{index+1}}.{{item.problem.title}}
-						<text>({{item.type==1?'单选题':item.type==2?'多选题':item.type==3?'填空题':item.type==4?'排序题':"滑动题"}})</text>
+						<text>({{item.type_value}})</text>
 					</view>
 					<!-- 单选 -->
 					<view class="ans_list" v-if="item.type==1">
-						<view class="ans_li" v-for="(item,idx) in 4">
+						<view class="ans_li" v-for="(item1,idx1) in answer">
 							<view class="ans_tit dis_flex">
 								<view class="ans_xzicon">
 									<image src="../../static/images/danxuan.png"></image>
 								</view>
-								<view class="ans_xztext">风云，风云伙食费</view>
+								<view class="ans_xztext">{{item1.answer.title}}</view>
 							</view>
-							<view class="ans_file">
+							<view v-if="item1.answer.img.length>0" class="ans_file">
 								<view class="ans_xzicon"> </view>
-								<image src="../../static/images/tx_m2.jpg"></image>
+								<image :src="item1.answer.img[0]"></image>
 							</view>
 						</view>
 					</view>
 					<!-- 多选 -->
 					<view class="ans_list" v-if="item.type==2">
-						<view class="ans_li" v-for="(item,idx) in 8">
+						<view class="ans_li" v-for="(item1,idx1) in answer">
 							<view class="ans_tit dis_flex">
 								<view class="ans_xzicon">
 									<image src="../../static/images/duoxuan.png"></image>
 								</view>
-								<view class="ans_xztext">风云，风云伙食费</view>
+								<view class="ans_xztext">{{item1.answer.title}}</view>
 							</view>
 						</view>
 					</view>
@@ -66,11 +66,11 @@
 					</view>
 					<!-- 排序 -->
 					<view class="ans_list" v-if="item.type==4">
-						<view class="ans_li" v-for="(item,idx) in 8">
+						<view class="ans_li" v-for="(item1,idx1) in answer">
 							<view class="ans_tit dis_flex">
 
 								<view class="ans_xztext">
-									檀中穴檀中穴檀中穴檀中穴檀中穴檀中穴檀中穴檀中穴
+									{{item1.answer.title}}
 								</view>
 								<view class="ans_xzicon">
 									<text class="iconfont icon-shangyi"></text>
@@ -79,8 +79,8 @@
 									<text class="iconfont icon-xiayi"></text>
 								</view>
 							</view>
-							<view class="ans_file">
-								<image src="../../static/images/tx_m2.jpg"></image>
+							<view v-if="item1.answer.img.length>0" class="ans_file">
+								<image :src="item1.answer.img[0]"></image>
 								<view class="ans_xzicon"> </view>
 								<view class="ans_xzicon"> </view>
 							</view>
@@ -90,18 +90,18 @@
 					<view class="ans_list" v-if="item.type==5">
 						<view class="hd_box">
 							<view class="hd_text dis_flex aic ju_b">
-								<view>好（0）</view>
-								<view>不好（100）</view>
+								<view>{{item.answer.min_text}}（{{item.answer.min_num}}）</view>
+								<view>{{item.answer.max_text}}（{{item.answer.max_num}}）</view>
 							</view>
-							<slider value="50" min='0' max="100" @change="sliderChange" activeColor="linear-gradient(-89deg, #65AEE1, #326CFA)"
-							 backgroundColor="#ECEBF1" block-color="#8A6DE9" block-size="10" step="10" />
+							<slider value="0" :min='item.answer.min_num' :max="item.answer.max_num" @change="sliderChange" activeColor="linear-gradient(-89deg, #65AEE1, #326CFA)"
+							 backgroundColor="#ECEBF1" block-color="#8A6DE9" block-size="10" :step="item.answer.step_size" />
 							<view class="step_d">
-								<view class="step_d_li"><text>0</text></view>
-								<view class="step_d_li"><text>20</text></view>
-								<view class="step_d_li"><text>40</text></view>
-								<view class="step_d_li"><text>60</text></view>
-								<view class="step_d_li"><text>80</text></view>
-								<view class="step_d_li"><text>100</text></view>
+								<view class="step_d_li"><text>{{item.answer.min_num}}</text></view>
+								<view class="step_d_li"><text>{{(item.answer.max_num-item.answer.min_num)*0.2}}</text></view>
+								<view class="step_d_li"><text>{{(item.answer.max_num-item.answer.min_num)*0.4}}</text></view>
+								<view class="step_d_li"><text>{{(item.answer.max_num-item.answer.min_num)*0.6}}</text></view>
+								<view class="step_d_li"><text>{{(item.answer.max_num-item.answer.min_num)*0.8}}</text></view>
+								<view class="step_d_li"><text>{{item.answer.max_num}}</text></view>
 							</view>
 						</view>
 
@@ -125,116 +125,26 @@
 	export default {
 		data() {
 			return {
-				datas: [{
-						problem: {
-							title: '在紧急情况下为伤员止血时，须先用压迫法止血后再根据出血情况改用其他止血法。',
-							img: []
-						},
-						type: 1,
-						answer: [{
-								title: '风云风云风云风云',
-								img: [
-									'../../static/images/danxuan.png'
-								]
-							},
-							{
-								title: '风云风云风云风云',
-								img: [
-									'../../static/images/danxuan.png'
-								]
-							},
-							{
-								title: '风云风云风云风云',
-								img: [
-									'../../static/images/danxuan.png'
-								]
-							},
-							{
-								title: '风云风云风云风云',
-								img: [
-									'../../static/images/danxuan.png'
-								]
-							},
-						]
-					},
-					{
-						problem: {
-							title: '在紧急情况下为伤员止血时，须先用压迫法止血后再根据出血情况改用其他止血法。',
-							img: []
-						},
-						type: 2,
-						answer: [{
-								title: '风云风云风云风云',
-								img: []
-							},
-							{
-								title: '风云风云风云风云',
-								img: []
-							},
-							{
-								title: '风云风云风云风云',
-								img: []
-							},
-							{
-								title: '风云风云风云风云',
-								img: []
-							},
-						]
-					},
-					{
-						problem: {
-							title: '在紧急情况下为伤员止血时，须先用压迫法止血后再根据出血情况改用其他止血法。',
-							img: []
-						},
-						type: 3,
-
-					},
-					{
-						problem: {
-							title: '在紧急情况下为伤员止血时，须先用压迫法止血后再根据出血情况改用其他止血法。',
-							img: []
-						},
-						type: 4,
-						answer: [{
-								title: '风云风云风云风云',
-								img: []
-							},
-							{
-								title: '风云风云风云风云',
-								img: []
-							},
-							{
-								title: '风云风云风云风云',
-								img: []
-							},
-							{
-								title: '风云风云风云风云',
-								img: []
-							},
-						]
-					},
-					{
-						problem: {
-							title: '在紧急情况下为伤员止血时，须先用压迫法止血后再根据出血情况改用其他止血法。',
-							img: []
-						},
-						type: 5,
-						"answer": {
-							"min_num": "0",
-							"min_text": "不好",
-							"max_num": "100",
-							"max_text": "非常好",
-							"step_size": "1"
-						}
-					},
-				]
+				datas: [],
+				title: '',
+				explain: '',
+				addition_explain: '',
+				participation_man:'',  //已经参与调研的人数
+				research_number:'',     //调研次数（提交调研的次数）
+				create_time:'',        //发布时间
+			}
+		},
+		onLoad(option){
+			if(option.id){
+				this.id=option.id
+				this.getdata()
 			}
 		},
 		onShow() {
 			console.log(this.new_problem)
 		},
 		computed: {
-			...mapState(['new_problem']),
+			...mapState(['new_problem','loginDatas']),
 		},
 		methods: {
 			...mapMutations(['setnew_problem']),
@@ -244,7 +154,7 @@
 			down_fuc(){
 				return
 				uni.downloadFile({
-				    url: 'http://http://192.168.133.103:81/', //仅为示例，并非真实的资源
+				    url: service.IPurl+'/user/getExcel?id='+that.id+'&token='+that.loginDatas.userToken, //仅为示例，并非真实的资源
 				    success: (res) => {
 				        if (res.statusCode === 200) {
 				            console.log('下载成功');
@@ -252,12 +162,67 @@
 										      tempFilePath: res.tempFilePath,
 										      success: function (res) {
 														console.log(res)
-										        var savedFilePath = res.savedFilePath;
+										        // var savedFilePath = res.savedFilePath;
 										      }
 										    });
 				        }
 				    }
 				});
+			},
+			getdata() {
+				var that = this
+				var datas = {
+					token: that.loginDatas.userToken || '',
+					id: that.id
+				}
+			
+				//selectSaraylDetailByUserCard
+				var jkurl = '/user/issueDetails'
+				uni.showLoading({
+					title: '正在获取数据'
+				})
+				service.P_get(jkurl, datas).then(res => {
+					that.btn_kg = 0
+					console.log(res)
+					if (res.code == 1) {
+						var datas = res.data
+						console.log(typeof datas)
+			
+						if (typeof datas == 'string') {
+							datas = JSON.parse(datas)
+						}
+						that.title = datas.title
+						that.explain = datas.explain
+						that.addition_explain = datas.addition_explain
+						that.participation_man = datas.participation_man
+						that.research_number = datas.research_number
+						that.create_time = datas.create_time
+						that.datas = datas.problem
+						console.log(datas)
+			
+			
+					} else {
+						if (res.msg) {
+							uni.showToast({
+								icon: 'none',
+								title: res.msg
+							})
+						} else {
+							uni.showToast({
+								icon: 'none',
+								title: '操作失败'
+							})
+						}
+					}
+				}).catch(e => {
+					that.btn_kg = 0
+					console.log(e)
+					uni.showToast({
+						icon: 'none',
+						title: '获取数据失败'
+					})
+				})
+			
 			},
 			sub() {
 				uni.showModal({

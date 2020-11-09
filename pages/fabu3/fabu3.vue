@@ -1,41 +1,45 @@
 <template>
 	<view>
 		<view class="dy_times">
-			<view class="dy_time">
-				<view>调研开始日期</view>
-				<picker mode="date" :value="time" :end="time1" @change="bindTimeChange" style="flex:1;">
+			<picker mode="date" :value="time" :end="time1" @change="bindTimeChange" style="flex:1;">
+				<view class="dy_time">
+					<view>调研开始日期</view>
 					<view @tap="visible=true" style="flex: 1;text-align: center;font-size: 28upx;">{{time?time:'开始时间'}}</view>
-				</picker>
-			</view>
-			<view class="dy_time">
-				<view>调研结束日期</view>
-				<picker mode="date" :value="time1" :start="time" @change="bindTimeChange1" style="flex:1;">
+				</view>
+			</picker>
+			<picker mode="date" :value="time1" :start="time" @change="bindTimeChange1" style="flex:1;">
+				<view class="dy_time">
+					<view>调研结束日期</view>
 					<view @tap="visible=true" style="flex: 1;text-align: center;font-size: 28upx;">{{time1?time1:'结束时间'}}</view>
-				</picker>
-			</view>
+				</view>
+			</picker>
 		</view>
 		<view class="add_type">
-			<view :class="add_type==0?'active':''" @tap="addType_fuc(0)">手动添加</view>
-			<view :class="add_type==1?'active':''" @tap="addType_fuc(1)">随机添加</view>
+			<view :class="add_type==1?'active':''" @tap="addType_fuc(1)">手动添加</view>
+			<view :class="add_type==2?'active':''" @tap="addType_fuc(2)">随机添加</view>
 		</view>
-		<view v-if="add_type==0" class="times_boxs">
+		<view v-if="add_type==1" class="times_boxs">
 			<view class="time_li dis_flex aic" v-for="(item,index) in time_list">
-				<picker mode="time" :value="item.start_time" :end="item.end_time" :data-idx="index" data-type="1" @change="bindDateChange" style="flex:1;">
+				<picker mode="time" :value="item.start_time" :end="item.end_time" :data-idx="index" data-type="1" @change="bindDateChange"
+				 style="flex:1;height: 100%;" class="dis_flex aic  ju_c">
 					<view @tap="visible=true" style="flex: 1;text-align: center;font-size: 28upx;">{{item.start_time?item.start_time:'开始时间'}}</view>
 				</picker>
 				<view>-</view>
-				<picker mode="time" :value="item.end_time" :start="item.start_time" :data-idx="index" data-type="2" @change="bindDateChange" style="flex:1;">
+				<picker mode="time" :value="item.end_time" :start="item.start_time" :data-idx="index" data-type="2" @change="bindDateChange"
+				 style="flex:1;height: 100%;" class="dis_flex aic ju_c">
 					<view @tap="visible=true" style="flex: 1;text-align: center;font-size: 28upx;">{{item.end_time?item.end_time:'结束时间'}}</view>
 				</picker>
 			</view>
 		</view>
-		<view v-if="add_type==1" class="times_boxs">
+		<view v-if="add_type==2" class="times_boxs">
 			<view class="time_li dis_flex aic">
-				<picker mode="time" :value="sj_time.start_time" :end="sj_time.end_time" :data-idx="-1" data-type="1" @change="bindDateChange" style="flex:1;">
+				<picker mode="time" :value="sj_time.start_time" :end="sj_time.end_time" :data-idx="-1" data-type="1" @change="bindDateChange"
+				 style="flex:1;" class="dis_flex aic ju_c">
 					<view @tap="visible=true" style="flex: 1;text-align: center;font-size: 28upx;">{{sj_time.start_time?sj_time.start_time:'开始时间'}}</view>
 				</picker>
 				<view>-</view>
-				<picker mode="time" :value="sj_time.end_time" :start="sj_time.start_time" :data-idx="-1" data-type="2" @change="bindDateChange" style="flex:1;">
+				<picker mode="time" :value="sj_time.end_time" :start="sj_time.start_time" :data-idx="-1" data-type="2" @change="bindDateChange"
+				 style="flex:1;" class="dis_flex aic ju_c">
 					<view @tap="visible=true" style="flex: 1;text-align: center;font-size: 28upx;">{{sj_time.end_time?sj_time.end_time:'结束时间'}}</view>
 				</picker>
 			</view>
@@ -49,7 +53,7 @@
 			<view @tap.stop="jump" data-url="../about/about?type=sm" :data-login='false' :data-haslogin='hasLogin'>《申请调研者说明》</view>
 		</view>
 		<view class="btns">
-			<view v-if="add_type==0" @tap="add_time"><text class="iconfont icon-bianji1"></text>添加时间</view>
+			<view v-if="add_type==1" @tap="add_time"><text class="iconfont icon-bianji1"></text>添加时间</view>
 			<view @tap="sub"><text class="iconfont icon-queding"></text>确认发布</view>
 		</view>
 	</view>
@@ -66,21 +70,22 @@
 			return {
 				time: '',
 				time1: '',
-				add_type: 0,
+				add_type: 1,    //1：手动添加  2：随机添加    调研时间类型
 				time_list: [{
 					"start_time": "",
 					"end_time": ""
 				}],
-				sj_time:{
+				sj_time: {
 					"start_time": "",
 					"end_time": ""
 				},
 				sm_ty: false,
-				dt_num:0
+				dt_num: 0,
+				btnkg:0
 			}
 		},
 		computed: {
-			...mapState(['hasLogin', 'forcedLogin', 'userName','ls_prodata','ls_pro_yh']),
+			...mapState(['hasLogin', 'forcedLogin', 'userName', 'loginDatas' ,'ls_prodata', 'ls_pro_yh']),
 		},
 		methods: {
 			...mapMutations(['clearls_pro']),
@@ -93,26 +98,26 @@
 				this.time1 = e.target.value
 			},
 			// 时间选择
-			bindDateChange(e){
-				var that =this
+			bindDateChange(e) {
+				var that = this
 				console.log(e)
 				console.log(e.currentTarget.dataset.idx)
 				console.log(e.currentTarget.dataset.type)
-				var datas =e.currentTarget.dataset
-				if(datas.idx==-1){
-					if(datas.type==1){
-						that.$set(that.sj_time,'start_time',e.target.value)
-						
-					}else{
-						that.$set(that.sj_time,'end_time',e.target.value)
+				var datas = e.currentTarget.dataset
+				if (datas.idx == -1) {
+					if (datas.type == 1) {
+						that.$set(that.sj_time, 'start_time', e.target.value)
+
+					} else {
+						that.$set(that.sj_time, 'end_time', e.target.value)
 					}
 					return
 				}
-				if(datas.type==1){
-					that.$set(that.time_list[datas.idx],'start_time',e.target.value)
-					
-				}else{
-					that.$set(that.time_list[datas.idx],'end_time',e.target.value)
+				if (datas.type == 1) {
+					that.$set(that.time_list[datas.idx], 'start_time', e.target.value)
+
+				} else {
+					that.$set(that.time_list[datas.idx], 'end_time', e.target.value)
 				}
 			},
 			addType_fuc(num) {
@@ -121,21 +126,110 @@
 			sm_fuc() {
 				this.sm_ty = !this.sm_ty
 			},
-			add_time(){
-				var newtime={
+			add_time() {
+				var newtime = {
 					"start_time": "",
 					"end_time": ""
 				}
 				this.time_list.push(newtime)
 			},
 			sub() {
-				uni.showToast({
-					icon: 'none',
-					title: '发布成功，等待审核'
+				var that =this
+				var datas
+				if(that.add_type==1){
+					if(that.time_list.length==0){
+						uni.showToast({
+							icon: 'none',
+							title: '请添加时间'
+						})
+						return
+					}
+					var times=JSON.stringify(that.time_list)
+					datas = {
+						token:that.loginDatas.userToken,
+						dy_title:that.ls_prodata.dy_title,
+						dy_explain:that.ls_prodata.dy_explain,
+						dy_addition_explain:that.ls_prodata.dy_addition_explain,
+						dy_start_time:that.time,
+						dy_end_time:that.time1,
+						problem:JSON.stringify(that.ls_prodata.datas),
+						uids:that.ls_pro_yh,
+						dy_time_type:that.add_type,
+						sd_time:times
+					}
+				}else{ //随机
+					datas = {
+						token:that.loginDatas.userToken,
+						dy_title:that.ls_prodata.dy_title,
+						dy_explain:that.ls_prodata.dy_explain,
+						dy_addition_explain:that.ls_prodata.dy_addition_explain,
+						dy_start_time:that.time,
+						dy_end_time:that.time1,
+						problem:JSON.stringify(that.ls_prodata.datas),
+						uids:that.ls_pro_yh,
+						dy_time_type:that.add_type,
+						sj_start_time:that.sj_time.start_time,
+						sj_end_time:that.sj_time.end_time,
+						sj_number:that.dt_num
+					}
+				}
+				
+				var jkurl = '/user/research/add'
+				
+				if(this.btnkg==1){
+					return
+				}
+				this.btnkg=1
+				uni.showLoading({
+					title:'正在提交'
 				})
+				// 单个请求
+				service.P_post(jkurl, datas).then(res => {
+					that.btn_kg=0
+					console.log(res)
+					if (res.code == 1) {
+						var datas = res.data
+						console.log(typeof datas)
+						
+						if (typeof datas == 'string') {
+							datas = JSON.parse(datas)
+						}
+						uni.showToast({
+							icon: 'none',
+							title: '发布成功，等待审核'
+						})
+						setTimeout(()=>{
+							uni.navigateBack({
+								delta:3
+							})
+						},1000)
+					} else {
+						that.btnkg=0
+						if (res.msg) {
+							uni.showToast({
+								icon: 'none',
+								title: res.msg
+							})
+						} else {
+							uni.showToast({
+								icon: 'none',
+								title: '操作失败'
+							})
+						}
+					}
+				}).catch(e => {
+					that.btn_kg=0
+					console.log(e)
+					uni.showToast({
+						icon: 'none',
+						title: '获取数据失败'
+					})
+				})
+				
+				
 			},
-			jump(e){
-				this.sm_ty=true
+			jump(e) {
+				this.sm_ty = true
 				service.jump(e)
 			}
 		}
@@ -253,7 +347,8 @@
 	.shuoming .active {
 		color: #4785F0;
 	}
-	.dt_num{
+
+	.dt_num {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
@@ -262,7 +357,8 @@
 		font-size: 28upx;
 		color: #333;
 	}
-	.dt_num input{
+
+	.dt_num input {
 		text-align: right;
 	}
 </style>

@@ -273,120 +273,22 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
 {
   data: function data() {
     return {
-      datas: [{
-        problem: {
-          title: '在紧急情况下为伤员止血时，须先用压迫法止血后再根据出血情况改用其他止血法。',
-          img: [] },
+      id: '',
+      title: '',
+      explain: '',
+      addition_explain: '',
+      datas: [] };
 
-        type: 1,
-        answer: [{
-          title: '风云风云风云风云',
-          img: [
-          '../../static/images/danxuan.png'] },
-
-
-        {
-          title: '风云风云风云风云',
-          img: [
-          '../../static/images/danxuan.png'] },
-
-
-        {
-          title: '风云风云风云风云',
-          img: [
-          '../../static/images/danxuan.png'] },
-
-
-        {
-          title: '风云风云风云风云',
-          img: [
-          '../../static/images/danxuan.png'] }] },
-
-
-
-
-      {
-        problem: {
-          title: '在紧急情况下为伤员止血时，须先用压迫法止血后再根据出血情况改用其他止血法。',
-          img: [] },
-
-        type: 2,
-        answer: [{
-          title: '风云风云风云风云',
-          img: [] },
-
-        {
-          title: '风云风云风云风云',
-          img: [] },
-
-        {
-          title: '风云风云风云风云',
-          img: [] },
-
-        {
-          title: '风云风云风云风云',
-          img: [] }] },
-
-
-
-      {
-        problem: {
-          title: '在紧急情况下为伤员止血时，须先用压迫法止血后再根据出血情况改用其他止血法。',
-          img: [] },
-
-        type: 3 },
-
-
-      {
-        problem: {
-          title: '在紧急情况下为伤员止血时，须先用压迫法止血后再根据出血情况改用其他止血法。',
-          img: [] },
-
-        type: 4,
-        answer: [{
-          title: '1风云风云风云风云',
-          id: '1',
-          img: [] },
-
-        {
-          title: '2风云风云风云风云',
-          id: '2',
-          img: [] },
-
-        {
-          title: '3风云风云风云风云',
-          id: '3',
-          img: [] },
-
-        {
-          title: '4风云风云风云风云',
-          id: '4',
-          img: [] }] },
-
-
-
-      {
-        problem: {
-          title: '在紧急情况下为伤员止血时，须先用压迫法止血后再根据出血情况改用其他止血法。',
-          img: [] },
-
-        type: 5,
-        "answer": {
-          "min_num": "0",
-          "min_text": "不好",
-          "max_num": "100",
-          "max_text": "非常好",
-          "step_size": "1" } }] };
-
-
-
-
+  },
+  onLoad: function onLoad(option) {
+    this.id = option.id;
+    this.getdata();
   },
   onShow: function onShow() {
     console.log(this.new_problem);
   },
   computed: _objectSpread({},
-  (0, _vuex.mapState)(['new_problem'])),
+  (0, _vuex.mapState)(['new_problem', 'loginDatas'])),
 
 
   methods: _objectSpread(_objectSpread({},
@@ -438,6 +340,13 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
 
       }
     },
+    tiankong_fuc: function tiankong_fuc(e) {
+      var that = this;
+      console.log(e.currentTarget.dataset);
+      var datas = e.currentTarget.dataset;
+      console.log(e.detail.value);
+      _vue.default.set(that.datas[datas.index], 'jieguo', e.detail.value);
+    },
     px_up: function px_up(item, idx) {
       var newarr = item.answer;
       var temp = JSON.parse(JSON.stringify(newarr[idx]));
@@ -474,19 +383,135 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
       console.log(item);
     },
     sub: function sub() {
+      var that = this;
+      var answer_list = [];
+      for (var i = 0; i < that.datas.length; i++) {
+        if (!that.datas[i].jieguo) {
+          uni.showToast({
+            icon: 'none',
+            title: '请先写填写问题' });
+
+          return;
+        }
+        answer_list.push({
+          id: that.datas[i].id,
+          option: that.datas[i].jieguo });
+
+      }
+      console.log(that.datas);
+      console.log(answer_list);
+      var datas = {
+        token: that.loginDatas.userToken,
+        answer: JSON.stringify(answer_list),
+        id: that.id };
+
+      var jkurl = '/subResearch';
       uni.showModal({
-        title: '请仔细确认发布内容，发布后不可修改',
+        title: '请仔细确认提交，提交后不可修改',
         success: function success(res) {
           if (res.confirm) {
             console.log('用户点击确定');
-            uni.navigateTo({
-              url: '../fabu2/fabu2' });
 
+            _service.default.P_post(jkurl, datas).then(function (res) {
+              that.btn_kg = 0;
+              console.log(res);
+              if (res.code == 1) {
+                var datas = res.data;
+                console.log(typeof datas);
+
+                if (typeof datas == 'string') {
+                  datas = JSON.parse(datas);
+                }
+                uni.showToast({
+                  icon: 'none',
+                  title: '提交成功' });
+
+                setTimeout(function () {
+                  uni.navigateBack({
+                    delta: 1 });
+
+                }, 1000);
+                console.log(datas);
+
+
+              } else {
+                if (res.msg) {
+                  uni.showToast({
+                    icon: 'none',
+                    title: res.msg });
+
+                } else {
+                  uni.showToast({
+                    icon: 'none',
+                    title: '操作失败' });
+
+                }
+              }
+            }).catch(function (e) {
+              that.btn_kg = 0;
+              console.log(e);
+              uni.showToast({
+                icon: 'none',
+                title: '获取数据失败' });
+
+            });
           } else if (res.cancel) {
             console.log('用户点击取消');
           }
         } });
 
+
+    },
+    getdata: function getdata() {
+      var that = this;
+      var datas = {
+        token: that.loginDatas.userToken || '',
+        id: that.id };
+
+
+      //selectSaraylDetailByUserCard
+      var jkurl = '/researchDetails';
+      uni.showLoading({
+        title: '正在获取数据' });
+
+      _service.default.P_get(jkurl, datas).then(function (res) {
+        that.btn_kg = 0;
+        console.log(res);
+        if (res.code == 1) {
+          var datas = res.data;
+          console.log(typeof datas);
+
+          if (typeof datas == 'string') {
+            datas = JSON.parse(datas);
+          }
+          that.title = datas.title;
+          that.explain = datas.explain;
+          that.addition_explain = datas.addition_explain;
+          that.datas = datas.problem;
+          console.log(datas);
+
+
+        } else {
+          if (res.msg) {
+            uni.showToast({
+              icon: 'none',
+              title: res.msg });
+
+          } else {
+            uni.showToast({
+              icon: 'none',
+              title: '操作失败' });
+
+          }
+        }
+      }).catch(function (e) {
+        that.btn_kg = 0;
+        console.log(e);
+        uni.showToast({
+          icon: 'none',
+          title: '获取数据失败' });
+
+      });
 
     },
     jump: function jump(e) {

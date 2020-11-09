@@ -377,7 +377,7 @@ const http =({url ='',param ={},method='',header={'content-type': 'application/x
           console.log(`耗时${Date.now() - timeStart}`);
 					console.log(res)
           if(res.statusCode ==200){//请求成功
-					
+					console.log(res)
 						if(res.data.code==-1){
 							uni.navigateTo({
 								url:'/pages/login/login'

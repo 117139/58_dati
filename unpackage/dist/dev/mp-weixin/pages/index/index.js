@@ -192,11 +192,11 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
       datas_xy: {
         body: '' },
 
-      btnkg: 0,
+      btn_kg: 0,
       time_zz: '你好',
       StatusBar: this.StatusBar,
       CustomBar: this.CustomBar,
-      datas: '',
+      datas: [],
       indicatorDots: true,
       autoplay: true,
       interval: 3000,
@@ -210,6 +210,12 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
       data_last: false };
 
   },
+  watch: {
+    hasLogin: function hasLogin() {
+      this.btn_kg = 0;
+      this.onRetry();
+    } },
+
   onLoad: function onLoad() {
     var yhxy = uni.getStorageSync('yhxy');
     // if (!yhxy) {
@@ -220,7 +226,7 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
     // 	this.triggered = true;
     // }, 1000)
     // this.onRetry()
-    this.getdata(1);
+    this.onRetry();
   },
   onPageScroll: function onPageScroll(e) {
     console.log(e);
@@ -274,10 +280,70 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
     onPulling: function onPulling(e) {
       console.log("onpulling", e);
     },
-    onRefresh: function onRefresh() {
+    onRefresh: function onRefresh() {var _this = this;
+      var that = this;
       if (this._freshing) return;
       this._freshing = true;
-      this.onRetry();
+      var datas = {
+        token: that.loginDatas.userToken,
+        page: 1,
+        size: that.size,
+        title: that.search_key,
+        sort: that.sort };
+
+      if (that.btn_kg == 1) {
+        return;
+      }
+      that.btn_kg = 1;
+      //selectSaraylDetailByUserCard
+      var jkurl = '/';
+      uni.showLoading({
+        title: '正在获取数据' });
+
+      _service.default.P_get(jkurl, datas).then(function (res) {
+        _this.triggered = false;
+        _this._freshing = false;
+        that.btn_kg = 0;
+        console.log(res);
+        if (res.code == 1) {
+          var datas = res.data;
+          console.log(typeof datas);
+
+          if (typeof datas == 'string') {
+            datas = JSON.parse(datas);
+          }
+          console.log(datas);
+          if (res.resfj_data) {
+            that.setfj_data(res.resfj_data);
+          }
+
+          that.datas = datas;
+
+          that.page = 2;
+
+        } else {
+          if (res.msg) {
+            uni.showToast({
+              icon: 'none',
+              title: res.msg });
+
+          } else {
+            uni.showToast({
+              icon: 'none',
+              title: '操作失败' });
+
+          }
+        }
+      }).catch(function (e) {
+        _this.triggered = false;
+        _this._freshing = false;
+        that.btn_kg = 0;
+        console.log(e);
+        uni.showToast({
+          icon: 'none',
+          title: '获取数据失败' });
+
+      });
       // setTimeout(()=>{
       // 	this.triggered=false
       // 	this._freshing =false
@@ -329,25 +395,35 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
       uni.showLoading({
         title: '正在获取数据' });
 
-      _service.default.get(jkurl, data,
+      var page_that = that.page;
+      _service.default.P_get(jkurl, data,
       function (res) {
 
-        if (res.data.code == 1) {
-          var datas = res.data.data;
+        if (res.code == 1) {
+          var datas = res.data;
           console.log(typeof datas);
 
           if (typeof datas == 'string') {
             datas = JSON.parse(datas);
           }
           console.log(datas);
-          that.datas = datas;
+          if (page_that == 1) {
 
+            that.datas = datas;
+          } else {
+            if (datas.length == 0) {
+              that.data_last = true;
+              return;
+            }
+            that.datas = that.datas.concat(datas);
+          }
+          that.page++;
 
         } else {
-          if (res.data.msg) {
+          if (res.msg) {
             uni.showToast({
               icon: 'none',
-              title: res.data.msg });
+              title: res.msg });
 
           } else {
             uni.showToast({
@@ -359,10 +435,10 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
       },
       function (err) {
 
-        if (err.data.msg) {
+        if (err.msg) {
           uni.showToast({
             icon: 'none',
-            title: err.data.msg });
+            title: err.msg });
 
         } else {
           uni.showToast({
@@ -379,43 +455,42 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
     },
     getdata: function getdata(num) {
       var that = this;
+
       if (that.data_last) {
         return;
       }
-      var data = {
+      var datas = {
         token: that.loginDatas.userToken || '',
         page: that.page,
         size: that.size,
         title: that.search_key,
         sort: that.sort };
 
-
+      if (this.btn_kg == 1) {
+        return;
+      }
+      this.btn_kg = 1;
       //selectSaraylDetailByUserCard
       var jkurl = '/';
       uni.showLoading({
         title: '正在获取数据' });
 
-      _service.default.get(jkurl, data,
-      function (res) {
-        console.log('获取到数据');
-        console.log(res.data);
-        if (!num) {
-          that.triggered = false;
-          that._freshing = false;
-        }
-
-        if (res.data.code == 1) {
-          var datas = res.data.data;
+      var page_that = that.page;
+      _service.default.P_get(jkurl, datas).then(function (res) {
+        that.btn_kg = 0;
+        console.log(res);
+        if (res.code == 1) {
+          var datas = res.data;
           console.log(typeof datas);
 
           if (typeof datas == 'string') {
             datas = JSON.parse(datas);
           }
-          console.log(datas);
-          if (res.data.fj_data) {
-            that.setfj_data(res.data.fj_data);
+          console.log(res);
+          if (res.fj_data) {
+            that.setfj_data(res.fj_data);
           }
-          if (that.page == 1) {
+          if (page_that == 1) {
 
             that.datas = datas;
           } else {
@@ -428,10 +503,10 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
           that.page++;
 
         } else {
-          if (res.data.msg) {
+          if (res.msg) {
             uni.showToast({
               icon: 'none',
-              title: res.data.msg });
+              title: res.msg });
 
           } else {
             uni.showToast({
@@ -440,35 +515,25 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
 
           }
         }
-      },
-      function (err) {
-        if (!num) {
-          that.triggered = false;
-          that._freshing = false;
-        }
-        if (err.data.msg) {
-          uni.showToast({
-            icon: 'none',
-            title: err.data.msg });
+      }).catch(function (e) {
+        that.btn_kg = 0;
+        console.log(e);
+        uni.showToast({
+          icon: 'none',
+          title: '获取数据失败' });
 
-        } else {
-          uni.showToast({
-            icon: 'none',
-            title: '操作失败' });
-
-        }
       });
 
     },
     jumpurl: function jumpurl(e) {
       var that = this;
 
-      if (that.btnkg == 1) {
+      if (that.btn_kg == 1) {
         return;
       } else {
-        that.btnkg = 1;
+        that.btn_kg = 1;
         setTimeout(function () {
-          that.btnkg = 0;
+          that.btn_kg = 0;
         }, 1000);
       }
       var datas = e.currentTarget.dataset;
@@ -484,12 +549,12 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
     jump: function jump(e) {
       var that = this;
 
-      if (that.btnkg == 1) {
+      if (that.btn_kg == 1) {
         return;
       } else {
-        that.btnkg = 1;
+        that.btn_kg = 1;
         setTimeout(function () {
-          that.btnkg = 0;
+          that.btn_kg = 0;
         }, 1000);
       }
 
@@ -514,9 +579,9 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
 
       _service.default.post(jkurl, data,
       function (res) {
-        that.btnkg = 0;
-        if (res.data.code == 1) {
-          that.login(res.data.data.nickname);
+        that.btn_kg = 0;
+        if (res.code == 1) {
+          that.login(res.data.nickname);
           that.logindata(res.data.data);
           uni.setStorageSync('loginmsg', JSON.stringify(res.data.data));
           uni.setStorageSync('phone', account);
@@ -548,7 +613,7 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
         }
       },
       function (err) {
-        that.btnkg = 0;
+        that.btn_kg = 0;
         if (err.data.msg) {
           uni.showToast({
             icon: 'none',

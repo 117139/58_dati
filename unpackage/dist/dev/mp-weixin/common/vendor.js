@@ -8281,7 +8281,7 @@ var http = function http() {var _ref = arguments.length > 0 && arguments[0] !== 
         console.log("\u8017\u65F6".concat(Date.now() - timeStart));
         console.log(res);
         if (res.statusCode == 200) {//请求成功
-
+          console.log(res);
           if (res.data.code == -1) {
             uni.navigateTo({
               url: '/pages/login/login' });

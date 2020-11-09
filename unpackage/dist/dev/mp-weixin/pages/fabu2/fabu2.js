@@ -160,7 +160,10 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
 {
   data: function data() {
     return {
-      list: [
+      page: 1,
+      size: 15,
+      keyword: '',
+      datas: [
       {
         name: 'pndas' },
 
@@ -198,8 +201,11 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
 
   },
   computed: _objectSpread({},
-  (0, _vuex.mapState)(['new_problem', 'ls_prodata'])),
+  (0, _vuex.mapState)(['new_problem', 'ls_prodata', 'loginDatas'])),
 
+  onLoad: function onLoad() {
+    this.onRetry();
+  },
   methods: _objectSpread(_objectSpread({},
   (0, _vuex.mapMutations)(['setnew_problem', 'setls_pro_yh'])), {}, {
     sliderChange: function sliderChange(e) {
@@ -212,12 +218,75 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
         _vue.default.set(item, 'active', true);
       }
     },
+    onRetry: function onRetry() {
+      this.page = 1;
+      this.getyh();
+    },
+    getyh: function getyh() {
+      var that = this;
+      var datas = {
+        token: that.loginDatas.userToken,
+        size: that.size,
+        page: that.page,
+        keyword: that.keyword };
+
+      //selectSaraylDetailByUserCard
+      var jkurl = '/user/research/getUsrAll';
+
+      // 单个请求
+      _service.default.P_get(jkurl, datas).then(function (res) {
+        that.btn_kg = 0;
+        console.log(res);
+        // if (res.data.code == 1) {
+        if (res.code == 1) {
+          var datas = res.data;
+          console.log(typeof datas);
+
+          if (typeof datas == 'string') {
+            datas = JSON.parse(datas);
+          }
+          if (that.page == 1) {
+
+            that.datas = datas;
+          } else {
+            if (datas.length == 0) {
+              that.data_last = true;
+              return;
+            }
+            that.datas = that.datas.concat(datas);
+          }
+          that.page++;
+
+        } else {
+          that.btnkg = 0;
+          if (res.msg) {
+            uni.showToast({
+              icon: 'none',
+              title: res.msg });
+
+          } else {
+            uni.showToast({
+              icon: 'none',
+              title: '操作失败' });
+
+          }
+        }
+      }).catch(function (e) {
+        that.btn_kg = 0;
+        console.log(e);
+        uni.showToast({
+          icon: 'none',
+          title: '获取数据失败' });
+
+      });
+
+    },
     sub: function sub() {
-      console.log(this.list);
+      console.log(this.datas);
       var arr = [];
-      for (var i = 0; i < this.list.length; i++) {
-        if (this.list[i].active) {
-          arr.push(this.list[i].name);
+      for (var i = 0; i < this.datas.length; i++) {
+        if (this.datas[i].active) {
+          arr.push(this.datas[i].id);
         }
       }
       console.log(arr);
@@ -228,6 +297,7 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
 
         return;
       }
+      arr = arr.join(',');
       this.setls_pro_yh(arr);
       // return
       uni.navigateTo({

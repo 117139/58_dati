@@ -20,12 +20,12 @@
 			 :refresher-threshold="100" @refresherpulling="onPulling" @refresherrefresh="onRefresh" @refresherrestore="onRestore"
 			 @refresherabort="onAbort" @scrolltolower="getdata">
 				<view>
-					<view class="i_li dis_flex aift" v-for="item in 20" @tap="jump" data-url="/pages/dati/dati">
-						<image class="i_li_tx" src="/static/images/tx_m2.jpg" mode="aspectFill" lazy-load="true"></image>
+					<view class="i_li dis_flex aift" v-for="item in datas" @tap="jump" :data-url="'/pages/dati/dati?id='+item.id">
+						<image class="i_li_tx" :src="item.head_portrait" mode="aspectFill" lazy-load="true"></image>
 						<view class="i_li_msg">
-							<view class="d1">1号研究者</view>
-							<view class="d2">2020-09-23 12：00：00</view>
-							<view class="d3">北京大学生的就业时间与高等教育改革调研研 究与分分析。</view>
+							<view class="d1">{{item.user_nickname}}</view>
+							<view class="d2">{{item.research_start_time}}</view>
+							<view class="d3">{{item.title}}</view>
 						</view>
 					</view>
 					<view v-if="datas.length==0" class="zanwu">暂无数据</view>
@@ -51,11 +51,11 @@
 				datas_xy: {
 					body: ''
 				},
-				btnkg: 0,
+				btn_kg: 0,
 				time_zz: '你好',
 				StatusBar: this.StatusBar,
 				CustomBar: this.CustomBar,
-				datas: '',
+				datas: [],
 				indicatorDots: true,
 				autoplay: true,
 				interval: 3000,
@@ -69,6 +69,12 @@
 				data_last:false
 			};
 		},
+		watch:{
+			hasLogin(){
+				this.btn_kg=0
+				this.onRetry()
+			}
+		},
 		onLoad() {
 			var yhxy = uni.getStorageSync('yhxy')
 			// if (!yhxy) {
@@ -79,7 +85,7 @@
 			// 	this.triggered = true;
 			// }, 1000)
 			// this.onRetry()
-			this.getdata(1)
+			this.onRetry()
 		},
 		onPageScroll(e) {
 			console.log(e)
@@ -134,9 +140,69 @@
 				console.log("onpulling", e);
 			},
 			onRefresh() {
+				var that =this
 				if (this._freshing) return;
 				this._freshing = true;
-				this.onRetry()
+				var datas = {
+					token: that.loginDatas.userToken,
+					page: 1,
+					size: that.size,
+					title: that.search_key,
+					sort: that.sort
+				}
+				if(that.btn_kg==1){
+					return
+				}
+				that.btn_kg=1
+				//selectSaraylDetailByUserCard
+				var jkurl = '/'
+				uni.showLoading({
+					title: '正在获取数据'
+				})
+				service.P_get(jkurl, datas).then(res => {
+					this.triggered=false
+					this._freshing =false
+					that.btn_kg=0
+					console.log(res)
+					if (res.code == 1) {
+						var datas = res.data
+						console.log(typeof datas)
+					
+						if (typeof datas == 'string') {
+							datas = JSON.parse(datas)
+						}
+						console.log(datas)
+						if(res.resfj_data){
+							that.setfj_data(res.resfj_data)
+						}
+						
+							that.datas = datas
+						
+						that.page=2
+					
+					} else {
+						if (res.msg) {
+							uni.showToast({
+								icon: 'none',
+								title: res.msg
+							})
+						} else {
+							uni.showToast({
+								icon: 'none',
+								title: '操作失败'
+							})
+						}
+					}
+				}).catch(e => {
+					this.triggered=false
+					this._freshing =false
+					that.btn_kg=0
+					console.log(e)
+					uni.showToast({
+						icon: 'none',
+						title: '获取数据失败'
+					})
+				})
 				// setTimeout(()=>{
 				// 	this.triggered=false
 				// 	this._freshing =false
@@ -188,25 +254,35 @@
 				uni.showLoading({
 					title: '正在获取数据'
 				})
-				service.get(jkurl, data,
+				var page_that=that.page
+				service.P_get(jkurl, data,
 					function(res) {
 
-						if (res.data.code == 1) {
-							var datas = res.data.data
+						if (res.code == 1) {
+							var datas = res.data
 							console.log(typeof datas)
 
 							if (typeof datas == 'string') {
 								datas = JSON.parse(datas)
 							}
 							console.log(datas)
-							that.datas = datas
-
-
+							if(page_that==1){
+								
+								that.datas = datas
+							}else{
+								if(datas.length==0){
+									that.data_last=true
+									return
+								}
+								that.datas =that.datas.concat(datas) 
+							}
+							that.page++
+			
 						} else {
-							if (res.data.msg) {
+							if (res.msg) {
 								uni.showToast({
 									icon: 'none',
-									title: res.data.msg
+									title: res.msg
 								})
 							} else {
 								uni.showToast({
@@ -218,10 +294,10 @@
 					},
 					function(err) {
 
-						if (err.data.msg) {
+						if (err.msg) {
 							uni.showToast({
 								icon: 'none',
-								title: err.data.msg
+								title: err.msg
 							})
 						} else {
 							uni.showToast({
@@ -238,77 +314,58 @@
 			},
 			getdata(num) {
 				var that = this
+				
 				if(that.data_last){
 					return
 				}
-				var data = {
+				var datas = {
 					token: that.loginDatas.userToken || '',
 					page: that.page,
 					size: that.size,
 					title: that.search_key,
 					sort: that.sort
 				}
-
+				if(this.btn_kg==1){
+					return
+				}
+				this.btn_kg=1
 				//selectSaraylDetailByUserCard
 				var jkurl = '/'
 				uni.showLoading({
 					title: '正在获取数据'
 				})
-				service.get(jkurl, data,
-					function(res) {
-						console.log('获取到数据')
-						console.log(res.data)
-						if(!num){
-							that.triggered = false;
-							that._freshing = false;
+				var page_that=that.page
+				service.P_get(jkurl, datas).then(res => {
+					that.btn_kg=0
+					console.log(res)
+					if (res.code == 1) {
+						var datas = res.data
+						console.log(typeof datas)
+					
+						if (typeof datas == 'string') {
+							datas = JSON.parse(datas)
 						}
-						
-						if (res.data.code == 1) {
-							var datas = res.data.data
-							console.log(typeof datas)
-
-							if (typeof datas == 'string') {
-								datas = JSON.parse(datas)
-							}
-							console.log(datas)
-							if(res.data.fj_data){
-								that.setfj_data(res.data.fj_data)
-							}
-							if(that.page==1){
-								
-								that.datas = datas
-							}else{
-								if(datas.length==0){
-									that.data_last=true
-									return
-								}
-								that.datas =that.datas.concat(datas) 
-							}
-							that.page++
-
-						} else {
-							if (res.data.msg) {
-								uni.showToast({
-									icon: 'none',
-									title: res.data.msg
-								})
-							} else {
-								uni.showToast({
-									icon: 'none',
-									title: '操作失败'
-								})
-							}
+						console.log(res)
+						if(res.fj_data){
+							that.setfj_data(res.fj_data)
 						}
-					},
-					function(err) {
-					if(!num){
-						that.triggered = false;
-						that._freshing = false;
-					}
-						if (err.data.msg) {
+						if(page_that==1){
+							
+							that.datas = datas
+						}else{
+							if(datas.length==0){
+								that.data_last=true
+								return
+							}
+							that.datas =that.datas.concat(datas) 
+						}
+						that.page++
+					
+					} else {
+						if (res.msg) {
 							uni.showToast({
 								icon: 'none',
-								title: err.data.msg
+								title: res.msg
 							})
 						} else {
 							uni.showToast({
@@ -317,17 +374,25 @@
 							})
 						}
 					}
-				)
+				}).catch(e => {
+					that.btn_kg=0
+					console.log(e)
+					uni.showToast({
+						icon: 'none',
+						title: '获取数据失败'
+					})
+				})
+				
 			},
 			jumpurl(e) {
 				var that = this
 
-				if (that.btnkg == 1) {
+				if (that.btn_kg == 1) {
 					return
 				} else {
-					that.btnkg = 1
+					that.btn_kg = 1
 					setTimeout(function() {
-						that.btnkg = 0
+						that.btn_kg = 0
 					}, 1000)
 				}
 				var datas = e.currentTarget.dataset
@@ -343,12 +408,12 @@
 			jump(e) {
 				var that = this
 
-				if (that.btnkg == 1) {
+				if (that.btn_kg == 1) {
 					return
 				} else {
-					that.btnkg = 1
+					that.btn_kg = 1
 					setTimeout(function() {
-						that.btnkg = 0
+						that.btn_kg = 0
 					}, 1000)
 				}
 
@@ -373,9 +438,9 @@
 
 				service.post(jkurl, data,
 					function(res) {
-						that.btnkg = 0
-						if (res.data.code == 1) {
-							that.login(res.data.data.nickname);
+						that.btn_kg = 0
+						if (res.code == 1) {
+							that.login(res.data.nickname);
 							that.logindata(res.data.data)
 							uni.setStorageSync('loginmsg', JSON.stringify(res.data.data))
 							uni.setStorageSync('phone', account)
@@ -407,7 +472,7 @@
 						}
 					},
 					function(err) {
-						that.btnkg = 0
+						that.btn_kg = 0
 						if (err.data.msg) {
 							uni.showToast({
 								icon: 'none',

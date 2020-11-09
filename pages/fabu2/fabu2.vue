@@ -3,11 +3,11 @@
 		<view class="an_list">
 			<view class="an_search">
 				<text class="iconfont icon-chakan"></text>
-				<input type="text" placeholder="请输入手机号或者名称">
+				<input type="text" placeholder="请输入手机号或者名称" v-model="keyword" confirm-type="search" @confirm="onRetry">
 			</view>
-			<view class="an_li dis_flex aic" v-for="(item,index) in list" @tap="xz_fuc(item,$event)">
-				<image class="an_li_tx" src="../../static/images/tx_m2.jpg"></image>
-				<view class="an_li_name flex_1">{{item.name}}</view>
+			<view class="an_li dis_flex aic" v-for="(item,index) in datas" @tap="xz_fuc(item,$event)">
+				<image class="an_li_tx" :src="item.head_portrait"></image>
+				<view class="an_li_name flex_1">{{item.nickname}}</view>
 				<image v-if="item.active"  :data-idx="index" class="an_li_xz" src="../../static/images/danxuan1.png"></image>
 				<image v-else class="an_li_xz" src="../../static/images/danxuan.png"></image>
 			</view>
@@ -28,7 +28,10 @@
 	export default {
 		data() {
 			return {
-				list:[
+				page:1,
+				size:15,
+				keyword:'',
+				datas:[
 					{
 						name:'pndas'
 					},
@@ -66,7 +69,10 @@
 			}
 		},
 		computed: {
-			...mapState(['new_problem','ls_prodata']),
+			...mapState(['new_problem','ls_prodata','loginDatas']),
+		},
+		onLoad() {
+			this.onRetry()
 		},
 		methods: {
 			...mapMutations(['setnew_problem','setls_pro_yh']),
@@ -80,12 +86,75 @@
 					Vue.set(item, 'active', true);
 				}
 			},
+			onRetry(){
+				this.page=1
+				this.getyh()
+			},
+			getyh(){
+				var that =this
+				var datas = {
+					token:that.loginDatas.userToken,
+					size:that.size,
+					page:that.page,
+					keyword:that.keyword,
+				}
+				//selectSaraylDetailByUserCard
+				var jkurl = '/user/research/getUsrAll'
+				
+				// 单个请求
+				service.P_get(jkurl, datas).then(res => {
+					that.btn_kg=0
+					console.log(res)
+					// if (res.data.code == 1) {
+					if (res.code == 1) {
+						var datas = res.data
+						console.log(typeof datas)
+						
+						if (typeof datas == 'string') {
+							datas = JSON.parse(datas)
+						}
+						if(that.page==1){
+							
+							that.datas = datas
+						}else{
+							if(datas.length==0){
+								that.data_last=true
+								return
+							}
+							that.datas =that.datas.concat(datas) 
+						}
+						that.page++
+									
+					} else {
+						that.btnkg=0
+						if (res.msg) {
+							uni.showToast({
+								icon: 'none',
+								title: res.msg
+							})
+						} else {
+							uni.showToast({
+								icon: 'none',
+								title: '操作失败'
+							})
+						}
+					}
+				}).catch(e => {
+					that.btn_kg=0
+					console.log(e)
+					uni.showToast({
+						icon: 'none',
+						title: '获取数据失败'
+					})
+				})
+				
+			},
 			sub(){
-				console.log(this.list)
+				console.log(this.datas)
 				var arr=[]
-				for(var i=0;i<this.list.length;i++){
-					if(this.list[i].active){
-						arr.push(this.list[i].name)
+				for(var i=0;i<this.datas.length;i++){
+					if(this.datas[i].active){
+						arr.push(this.datas[i].id)
 					}
 				}
 				console.log(arr)
@@ -96,6 +165,7 @@
 					})
 					return
 				}
+				arr=arr.join(',')
 				this.setls_pro_yh(arr)
 				// return
 				uni.navigateTo({

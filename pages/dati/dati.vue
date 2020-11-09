@@ -1,13 +1,13 @@
 <template>
 	<view>
 		<view class="fabu_int">
-			<view>北京大学生的就业时间与高等教育改革调 研研究与分析。</view>
+			<view>{{title}}</view>
 		</view>
 		<view class="fabu_int">
-			<view>调研提示或调研说明</view>
+			<view>{{explain}}</view>
 		</view>
 		<view class="fabu_int">
-			<view>xxxxxxxxxxxxx</view>
+			<view>{{addition_explain}}</view>
 		</view>
 		<view class="problem_list">
 
@@ -35,7 +35,7 @@
 					</view>
 					<!-- 多选 -->
 					<view class="ans_list" v-if="item.type==2">
-						<view class="ans_li" v-for="(item1,idx1) in item.answer"  @tap="duoxuan(item,$event)" :data-idx="idx1">
+						<view class="ans_li" v-for="(item1,idx1) in item.answer" @tap="duoxuan(item,$event)" :data-idx="idx1">
 							<view class="ans_tit dis_flex">
 								<view class="ans_xzicon">
 									<image v-if="getduoxuan(item,idx1)" :data-index="index" :data-idx="idx1" src="../../static/images/duoxuan1.png"></image>
@@ -47,7 +47,7 @@
 					</view>
 					<!-- 填空 -->
 					<view class="ans_list" v-if="item.type==3">
-						<textarea v-model="item.jieguo"></textarea>
+						<textarea v-model="item.jieguo" :data-index="index" @input="tiankong_fuc" placeholder="请输入"></textarea>
 					</view>
 					<!-- 排序 -->
 					<view class="ans_list" v-if="item.type==4">
@@ -60,7 +60,7 @@
 								<view v-if="idx1!=0" class="ans_xzicon" @click="px_up(item,idx1)">
 									<text class="iconfont icon-shangyi"></text>
 								</view>
-								<view  v-if="idx1!=item.answer.length-1" class="ans_xzicon" @click="px_down(item,idx1)">
+								<view v-if="idx1!=item.answer.length-1" class="ans_xzicon" @click="px_down(item,idx1)">
 									<text class="iconfont icon-xiayi"></text>
 								</view>
 							</view>
@@ -112,219 +112,244 @@
 	export default {
 		data() {
 			return {
-				datas: [{
-						problem: {
-							title: '在紧急情况下为伤员止血时，须先用压迫法止血后再根据出血情况改用其他止血法。',
-							img: []
-						},
-						type: 1,
-						answer: [{
-								title: '风云风云风云风云',
-								img: [
-									'../../static/images/danxuan.png'
-								]
-							},
-							{
-								title: '风云风云风云风云',
-								img: [
-									'../../static/images/danxuan.png'
-								]
-							},
-							{
-								title: '风云风云风云风云',
-								img: [
-									'../../static/images/danxuan.png'
-								]
-							},
-							{
-								title: '风云风云风云风云',
-								img: [
-									'../../static/images/danxuan.png'
-								]
-							},
-						]
-					},
-					{
-						problem: {
-							title: '在紧急情况下为伤员止血时，须先用压迫法止血后再根据出血情况改用其他止血法。',
-							img: []
-						},
-						type: 2,
-						answer: [{
-								title: '风云风云风云风云',
-								img: []
-							},
-							{
-								title: '风云风云风云风云',
-								img: []
-							},
-							{
-								title: '风云风云风云风云',
-								img: []
-							},
-							{
-								title: '风云风云风云风云',
-								img: []
-							},
-						]
-					},
-					{
-						problem: {
-							title: '在紧急情况下为伤员止血时，须先用压迫法止血后再根据出血情况改用其他止血法。',
-							img: []
-						},
-						type: 3,
-
-					},
-					{
-						problem: {
-							title: '在紧急情况下为伤员止血时，须先用压迫法止血后再根据出血情况改用其他止血法。',
-							img: []
-						},
-						type: 4,
-						answer: [{
-								title: '1风云风云风云风云',
-								id:'1',
-								img: []
-							},
-							{
-								title: '2风云风云风云风云',
-								id:'2',
-								img: []
-							},
-							{
-								title: '3风云风云风云风云',
-								id:'3',
-								img: []
-							},
-							{
-								title: '4风云风云风云风云',
-								id:'4',
-								img: []
-							},
-						]
-					},
-					{
-						problem: {
-							title: '在紧急情况下为伤员止血时，须先用压迫法止血后再根据出血情况改用其他止血法。',
-							img: []
-						},
-						type: 5,
-						"answer": {
-							"min_num": "0",
-							"min_text": "不好",
-							"max_num": "100",
-							"max_text": "非常好",
-							"step_size": "1"
-						}
-					},
-				]
+				id: '',
+				title: '',
+				explain: '',
+				addition_explain: '',
+				datas: []
 			}
+		},
+		onLoad(option) {
+			this.id = option.id
+			this.getdata()
 		},
 		onShow() {
 			console.log(this.new_problem)
 		},
 		computed: {
-			...mapState(['new_problem']),
-			
+			...mapState(['new_problem', 'loginDatas']),
+
 		},
 		methods: {
 			...mapMutations(['setnew_problem']),
 			sliderChange(e) {
-				var that =this
+				var that = this
 				console.log(e.detail.value)
-				var idxs=e.currentTarget.dataset.idx
+				var idxs = e.currentTarget.dataset.idx
 				Vue.set(that.datas[idxs], 'jieguo', e.detail.value)
 				console.log(that.datas)
 			},
 			//单选
-			danxuan(item,index){
+			danxuan(item, index) {
 				Vue.set(item, 'jieguo', index.currentTarget.dataset.idx); //为item添加不存在的属性，需要使用vue提供的Vue.set( object, key, value )方法
 				console.log(this.datas)
-				
+
 			},
 			//多选
-			duoxuan(item,index){
-				var jgarr=item.jieguo||[]
-				var datas=index.currentTarget.dataset
-				var isdx=jgarr.indexOf(datas.idx+'');
+			duoxuan(item, index) {
+				var jgarr = item.jieguo || []
+				var datas = index.currentTarget.dataset
+				var isdx = jgarr.indexOf(datas.idx + '');
 				// console.log(isdx)
-				if(isdx!=-1){
-					jgarr=jgarr.splice(isdx,1)
-				}else{
-					jgarr.push(datas.idx+'')
+				if (isdx != -1) {
+					jgarr = jgarr.splice(isdx, 1)
+				} else {
+					jgarr.push(datas.idx + '')
 				}
 				Vue.set(item, 'jieguo', jgarr); //为item添加不存在的属性，需要使用vue提供的Vue.set( object, key, value )方法
 				console.log(this.datas)
 			},
-			getduoxuan(item,idx1){
-				
-				if(!item.jieguo){
+			getduoxuan(item, idx1) {
+
+				if (!item.jieguo) {
 					return false
-				}else{
-					var jgarr=item.jieguo
+				} else {
+					var jgarr = item.jieguo
 					console.log(jgarr)
 					console.log(idx1)
-					var idx1=idx1+''
+					var idx1 = idx1 + ''
 					// var idx=datas.currentTarget.dataset.idx
-					var isdx=jgarr.indexOf(idx1);
+					var isdx = jgarr.indexOf(idx1);
 					console.log(isdx)
-					if(isdx!=-1){
+					if (isdx != -1) {
 						return true
-					}else{
+					} else {
 						return false
 					}
-					
+
 				}
 			},
-			px_up(item,idx){
-				var newarr=item.answer
+			tiankong_fuc(e){
+				var that =this
+				console.log(e.currentTarget.dataset)
+				var datas =e.currentTarget.dataset
+				console.log(e.detail.value)
+				Vue.set(that.datas[datas.index], 'jieguo', e.detail.value);
+			},
+			px_up(item, idx) {
+				var newarr = item.answer
 				var temp = JSON.parse(JSON.stringify(newarr[idx]));
 				// newarr[idx] =newarr[idx-1];
 				// newarr[idx-1] = temp;
 				console.log('px_up')
-				var idx_1=idx*1-1
-				Vue.set(item.answer, idx, newarr[idx-1])
+				var idx_1 = idx * 1 - 1
+				Vue.set(item.answer, idx, newarr[idx - 1])
 				Vue.set(item.answer, idx_1, temp)
-				var jieguo=[]
-				for(var i=0;i<item.answer.length;i++){
+				var jieguo = []
+				for (var i = 0; i < item.answer.length; i++) {
 					jieguo.push(item.answer[i].id)
 				}
 				Vue.set(item, 'jieguo', jieguo)
 			},
-			px_down(item,idx){
-				var newarr=item.answer
+			px_down(item, idx) {
+				var newarr = item.answer
 				var temp = JSON.parse(JSON.stringify(newarr[idx]));
 				// newarr[idx] =newarr[idx+1];
 				// newarr[idx+1] = temp;
-				
+
 				// console.log('datas')
 				// console.log(item)
 				// console.log(idx)
 				console.log('px_down')
-				var idx_1=idx*1+1
-				Vue.set(item.answer, idx, newarr[idx+1])
+				var idx_1 = idx * 1 + 1
+				Vue.set(item.answer, idx, newarr[idx + 1])
 				Vue.set(item.answer, idx_1, temp)
-				var jieguo=[]
-				for(var i=0;i<item.answer.length;i++){
+				var jieguo = []
+				for (var i = 0; i < item.answer.length; i++) {
 					jieguo.push(item.answer[i].id)
 				}
 				Vue.set(item, 'jieguo', jieguo)
-				 console.log(item)
+				console.log(item)
 			},
 			sub() {
+				var that =this
+				var answer_list=[]
+				for(var i=0;i<that.datas.length;i++){
+					if(!that.datas[i].jieguo){
+						uni.showToast({
+							icon:'none',
+							title:'请先写填写问题'
+						})
+						return
+					}
+					answer_list.push({
+						id:that.datas[i].id,
+						option:that.datas[i].jieguo
+					})
+				}
+				console.log(that.datas)
+				console.log(answer_list)
+				var datas={
+					token:that.loginDatas.userToken,
+					answer:JSON.stringify(answer_list),
+					id:that.id,
+				}
+				var jkurl='/subResearch'
 				uni.showModal({
-					title: '请仔细确认发布内容，发布后不可修改',
+					title: '请仔细确认提交，提交后不可修改',
 					success: function(res) {
 						if (res.confirm) {
 							console.log('用户点击确定');
-							uni.navigateTo({
-								url: '../fabu2/fabu2'
+							
+							service.P_post(jkurl, datas).then(res => {
+								that.btn_kg = 0
+								console.log(res)
+								if (res.code == 1) {
+									var datas = res.data
+									console.log(typeof datas)
+
+									if (typeof datas == 'string') {
+										datas = JSON.parse(datas)
+									}
+								uni.showToast({
+									icon:'none',
+									title:'提交成功'
+								})
+								setTimeout(()=>{
+									uni.navigateBack({
+										delta:1
+									})
+								},1000)
+									console.log(datas)
+
+
+								} else {
+									if (res.msg) {
+										uni.showToast({
+											icon: 'none',
+											title: res.msg
+										})
+									} else {
+										uni.showToast({
+											icon: 'none',
+											title: '操作失败'
+										})
+									}
+								}
+							}).catch(e => {
+								that.btn_kg = 0
+								console.log(e)
+								uni.showToast({
+									icon: 'none',
+									title: '获取数据失败'
+								})
 							})
 						} else if (res.cancel) {
 							console.log('用户点击取消');
 						}
 					}
+				})
+
+			},
+			getdata() {
+				var that = this
+				var datas = {
+					token: that.loginDatas.userToken || '',
+					id: that.id
+				}
+
+				//selectSaraylDetailByUserCard
+				var jkurl = '/researchDetails'
+				uni.showLoading({
+					title: '正在获取数据'
+				})
+				service.P_get(jkurl, datas).then(res => {
+					that.btn_kg = 0
+					console.log(res)
+					if (res.code == 1) {
+						var datas = res.data
+						console.log(typeof datas)
+
+						if (typeof datas == 'string') {
+							datas = JSON.parse(datas)
+						}
+						that.title = datas.title
+						that.explain = datas.explain
+						that.addition_explain = datas.addition_explain
+						that.datas = datas.problem
+						console.log(datas)
+
+
+					} else {
+						if (res.msg) {
+							uni.showToast({
+								icon: 'none',
+								title: res.msg
+							})
+						} else {
+							uni.showToast({
+								icon: 'none',
+								title: '操作失败'
+							})
+						}
+					}
+				}).catch(e => {
+					that.btn_kg = 0
+					console.log(e)
+					uni.showToast({
+						icon: 'none',
+						title: '获取数据失败'
+					})
 				})
 
 			},
@@ -338,17 +363,18 @@
 <style scoped>
 	.fabu_int {
 		width: 100%;
-		
-		padding:15upx 30upx;
+
+		padding: 15upx 30upx;
 		-webkit-box-sizing: border-box;
 		-moz-box-sizing: border-box;
 		box-sizing: border-box;
 		background: #FFFFFF;
-		
+
 	}
-	.fabu_int view{
+
+	.fabu_int view {
 		width: 100%;
-		
+
 		padding: 30upx 40upx;
 		-webkit-box-sizing: border-box;
 		-moz-box-sizing: border-box;
@@ -455,6 +481,8 @@
 		width: 100%;
 		height: 224upx;
 		background: #EAEAEA;
+		padding: 20upx;
+		box-sizing: border-box;
 	}
 
 	.hd_box {

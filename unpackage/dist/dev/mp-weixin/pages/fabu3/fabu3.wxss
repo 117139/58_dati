@@ -116,7 +116,7 @@ page.data-v-757ec752 {
 .shuoming .active.data-v-757ec752 {
 	color: #4785F0;
 }
-.dt_num.data-v-757ec752{
+.dt_num.data-v-757ec752 {
 	display: -webkit-box;
 	display: -webkit-flex;
 	display: flex;
@@ -131,7 +131,7 @@ page.data-v-757ec752 {
 	font-size: 28rpx;
 	color: #333;
 }
-.dt_num input.data-v-757ec752{
+.dt_num input.data-v-757ec752 {
 	text-align: right;
 }
 

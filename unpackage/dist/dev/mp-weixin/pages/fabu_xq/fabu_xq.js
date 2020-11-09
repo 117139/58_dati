@@ -257,116 +257,26 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
 {
   data: function data() {
     return {
-      datas: [{
-        problem: {
-          title: '在紧急情况下为伤员止血时，须先用压迫法止血后再根据出血情况改用其他止血法。',
-          img: [] },
-
-        type: 1,
-        answer: [{
-          title: '风云风云风云风云',
-          img: [
-          '../../static/images/danxuan.png'] },
-
-
-        {
-          title: '风云风云风云风云',
-          img: [
-          '../../static/images/danxuan.png'] },
-
-
-        {
-          title: '风云风云风云风云',
-          img: [
-          '../../static/images/danxuan.png'] },
-
-
-        {
-          title: '风云风云风云风云',
-          img: [
-          '../../static/images/danxuan.png'] }] },
-
-
-
-
-      {
-        problem: {
-          title: '在紧急情况下为伤员止血时，须先用压迫法止血后再根据出血情况改用其他止血法。',
-          img: [] },
-
-        type: 2,
-        answer: [{
-          title: '风云风云风云风云',
-          img: [] },
-
-        {
-          title: '风云风云风云风云',
-          img: [] },
-
-        {
-          title: '风云风云风云风云',
-          img: [] },
-
-        {
-          title: '风云风云风云风云',
-          img: [] }] },
-
-
-
-      {
-        problem: {
-          title: '在紧急情况下为伤员止血时，须先用压迫法止血后再根据出血情况改用其他止血法。',
-          img: [] },
-
-        type: 3 },
-
-
-      {
-        problem: {
-          title: '在紧急情况下为伤员止血时，须先用压迫法止血后再根据出血情况改用其他止血法。',
-          img: [] },
-
-        type: 4,
-        answer: [{
-          title: '风云风云风云风云',
-          img: [] },
-
-        {
-          title: '风云风云风云风云',
-          img: [] },
-
-        {
-          title: '风云风云风云风云',
-          img: [] },
-
-        {
-          title: '风云风云风云风云',
-          img: [] }] },
-
-
-
-      {
-        problem: {
-          title: '在紧急情况下为伤员止血时，须先用压迫法止血后再根据出血情况改用其他止血法。',
-          img: [] },
-
-        type: 5,
-        "answer": {
-          "min_num": "0",
-          "min_text": "不好",
-          "max_num": "100",
-          "max_text": "非常好",
-          "step_size": "1" } }] };
-
-
-
-
+      datas: [],
+      title: '',
+      explain: '',
+      addition_explain: '',
+      participation_man: '', //已经参与调研的人数
+      research_number: '', //调研次数（提交调研的次数）
+      create_time: '' //发布时间
+    };
+  },
+  onLoad: function onLoad(option) {
+    if (option.id) {
+      this.id = option.id;
+      this.getdata();
+    }
   },
   onShow: function onShow() {
     console.log(this.new_problem);
   },
   computed: _objectSpread({},
-  (0, _vuex.mapState)(['new_problem'])),
+  (0, _vuex.mapState)(['new_problem', 'loginDatas'])),
 
   methods: _objectSpread(_objectSpread({},
   (0, _vuex.mapMutations)(['setnew_problem'])), {}, {
@@ -376,7 +286,7 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
     down_fuc: function down_fuc() {
       return;
       uni.downloadFile({
-        url: 'http://http://192.168.133.103:81/', //仅为示例，并非真实的资源
+        url: _service.default.IPurl + '/user/getExcel?id=' + that.id + '&token=' + that.loginDatas.userToken, //仅为示例，并非真实的资源
         success: function success(res) {
           if (res.statusCode === 200) {
             console.log('下载成功');
@@ -384,11 +294,66 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
               tempFilePath: res.tempFilePath,
               success: function success(res) {
                 console.log(res);
-                var savedFilePath = res.savedFilePath;
+                // var savedFilePath = res.savedFilePath;
               } });
 
           }
         } });
+
+    },
+    getdata: function getdata() {
+      var that = this;
+      var datas = {
+        token: that.loginDatas.userToken || '',
+        id: that.id };
+
+
+      //selectSaraylDetailByUserCard
+      var jkurl = '/user/issueDetails';
+      uni.showLoading({
+        title: '正在获取数据' });
+
+      _service.default.P_get(jkurl, datas).then(function (res) {
+        that.btn_kg = 0;
+        console.log(res);
+        if (res.code == 1) {
+          var datas = res.data;
+          console.log(typeof datas);
+
+          if (typeof datas == 'string') {
+            datas = JSON.parse(datas);
+          }
+          that.title = datas.title;
+          that.explain = datas.explain;
+          that.addition_explain = datas.addition_explain;
+          that.participation_man = datas.participation_man;
+          that.research_number = datas.research_number;
+          that.create_time = datas.create_time;
+          that.datas = datas.problem;
+          console.log(datas);
+
+
+        } else {
+          if (res.msg) {
+            uni.showToast({
+              icon: 'none',
+              title: res.msg });
+
+          } else {
+            uni.showToast({
+              icon: 'none',
+              title: '操作失败' });
+
+          }
+        }
+      }).catch(function (e) {
+        that.btn_kg = 0;
+        console.log(e);
+        uni.showToast({
+          icon: 'none',
+          title: '获取数据失败' });
+
+      });
 
     },
     sub: function sub() {
