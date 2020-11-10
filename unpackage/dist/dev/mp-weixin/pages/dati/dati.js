@@ -97,32 +97,101 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  var l1 = _vm.__map(_vm.datas, function(item, index) {
-    var $orig = _vm.__get_orig(item)
+  var l4 =
+    _vm.datas.length > 0
+      ? _vm.__map(_vm.datas, function(item, index) {
+          var $orig = _vm.__get_orig(item)
 
-    var l0 =
-      item.type == 2
-        ? _vm.__map(item.answer, function(item1, idx1) {
-            var $orig = _vm.__get_orig(item1)
+          var l0 =
+            item.problem.problem_img.length > 0
+              ? _vm.__map(item.problem.problem_img, function(item1, index) {
+                  var $orig = _vm.__get_orig(item1)
 
-            var m0 = _vm.getduoxuan(item, idx1)
-            return {
-              $orig: $orig,
-              m0: m0
-            }
-          })
-        : null
-    return {
-      $orig: $orig,
-      l0: l0
-    }
-  })
+                  var m0 = _vm.getimg(item1)
+                  var m1 = _vm.getimg(item1)
+                  return {
+                    $orig: $orig,
+                    m0: m0,
+                    m1: m1
+                  }
+                })
+              : null
+          var l1 =
+            item.type == 1
+              ? _vm.__map(item.answer, function(item1, idx1) {
+                  var $orig = _vm.__get_orig(item1)
 
+                  var m2 =
+                    item1.answer.img.length > 0
+                      ? _vm.getimg(item1.answer.img[0])
+                      : null
+                  var m3 =
+                    item1.answer.img.length > 0
+                      ? _vm.getimg(item1.answer.img[0])
+                      : null
+                  return {
+                    $orig: $orig,
+                    m2: m2,
+                    m3: m3
+                  }
+                })
+              : null
+          var l2 =
+            item.type == 2
+              ? _vm.__map(item.answer, function(item1, idx1) {
+                  var $orig = _vm.__get_orig(item1)
+
+                  var m4 = _vm.getduoxuan(item, item1.option)
+                  var m5 =
+                    item1.answer.img.length > 0
+                      ? _vm.getimg(item1.answer.img[0])
+                      : null
+                  var m6 =
+                    item1.answer.img.length > 0
+                      ? _vm.getimg(item1.answer.img[0])
+                      : null
+                  return {
+                    $orig: $orig,
+                    m4: m4,
+                    m5: m5,
+                    m6: m6
+                  }
+                })
+              : null
+          var l3 =
+            item.type == 4
+              ? _vm.__map(item.answer, function(item1, idx1) {
+                  var $orig = _vm.__get_orig(item1)
+
+                  var m7 =
+                    item1.answer.img.length > 0
+                      ? _vm.getimg(item1.answer.img[0])
+                      : null
+                  var m8 =
+                    item1.answer.img.length > 0
+                      ? _vm.getimg(item1.answer.img[0])
+                      : null
+                  return {
+                    $orig: $orig,
+                    m7: m7,
+                    m8: m8
+                  }
+                })
+              : null
+          return {
+            $orig: $orig,
+            l0: l0,
+            l1: l1,
+            l2: l2,
+            l3: l3
+          }
+        })
+      : null
   _vm.$mp.data = Object.assign(
     {},
     {
       $root: {
-        l1: l1
+        l4: l4
       }
     }
   )
@@ -264,6 +333,19 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 var _vue = _interopRequireDefault(__webpack_require__(/*! vue */ 2));
 var _service = _interopRequireDefault(__webpack_require__(/*! ../../service.js */ 8));
 var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function ownKeys(object, enumerableOnly) {var keys = Object.keys(object);if (Object.getOwnPropertySymbols) {var symbols = Object.getOwnPropertySymbols(object);if (enumerableOnly) symbols = symbols.filter(function (sym) {return Object.getOwnPropertyDescriptor(object, sym).enumerable;});keys.push.apply(keys, symbols);}return keys;}function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};if (i % 2) {ownKeys(Object(source), true).forEach(function (key) {_defineProperty(target, key, source[key]);});} else if (Object.getOwnPropertyDescriptors) {Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));} else {ownKeys(Object(source)).forEach(function (key) {Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));});}}return target;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}var _default =
@@ -288,7 +370,7 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
     console.log(this.new_problem);
   },
   computed: _objectSpread({},
-  (0, _vuex.mapState)(['new_problem', 'loginDatas'])),
+  (0, _vuex.mapState)(['hasLogin', 'new_problem', 'loginDatas'])),
 
 
   methods: _objectSpread(_objectSpread({},
@@ -313,7 +395,7 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
       var isdx = jgarr.indexOf(datas.idx + '');
       // console.log(isdx)
       if (isdx != -1) {
-        jgarr = jgarr.splice(isdx, 1);
+        jgarr.splice(isdx, 1);
       } else {
         jgarr.push(datas.idx + '');
       }
@@ -358,7 +440,7 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
       _vue.default.set(item.answer, idx_1, temp);
       var jieguo = [];
       for (var i = 0; i < item.answer.length; i++) {
-        jieguo.push(item.answer[i].id);
+        jieguo.push(item.answer[i].option);
       }
       _vue.default.set(item, 'jieguo', jieguo);
     },
@@ -377,26 +459,51 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
       _vue.default.set(item.answer, idx_1, temp);
       var jieguo = [];
       for (var i = 0; i < item.answer.length; i++) {
-        jieguo.push(item.answer[i].id);
+        jieguo.push(item.answer[i].option);
       }
       _vue.default.set(item, 'jieguo', jieguo);
       console.log(item);
     },
     sub: function sub() {
       var that = this;
+      if (!that.hasLogin) {
+        uni.navigateTo({
+          url: '/pages/login/login' });
+
+        return;
+      }
       var answer_list = [];
       for (var i = 0; i < that.datas.length; i++) {
         if (!that.datas[i].jieguo) {
-          uni.showToast({
-            icon: 'none',
-            title: '请先写填写问题' });
 
-          return;
+          if (that.datas[i].type == 4) {
+            var jieguo = [];
+            for (var j = 0; j < that.datas[i].answer.length; j++) {
+              jieguo.push(that.datas[i].answer[j].option);
+            }
+            _vue.default.set(that.datas[i], 'jieguo', jieguo);
+          } else if (that.datas[i].type == 5) {
+            _vue.default.set(that.datas[i], 'jieguo', 0);
+          } else {
+            uni.showToast({
+              icon: 'none',
+              title: '请先写填写问题' });
+
+            return;
+          }
+
         }
-        answer_list.push({
-          id: that.datas[i].id,
-          option: that.datas[i].jieguo });
+        if (that.datas[i].type == 2 || that.datas[i].type == 4) {
+          answer_list.push({
+            id: that.datas[i].id,
+            option: that.datas[i].jieguo.join(',') });
 
+        } else {
+          answer_list.push({
+            id: that.datas[i].id,
+            option: that.datas[i].jieguo });
+
+        }
       }
       console.log(that.datas);
       console.log(answer_list);
@@ -411,6 +518,8 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
         success: function success(res) {
           if (res.confirm) {
             console.log('用户点击确定');
+            uni.showLoading({
+              title: '正在提交' });
 
             _service.default.P_post(jkurl, datas).then(function (res) {
               that.btn_kg = 0;
@@ -516,6 +625,12 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
     },
     jump: function jump(e) {
       _service.default.jump(e);
+    },
+    getimg: function getimg(img) {
+      return _service.default.getimg(img);
+    },
+    pveimg: function pveimg(e) {
+      _service.default.pveimg(e);
     } }) };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 

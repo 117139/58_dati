@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<view class="dy_times">
-			<picker mode="date" :value="time" :end="time1" @change="bindTimeChange" style="flex:1;">
+			<picker mode="date" :value="time" :end="time1" :start="now_time" @change="bindTimeChange" style="flex:1;">
 				<view class="dy_time">
 					<view>调研开始日期</view>
 					<view @tap="visible=true" style="flex: 1;text-align: center;font-size: 28upx;">{{time?time:'开始时间'}}</view>
@@ -81,7 +81,8 @@
 				},
 				sm_ty: false,
 				dt_num: 0,
-				btnkg:0
+				btnkg:0,
+				now_time:new Date()
 			}
 		},
 		computed: {

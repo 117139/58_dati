@@ -1,104 +1,117 @@
 <template>
 	<view>
-		<view class="fabu_int">
-			<view>{{title}}</view>
-		</view>
-		<view class="fabu_int">
-			<view>{{explain}}</view>
-		</view>
-		<view class="fabu_int">
-			<view>{{addition_explain}}</view>
-		</view>
-		<view class="problem_list">
-
-			<view class="problem_li" v-for="(item,index) in datas">
-				<view class="problem_msg">
-					<view class="problem_tit">
-						{{index+1}}.{{item.problem.title}}
-						<text>({{item.type==1?'单选题':item.type==2?'多选题':item.type==3?'填空题':item.type==4?'排序题':"滑动题"}})</text>
-					</view>
-					<!-- 单选 -->
-					<view class="ans_list" v-if="item.type==1">
-						<view class="ans_li" v-for="(item1,idx1) in item.answer" @tap="danxuan(item,$event)" :data-idx="idx1">
-							<view class="ans_tit dis_flex">
-								<view class="ans_xzicon">
-									<image v-if="item.jieguo==idx1" src="../../static/images/danxuan1.png"></image>
-									<image v-else src="../../static/images/danxuan.png"></image>
-								</view>
-								<view class="ans_xztext">风云，风云伙食费</view>
-							</view>
-							<view class="ans_file">
-								<view class="ans_xzicon"> </view>
-								<image src="../../static/images/tx_m2.jpg"></image>
-							</view>
-						</view>
-					</view>
-					<!-- 多选 -->
-					<view class="ans_list" v-if="item.type==2">
-						<view class="ans_li" v-for="(item1,idx1) in item.answer" @tap="duoxuan(item,$event)" :data-idx="idx1">
-							<view class="ans_tit dis_flex">
-								<view class="ans_xzicon">
-									<image v-if="getduoxuan(item,idx1)" :data-index="index" :data-idx="idx1" src="../../static/images/duoxuan1.png"></image>
-									<image v-else src="../../static/images/duoxuan.png"></image>
-								</view>
-								<view class="ans_xztext">风云，风云伙食费</view>
-							</view>
-						</view>
-					</view>
-					<!-- 填空 -->
-					<view class="ans_list" v-if="item.type==3">
-						<textarea v-model="item.jieguo" :data-index="index" @input="tiankong_fuc" placeholder="请输入"></textarea>
-					</view>
-					<!-- 排序 -->
-					<view class="ans_list" v-if="item.type==4">
-						<view class="ans_li" v-for="(item1,idx1) in item.answer">
-							<view class="ans_tit dis_flex">
-
-								<view class="ans_xztext">
-									{{item1.title}}
-								</view>
-								<view v-if="idx1!=0" class="ans_xzicon" @click="px_up(item,idx1)">
-									<text class="iconfont icon-shangyi"></text>
-								</view>
-								<view v-if="idx1!=item.answer.length-1" class="ans_xzicon" @click="px_down(item,idx1)">
-									<text class="iconfont icon-xiayi"></text>
-								</view>
-							</view>
-							<view class="ans_file">
-								<image src="../../static/images/tx_m2.jpg"></image>
-								<view class="ans_xzicon"> </view>
-								<view class="ans_xzicon"> </view>
-							</view>
-						</view>
-					</view>
-					<!-- 滑动题 -->
-					<view class="ans_list" v-if="item.type==5">
-						<view class="hd_box">
-							<view class="hd_text dis_flex aic ju_b">
-								<view>好（0）</view>
-								<view>不好（100）</view>
-							</view>
-							<slider value="50" min='0' max="100" @change="sliderChange" :data-idx="index" activeColor="linear-gradient(-89deg, #65AEE1, #326CFA)"
-							 backgroundColor="#ECEBF1" block-color="#8A6DE9" block-size="10" step="10" />
-							<view class="step_d">
-								<view class="step_d_li"><text>0</text></view>
-								<view class="step_d_li"><text>20</text></view>
-								<view class="step_d_li"><text>40</text></view>
-								<view class="step_d_li"><text>60</text></view>
-								<view class="step_d_li"><text>80</text></view>
-								<view class="step_d_li"><text>100</text></view>
-							</view>
-						</view>
-
-					</view>
-
-				</view>
+		<block v-if="datas.length>0">
+			<view class="fabu_int">
+				<view>{{title}}</view>
 			</view>
-
-		</view>
-		<view class="sub_box">
-			<view class="sub_btn" @tap="sub">确认提交</view>
-		</view>
+			<view class="fabu_int">
+				<view>{{explain}}</view>
+			</view>
+			<view class="fabu_int">
+				<view>{{addition_explain}}</view>
+			</view>
+			<view class="problem_list">
+			
+				<view class="problem_li" v-for="(item,index) in datas">
+					<view class="problem_msg">
+						<view class="problem_tit">
+							{{index+1}}.{{item.problem.title}}
+							<text>({{item.type==1?'单选题':item.type==2?'多选题':item.type==3?'填空题':item.type==4?'排序题':"滑动题"}})</text>
+						</view>
+						<view v-if="item.problem.problem_img.length>0" class="ans_file">
+							
+							<image v-for="(item1,index) in item.problem.problem_img" :src="getimg(item1)" @tap="pveimg" mode="aspectFit" lazy-load="true" 
+							:data-src="getimg(item1)"></image>
+						</view>
+						<!-- 单选 -->
+						<view class="ans_list" v-if="item.type==1">
+							<view class="ans_li" v-for="(item1,idx1) in item.answer" @tap="danxuan(item,$event)" :data-idx="item1.option">
+								<view class="ans_tit dis_flex">
+									<view class="ans_xzicon">
+										<image v-if="item.jieguo==item1.option" src="../../static/images/danxuan1.png"></image>
+										<image v-else src="../../static/images/danxuan.png"></image>
+									</view>
+									<view class="ans_xztext">
+										<view class="ans_v_text">{{item1.answer.title}}</view>
+										<view v-if="item1.answer.img.length>0" class="ans_file">
+											<image :src="getimg(item1.answer.img[0])" @tap.stop="pveimg" mode="aspectFit" lazy-load="true" :data-src="getimg(item1.answer.img[0])"></image>
+										</view>
+									</view>
+								</view>
+							</view>
+						</view>
+						<!-- 多选 -->
+						<view class="ans_list" v-if="item.type==2">
+							<view class="ans_li" v-for="(item1,idx1) in item.answer" @tap="duoxuan(item,$event)" :data-idx="item1.option">
+								<view class="ans_tit dis_flex">
+									<view class="ans_xzicon">
+										<image v-if="getduoxuan(item,item1.option)" :data-index="index" :data-idx="idx1" src="../../static/images/duoxuan1.png"></image>
+										<image v-else src="../../static/images/duoxuan.png"></image>
+									</view>
+									<view class="ans_xztext">
+										<view class="ans_v_text">{{item1.answer.title}}</view>
+										<view v-if="item1.answer.img.length>0" class="ans_file">
+											<image :src="getimg(item1.answer.img[0])" @tap.stop="pveimg" mode="aspectFit" lazy-load="true" :data-src="getimg(item1.answer.img[0])"></image>
+										</view>
+									</view>
+								</view>
+							</view>
+						</view>
+						<!-- 填空 -->
+						<view class="ans_list" v-if="item.type==3">
+							<textarea v-model="item.jieguo" :data-index="index" @input="tiankong_fuc" placeholder="请输入"></textarea>
+						</view>
+						<!-- 排序 -->
+						<view class="ans_list" v-if="item.type==4">
+							<view class="ans_li" v-for="(item1,idx1) in item.answer">
+								<view class="ans_tit dis_flex">
+			
+									<view class="ans_xztext">
+										<view class="ans_v_text">{{item1.answer.title}}</view>
+										<view v-if="item1.answer.img.length>0" class="ans_file">
+											<image :src="getimg(item1.answer.img[0])" @tap.stop="pveimg" mode="aspectFit" lazy-load="true" :data-src="getimg(item1.answer.img[0])"></image>
+										</view>
+									</view>
+									<view v-if="idx1!=0" class="ans_xzicon" @click="px_up(item,idx1)">
+										<text class="iconfont icon-shangyi"></text>
+									</view>
+									<view v-if="idx1!=item.answer.length-1" class="ans_xzicon" @click="px_down(item,idx1)">
+										<text class="iconfont icon-xiayi"></text>
+									</view>
+								</view>
+							</view>
+						</view>
+						<!-- 滑动题 -->
+						<view class="ans_list" v-if="item.type==5">
+							<view class="hd_box">
+								<view class="hd_text dis_flex aic ju_b">
+									<view>{{item.answer[0].min_text}}（{{item.answer[0].min_num}}）</view>
+									<view>{{item.answer[0].max_text}}（{{item.answer[0].max_num}}）</view>
+								</view>
+								<slider value="0" :min='item.answer[0].min_num' :max="item.answer[0].max_num" @change="sliderChange" 
+								:data-idx="index"
+								activeColor="linear-gradient(-89deg, #65AEE1, #326CFA)"
+								 backgroundColor="#ECEBF1" block-color="#8A6DE9" block-size="10" :step="item.answer[0].step_size" />
+								<view class="step_d">
+									<view class="step_d_li"><text>{{item.answer[0].min_num}}</text></view>
+									<view class="step_d_li"><text>{{(item.answer[0].max_num-item.answer[0].min_num)*0.2}}</text></view>
+									<view class="step_d_li"><text>{{(item.answer[0].max_num-item.answer[0].min_num)*0.4}}</text></view>
+									<view class="step_d_li"><text>{{(item.answer[0].max_num-item.answer[0].min_num)*0.6}}</text></view>
+									<view class="step_d_li"><text>{{(item.answer[0].max_num-item.answer[0].min_num)*0.8}}</text></view>
+									<view class="step_d_li"><text>{{item.answer[0].max_num}}</text></view>
+								</view>
+							</view>
+			
+						</view>
+			
+					</view>
+				</view>
+			
+			</view>
+			<view class="sub_box">
+				<view class="sub_btn" @tap="sub">确认提交</view>
+			</view>
+		</block>
 	</view>
 </template>
 
@@ -127,7 +140,7 @@
 			console.log(this.new_problem)
 		},
 		computed: {
-			...mapState(['new_problem', 'loginDatas']),
+			...mapState(['hasLogin','new_problem', 'loginDatas']),
 
 		},
 		methods: {
@@ -152,7 +165,7 @@
 				var isdx = jgarr.indexOf(datas.idx + '');
 				// console.log(isdx)
 				if (isdx != -1) {
-					jgarr = jgarr.splice(isdx, 1)
+					jgarr.splice(isdx, 1)
 				} else {
 					jgarr.push(datas.idx + '')
 				}
@@ -197,7 +210,7 @@
 				Vue.set(item.answer, idx_1, temp)
 				var jieguo = []
 				for (var i = 0; i < item.answer.length; i++) {
-					jieguo.push(item.answer[i].id)
+					jieguo.push(item.answer[i].option)
 				}
 				Vue.set(item, 'jieguo', jieguo)
 			},
@@ -216,26 +229,51 @@
 				Vue.set(item.answer, idx_1, temp)
 				var jieguo = []
 				for (var i = 0; i < item.answer.length; i++) {
-					jieguo.push(item.answer[i].id)
+					jieguo.push(item.answer[i].option)
 				}
 				Vue.set(item, 'jieguo', jieguo)
 				console.log(item)
 			},
 			sub() {
 				var that =this
+				if(!that.hasLogin){
+					uni.navigateTo({
+						url:'/pages/login/login'
+					})
+					return
+				}
 				var answer_list=[]
 				for(var i=0;i<that.datas.length;i++){
 					if(!that.datas[i].jieguo){
-						uni.showToast({
-							icon:'none',
-							title:'请先写填写问题'
-						})
-						return
+						
+						if(that.datas[i].type==4){
+							var jieguo=[]
+							for (var j = 0; j < that.datas[i].answer.length; j++) {
+								jieguo.push(that.datas[i].answer[j].option)
+							}
+							Vue.set(that.datas[i], 'jieguo', jieguo)
+						}else if(that.datas[i].type==5){
+							Vue.set(that.datas[i], 'jieguo', 0)
+						}else{
+							uni.showToast({
+								icon:'none',
+								title:'请先写填写问题'
+							})
+							return
+						}
+						
 					}
-					answer_list.push({
-						id:that.datas[i].id,
-						option:that.datas[i].jieguo
-					})
+					if(that.datas[i].type==2||that.datas[i].type==4){
+						answer_list.push({
+							id:that.datas[i].id,
+							option:that.datas[i].jieguo.join(',')
+						})
+					}else{
+						answer_list.push({
+							id:that.datas[i].id,
+							option:that.datas[i].jieguo
+						})
+					}
 				}
 				console.log(that.datas)
 				console.log(answer_list)
@@ -250,7 +288,9 @@
 					success: function(res) {
 						if (res.confirm) {
 							console.log('用户点击确定');
-							
+							uni.showLoading({
+								title:'正在提交'
+							})
 							service.P_post(jkurl, datas).then(res => {
 								that.btn_kg = 0
 								console.log(res)
@@ -355,6 +395,12 @@
 			},
 			jump(e) {
 				service.jump(e)
+			},
+			getimg(img){
+				return service.getimg(img)
+			},
+			pveimg(e){
+				service.pveimg(e)
 			}
 		}
 	}
@@ -466,17 +512,21 @@
 		line-height: 35upx;
 		color: #333;
 	}
-
+	.ans_v_text{
+		margin-bottom: 15upx;
+	}
 	.ans_file {
 		display: flex;
+		flex-wrap: wrap;
 	}
 
 	.ans_file image {
-
+	
 		width: 158upx;
 		height: 158upx;
+		margin-right: 15upx;
+		margin-bottom: 15upx;
 	}
-
 	.ans_list textarea {
 		width: 100%;
 		height: 224upx;

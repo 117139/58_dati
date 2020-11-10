@@ -1,10 +1,11 @@
 <template>
 	<view>
 		<view class="fabu_list">
-			<view class="fabu_li" v-for="(item,index) in datas" @tap="jump"  :data-url="'/pages/fabu_xq/fabu_xq?id='+item.id">
+			<view v-if="datas.length>0" class="fabu_li" v-for="(item,index) in datas" @tap="jump"  :data-url="'/pages/fabu_xq/fabu_xq?id='+item.id">
 				<view class="oh2 fabu_name" v-html="item.title"></view>
 				<view class="fabu_time" v-html="item.create_time"></view>
 			</view>
+			<view v-if="datas.length==0" class="zanwu">暂无数据</view>
 		</view>
 		<view class="fabu_btns">
 				<view @tap="jump" data-url="/pages/fabu/fabu"><text class="iconfont icon-bianji1"></text> <text>|</text>发布</view>

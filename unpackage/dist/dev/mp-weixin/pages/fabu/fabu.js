@@ -97,6 +97,82 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
+  var l4 = _vm.__map(_vm.datas, function(item, index) {
+    var $orig = _vm.__get_orig(item)
+
+    var l0 =
+      item.problem.img && item.problem.img.length > 0
+        ? _vm.__map(item.problem.img, function(item1, index) {
+            var $orig = _vm.__get_orig(item1)
+
+            var m0 = _vm.getimg(item1)
+            var m1 = _vm.getimg(item1)
+            return {
+              $orig: $orig,
+              m0: m0,
+              m1: m1
+            }
+          })
+        : null
+    var l1 =
+      item.type == 1
+        ? _vm.__map(item.answer, function(item1, idx1) {
+            var $orig = _vm.__get_orig(item1)
+
+            var m2 = item1.img.length > 0 ? _vm.getimg(item1.img[0]) : null
+            var m3 = item1.img.length > 0 ? _vm.getimg(item1.img[0]) : null
+            return {
+              $orig: $orig,
+              m2: m2,
+              m3: m3
+            }
+          })
+        : null
+    var l2 =
+      item.type == 2
+        ? _vm.__map(item.answer, function(item1, idx1) {
+            var $orig = _vm.__get_orig(item1)
+
+            var m4 = item1.img.length > 0 ? _vm.getimg(item1.img[0]) : null
+            var m5 = item1.img.length > 0 ? _vm.getimg(item1.img[0]) : null
+            return {
+              $orig: $orig,
+              m4: m4,
+              m5: m5
+            }
+          })
+        : null
+    var l3 =
+      item.type == 4
+        ? _vm.__map(item.answer, function(item1, idx1) {
+            var $orig = _vm.__get_orig(item1)
+
+            var m6 = item1.img.length > 0 ? _vm.getimg(item1.img[0]) : null
+            var m7 = item1.img.length > 0 ? _vm.getimg(item1.img[0]) : null
+            return {
+              $orig: $orig,
+              m6: m6,
+              m7: m7
+            }
+          })
+        : null
+    return {
+      $orig: $orig,
+      l0: l0,
+      l1: l1,
+      l2: l2,
+      l3: l3
+    }
+  })
+
+  _vm.$mp.data = Object.assign(
+    {},
+    {
+      $root: {
+        l4: l4
+      }
+    }
+  )
 }
 var recyclableRender = false
 var staticRenderFns = []
@@ -131,6 +207,12 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;
+
+
+
+
+
+
 
 
 
@@ -518,9 +600,7 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
 
   methods: _objectSpread(_objectSpread({},
   (0, _vuex.mapMutations)(['setnew_problem', 'edit_problem', 'setls_prodata'])), {}, {
-    pveimg: function pveimg(e) {
-      _service.default.pveimg(e);
-    },
+
     sliderChange: function sliderChange(e) {
       console.log(e);
     },
@@ -661,6 +741,12 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
     },
     jump: function jump(e) {
       _service.default.jump(e);
+    },
+    getimg: function getimg(img) {
+      return _service.default.getimg(img);
+    },
+    pveimg: function pveimg(e) {
+      _service.default.pveimg(e);
     } }) };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 

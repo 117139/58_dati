@@ -238,7 +238,8 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
 
       sm_ty: false,
       dt_num: 0,
-      btnkg: 0 };
+      btnkg: 0,
+      now_time: new Date() };
 
   },
   computed: _objectSpread({},

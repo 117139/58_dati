@@ -103,8 +103,9 @@ var render = function() {
       : null
   var m1 =
     _vm.hasLogin && _vm.loginDatas.dy_status == 3
-      ? _vm.gettime(_vm.loginDatas.dy_start_status)
+      ? _vm.gettime(_vm.loginDatas.dy_end_status)
       : null
+  var m2 = _vm.fabu_status()
 
   if (!_vm._isMounted) {
     _vm.e0 = function($event) {
@@ -121,7 +122,8 @@ var render = function() {
     {
       $root: {
         m0: m0,
-        m1: m1
+        m1: m1,
+        m2: m2
       }
     }
   )
@@ -159,6 +161,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;
+
 
 
 
@@ -302,6 +305,22 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
   },
   methods: _objectSpread(_objectSpread({},
   (0, _vuex.mapMutations)(['login', 'logindata', 'logout', 'setplatform'])), {}, {
+    fabu_status: function fabu_status() {
+      var that = this;
+      if (that.loginDatas.dy_status == 3) {
+        var now = Date.parse(new Date());
+        console.log(now);
+        console.log(that.loginDatas.dy_start_status * 1000);
+        console.log(that.loginDatas.dy_end_status * 1000);
+        console.log(1667567600000 < now);
+        console.log(that.loginDatas.dy_end_status * 1000 > now);
+        console.log(1667567600000 < now && that.loginDatas.dy_end_status * 1000 > now);
+        if (that.loginDatas.dy_start_status * 1000 < now && that.loginDatas.dy_end_status * 1000 > now) {
+          return true;
+        }
+      }
+      return false;
+    },
     gettime: function gettime(time) {
       var time = new Date(time * 1000);
       var year = time.getFullYear();

@@ -548,7 +548,12 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
     },
     jump: function jump(e) {
       var that = this;
+      if (!that.hasLogin) {
+        uni.navigateTo({
+          url: '/pages/login/login' });
 
+        return;
+      }
       if (that.btn_kg == 1) {
         return;
       } else {

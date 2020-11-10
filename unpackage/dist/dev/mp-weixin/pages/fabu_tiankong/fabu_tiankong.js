@@ -190,6 +190,9 @@ var that;var _default = { data: function data() {return { problem: '', type: '',
         return;
       }
       that.btnkg = 1;
+      // uni.showLoading({
+      // 	title:'正在添加问题'
+      // })
       if (this.idx == -1) {
         var datas = {
           problem: {
@@ -211,9 +214,16 @@ var that;var _default = { data: function data() {return { problem: '', type: '',
 
         this.edit_problem(edit_data);
       }
+      // uni.hideLoading()
+      uni.showToast({
+        icon: 'none',
+        title: '操作成功' });
 
-      uni.navigateBack({
-        delta: 1 });
+      setTimeout(function () {
+        uni.navigateBack({
+          delta: 1 });
+
+      }, 1000);
 
     } }) };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))

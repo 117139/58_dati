@@ -472,7 +472,14 @@ const P_delete = (url, param = {}) => {
 // }).catch(e => {
 //   console.log(e)
 // })
-
+const getimg=function (img){
+	if(!img) return
+	console.log(imgurl+img)
+	if(img.indexOf('://')== -1){
+	  img = imgurl+img
+	}
+	return img
+}
 
 const gettime=function (mj){
 	if(!mj) {
@@ -546,5 +553,6 @@ export default {
 	P_post,
 	P_put,
 	P_delete,
-	gettime
+	gettime,
+	getimg
 }

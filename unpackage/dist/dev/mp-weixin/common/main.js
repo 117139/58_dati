@@ -114,6 +114,7 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
   onLaunch: function onLaunch() {
     var that = this;
     console.log('App Launch');
+    _service.default.wxlogin();
     uni.getSystemInfo({
       success: function success(e) {
         console.log(e);
@@ -148,7 +149,7 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
 
       } });
 
-    _service.default.wxlogin();
+
   },
   onShow: function onShow() {
     console.log('App Show');

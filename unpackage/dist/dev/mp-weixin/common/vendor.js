@@ -8376,7 +8376,14 @@ var P_delete = function P_delete(url) {var param = arguments.length > 1 && argum
 // }).catch(e => {
 //   console.log(e)
 // })
-
+var getimg = function getimg(img) {
+  if (!img) return;
+  console.log(imgurl + img);
+  if (img.indexOf('://') == -1) {
+    img = imgurl + img;
+  }
+  return img;
+};
 
 var gettime = function gettime(mj) {
   if (!mj) {
@@ -8450,7 +8457,8 @@ var gettime = function gettime(mj) {
   P_post: P_post,
   P_put: P_put,
   P_delete: P_delete,
-  gettime: gettime };exports.default = _default;
+  gettime: gettime,
+  getimg: getimg };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
 /***/ }),

@@ -21,10 +21,10 @@
 			<input style="color: #333;" type="text" :disabled="true" :value="title">
 		</view>
 		<view class="fabu_int">
-			<input style="color: #333;" type="text"  :disabled="true" :value="explain">
+			<input style="color: #333;" type="text" :disabled="true" :value="explain">
 		</view>
 		<view class="fabu_int">
-			<input style="color: #333;" type="text"  :disabled="true" :value="addition_explain">
+			<input style="color: #333;" type="text" :disabled="true" :value="addition_explain">
 		</view>
 		<view class="problem_list">
 
@@ -34,29 +34,45 @@
 						{{index+1}}.{{item.problem.title}}
 						<text>({{item.type_value}})</text>
 					</view>
+					<view v-if="item.problem.problem_img.length>0" class="ans_file">
+
+						<image v-for="(item1,index) in item.problem.problem_img" :src="getimg(item1)" @tap="pveimg" mode="aspectFit" lazy-load="true"
+						 :data-src="getimg(item1)"></image>
+					</view>
 					<!-- 单选 -->
 					<view class="ans_list" v-if="item.type==1">
-						<view class="ans_li" v-for="(item1,idx1) in answer">
+						<view class="ans_li" v-for="(item1,idx1) in item.answer">
 							<view class="ans_tit dis_flex">
 								<view class="ans_xzicon">
 									<image src="../../static/images/danxuan.png"></image>
 								</view>
-								<view class="ans_xztext">{{item1.answer.title}}</view>
+								<view class="ans_xztext">
+									<view class="ans_v_text">{{item1.answer.title}}</view>
+									<view v-if="item1.answer.img.length>0" class="ans_file">
+										<image :src="getimg(item1.answer.img[0])" @tap="pveimg" mode="aspectFit" lazy-load="true" :data-src="getimg(item1.answer.img[0])"></image>
+									</view>
+								</view>
 							</view>
-							<view v-if="item1.answer.img.length>0" class="ans_file">
-								<view class="ans_xzicon"> </view>
-								<image :src="item1.answer.img[0]"></image>
-							</view>
+							
 						</view>
 					</view>
 					<!-- 多选 -->
 					<view class="ans_list" v-if="item.type==2">
-						<view class="ans_li" v-for="(item1,idx1) in answer">
+						<view class="ans_li" v-for="(item1,idx1) in item.answer">
 							<view class="ans_tit dis_flex">
 								<view class="ans_xzicon">
 									<image src="../../static/images/duoxuan.png"></image>
 								</view>
-								<view class="ans_xztext">{{item1.answer.title}}</view>
+								<view class="ans_xztext">
+									<view class="ans_v_text">{{item1.answer.title}}</view>
+									<view v-if="item1.answer.img.length>0" class="ans_file">
+										<image :src="getimg(item1.answer.img[0])" @tap="pveimg" mode="aspectFit" lazy-load="true" :data-src="getimg(item1.answer.img[0])"></image>
+									</view>
+								</view>
+							</view>
+							<view v-if="item1.answer.img.length>0" class="ans_file">
+								<view class="ans_xzicon"> </view>
+								<image :src="getimg(item1.answer.img[0])" @tap="pveimg" mode="aspectFit" lazy-load="true" :data-src="getimg(item1.answer.img[0])"></image>
 							</view>
 						</view>
 					</view>
@@ -66,11 +82,14 @@
 					</view>
 					<!-- 排序 -->
 					<view class="ans_list" v-if="item.type==4">
-						<view class="ans_li" v-for="(item1,idx1) in answer">
+						<view class="ans_li" v-for="(item1,idx1) in item.answer">
 							<view class="ans_tit dis_flex">
 
 								<view class="ans_xztext">
-									{{item1.answer.title}}
+									<view class="ans_v_text">{{item1.answer.title}}</view>
+									<view v-if="item1.answer.img.length>0" class="ans_file">
+										<image :src="getimg(item1.answer.img[0])" @tap="pveimg" mode="aspectFit" lazy-load="true" :data-src="getimg(item1.answer.img[0])"></image>
+									</view>
 								</view>
 								<view class="ans_xzicon">
 									<text class="iconfont icon-shangyi"></text>
@@ -78,11 +97,6 @@
 								<view class="ans_xzicon">
 									<text class="iconfont icon-xiayi"></text>
 								</view>
-							</view>
-							<view v-if="item1.answer.img.length>0" class="ans_file">
-								<image :src="item1.answer.img[0]"></image>
-								<view class="ans_xzicon"> </view>
-								<view class="ans_xzicon"> </view>
 							</view>
 						</view>
 					</view>
@@ -108,11 +122,11 @@
 					</view>
 
 				</view>
-				
+
 			</view>
 
 		</view>
-		
+
 	</view>
 </template>
 
@@ -129,14 +143,14 @@
 				title: '',
 				explain: '',
 				addition_explain: '',
-				participation_man:'',  //已经参与调研的人数
-				research_number:'',     //调研次数（提交调研的次数）
-				create_time:'',        //发布时间
+				participation_man: '', //已经参与调研的人数
+				research_number: '', //调研次数（提交调研的次数）
+				create_time: '', //发布时间
 			}
 		},
-		onLoad(option){
-			if(option.id){
-				this.id=option.id
+		onLoad(option) {
+			if (option.id) {
+				this.id = option.id
 				this.getdata()
 			}
 		},
@@ -144,29 +158,61 @@
 			console.log(this.new_problem)
 		},
 		computed: {
-			...mapState(['new_problem','loginDatas']),
+			...mapState(['new_problem', 'loginDatas']),
 		},
 		methods: {
 			...mapMutations(['setnew_problem']),
 			sliderChange(e) {
 				console.log(e)
 			},
-			down_fuc(){
-				return
+			down_fuc() {
+				// return
+				var that = this
+				uni.showLoading({
+					title: '正在拉取数据'
+				})
+				console.log(service.IPurl + '/user/getExcel?id=' + that.id + '&token=' + that.loginDatas.userToken)
+				var now = Date.parse(new Date())
 				uni.downloadFile({
-				    url: service.IPurl+'/user/getExcel?id='+that.id+'&token='+that.loginDatas.userToken, //仅为示例，并非真实的资源
-				    success: (res) => {
-				        if (res.statusCode === 200) {
-				            console.log('下载成功');
-										 uni.saveFile({
-										      tempFilePath: res.tempFilePath,
-										      success: function (res) {
-														console.log(res)
-										        // var savedFilePath = res.savedFilePath;
-										      }
-										    });
-				        }
-				    }
+					url: service.IPurl + '/user/getExcel?id=' + that.id + '&token=' + that.loginDatas.userToken, //仅为示例，并非真实的资源
+					// filePath: wx.env.USER_DATA_PATH + '/' + now + '.xlsx',
+					success: (res) => {
+						if (res.statusCode === 200) {
+							console.log('下载成功');
+							console.log(res);
+							uni.hideLoading()
+							// uni.showToast({
+							// 	icon: 'none',
+							// 	title: '保存成功'
+							// })
+							var filePath = res.tempFilePath;
+							wx.openDocument({
+								filePath: filePath,
+								showMenu: true,
+								success: function(res) {
+									console.log('打开文档成功')
+								},
+								fail: function(res) {
+									console.log(res);
+								},
+								complete: function(res) {
+									console.log(res);
+								}
+							})
+							// uni.saveFile({
+							//      tempFilePath: res.tempFilePath,
+							//      success: function (res) {
+							// 			uni.hideLoading()
+							// 			uni.showToast({
+							// 				icon:'none',
+							// 				title:'保存成功'
+							// 			})
+							// 			console.log(res)
+							//        // var savedFilePath = res.savedFilePath;
+							//      }
+							//    });
+						}
+					}
 				});
 			},
 			getdata() {
@@ -175,7 +221,7 @@
 					token: that.loginDatas.userToken || '',
 					id: that.id
 				}
-			
+
 				//selectSaraylDetailByUserCard
 				var jkurl = '/user/issueDetails'
 				uni.showLoading({
@@ -187,7 +233,7 @@
 					if (res.code == 1) {
 						var datas = res.data
 						console.log(typeof datas)
-			
+
 						if (typeof datas == 'string') {
 							datas = JSON.parse(datas)
 						}
@@ -199,8 +245,8 @@
 						that.create_time = datas.create_time
 						that.datas = datas.problem
 						console.log(datas)
-			
-			
+
+
 					} else {
 						if (res.msg) {
 							uni.showToast({
@@ -222,7 +268,7 @@
 						title: '获取数据失败'
 					})
 				})
-			
+
 			},
 			sub() {
 				uni.showModal({
@@ -242,21 +288,28 @@
 			},
 			jump(e) {
 				service.jump(e)
-			}
+			},
+			pveimg(e) {
+				service.pveimg(e)
+			},
+			getimg(img){
+				return service.getimg(img)
+			},
 		}
 	}
 </script>
 
 <style scoped>
-	.fabu_list{
+	.fabu_list {
 		width: 100%;
 		padding: 20upx 0;
 		-webkit-box-sizing: border-box;
 		-moz-box-sizing: border-box;
 		box-sizing: border-box;
-		
+
 	}
-	.fabu_li{
+
+	.fabu_li {
 		width: 100%;
 		min-height: 160upx;
 		background: #FFFFFF;
@@ -270,19 +323,22 @@
 		flex-direction: column;
 		justify-content: space-between;
 	}
-	.fabu_name{
+
+	.fabu_name {
 		margin-bottom: 27upx;
 		font-size: 30upx;
 		color: #333;
 		font-weight: bold;
 	}
-	.fabu_time{
+
+	.fabu_time {
 		font-size: 24upx;
 		color: #999;
 	}
-	.dynum_box{
+
+	.dynum_box {
 		width: 100%;
-		padding: 0 30upx ;
+		padding: 0 30upx;
 		-webkit-box-sizing: border-box;
 		-moz-box-sizing: border-box;
 		box-sizing: border-box;
@@ -294,7 +350,8 @@
 		color: #666;
 		margin-bottom: 20upx;
 	}
-	.down_btns{
+
+	.down_btns {
 		width: 100%;
 		padding: 30upx;
 		-webkit-box-sizing: border-box;
@@ -304,7 +361,8 @@
 		align-items: center;
 		justify-content: center;
 	}
-	.down_btns view{
+
+	.down_btns view {
 		width: 529upx;
 		height: 80upx;
 		background: linear-gradient(90deg, #65AEE1, #326CFA);
@@ -316,7 +374,8 @@
 		align-items: center;
 		justify-content: center;
 	}
-	.down_tip{
+
+	.down_tip {
 		width: 100%;
 		display: flex;
 		align-items: center;
@@ -324,7 +383,8 @@
 		font-size: 26upx;
 		color: #999;
 	}
-	.fabu_msg{
+
+	.fabu_msg {
 		margin-top: 20upx;
 		margin-bottom: 20upx;
 		width: 100%;
@@ -338,6 +398,7 @@
 		align-items: center;
 		border-bottom: 1px solid #eee;
 	}
+
 	.fabu_int {
 		width: 100%;
 		height: 94upx;
@@ -428,15 +489,21 @@
 		line-height: 35upx;
 		color: #333;
 	}
-
+	.ans_v_text{
+		margin-bottom: 15upx;
+	}
 	.ans_file {
 		display: flex;
+		flex-wrap: wrap;
+		margin-top: 15upx;
 	}
 
 	.ans_file image {
 
 		width: 158upx;
 		height: 158upx;
+		margin-right: 15upx;
+		margin-bottom: 15upx;
 	}
 
 	.ans_list textarea {

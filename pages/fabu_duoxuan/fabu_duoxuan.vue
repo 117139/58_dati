@@ -5,7 +5,7 @@
 			<textarea value="" placeholder="请输入标题" v-model="problem.title" />
 			<view class="fbtimg_list dis_flex">
 				<view v-if="problem.img.length>0" class="fbtimg_li" v-for="(item,index) in problem.img">
-					<image :src="item" :data-src="item" mode="aspectFit" @tap="pveimg"></image>
+					<image :src="getimg(item)" :data-src="getimg(item)" mode="aspectFit" @tap="pveimg"></image>
 					<image src="../../static/images/xz_jian.png" mode="aspectFit" class="del" @tap="imgdel" :data-idx="index"  data-type="-1"></image>
 				</view>
 				<view class="fbtimg_li" @tap="upimg" data-type="-1">
@@ -19,7 +19,7 @@
 				<image src="../../static/images/xz_jian.png" mode="aspectFit" class="del" @tap="del_ans" :data-type="index"></image>
 				<input class="flex_1" type="text" placeholder="输入选项" v-model="item.title">
 				<!-- <block v-if="type!=4"> -->
-					<image v-if="item.img.length>0" class="xz_img" :src="item.img[0]" mode="aspectFit" @tap="upimg" :data-type="index"></image>
+					<image v-if="item.img.length>0" class="xz_img" :src="getimg(item.img[0])" mode="aspectFit" @tap="upimg" :data-type="index"></image>
 					<image v-else class="xz_img" src="../../static/images/img_def.png" mode="aspectFit" @tap="upimg" :data-type="index"></image>
 				<!-- </block> -->
 			</view>
@@ -101,7 +101,7 @@
 			
 		},
 		computed: {
-			...mapState(['new_xz','bj_prodata']),
+			...mapState(['new_xz','bj_prodata','loginDatas']),
 		},
 		methods: {
 			...mapMutations(['setnew_problem','setnew_xz','edit_problem']),
@@ -180,6 +180,9 @@
 					return
 				}
 				that.btnkg=1
+				// uni.showLoading({
+				// 	title:'正在添加问题'
+				// })
 				if(this.idx==-1){
 					
 					var datas={
@@ -201,6 +204,11 @@
 					}
 					this.edit_problem(edit_data)
 				}
+				// uni.hideLoading()
+				uni.showToast({
+					icon:'none',
+					title:'操作成功'
+				})
 				setTimeout(()=>{
 					uni.navigateBack({
 						delta:1
@@ -232,7 +240,7 @@
 				var that = this
 				console.log(e.currentTarget.dataset.type)
 				if(e.currentTarget.dataset.type==-1){
-					// 从相册选择1张图
+					// 从相册选择1张图  标题
 					uni.chooseImage({
 						count: 9,
 						sizeType: ['original', 'compressed'],
@@ -241,42 +249,9 @@
 							console.log(res)
 							const tempFilePaths = res.tempFilePaths
 							console.log(e)
-							if(e.currentTarget.dataset.type==-1){
-								const imglen = that.problem.img.length
-								
-								if (imglen == 9) {
-									wx.showToast({
-										icon: 'none',
-										title: '最多可上传九张'
-									})
-									return
-								}else{
-									var newimgs=that.problem.img.concat(res.tempFilePaths)
-									that.$set(that.problem,'img',newimgs)
-								}
-								
-							}else{
-								var idx=e.currentTarget.dataset.type
-								var newimgs=that.answer[idx].img.concat(res.tempFilePaths)
-								that.$set(that.answer[idx].img,0,newimgs)
-								return
-								const imglen = that.answer[idx].img.length
-								
-								if (imglen == 9) {
-									wx.showToast({
-										icon: 'none',
-										title: '最多可上传九张'
-									})
-									return
-								}else{
-									var newimgs=that.answer[idx].img.concat(res.tempFilePaths)
-									that.$set(that.answer[idx],'img',newimgs)
-								}
-							}
 							
-							
-							return
-							that.upimg1(tempFilePaths, 0)
+							// return
+							that.upimg1(tempFilePaths,e.currentTarget.dataset.type, 0)
 				
 						}
 					});
@@ -291,8 +266,9 @@
 							const tempFilePaths = res.tempFilePaths
 							console.log(e)
 							var idx=e.currentTarget.dataset.type
-							// var newimgs=that.answer[idx].img.concat(res.tempFilePaths)
-							that.$set(that.answer[idx],'img',res.tempFilePaths)
+							// that.$set(that.answer[idx],'img',res.tempFilePaths)
+							
+								that.upimg1(tempFilePaths,idx, 0)
 							return
 							const imglen = that.answer[idx].img.length
 							
@@ -315,53 +291,50 @@
 					});
 				}
 			},
-			upimg1(imgs, i) {
+			upimg1(imgs,type, i) {
 				var that = this
-				const imglen = that.problem.img.length
-				var newlen = Number(imglen) + Number(i)
-				if (imglen == 9) {
-					wx.showToast({
-						icon: 'none',
-						title: '最多可上传九张'
-					})
-					return
-				}
-				var newdata = that.problem.img
-				// console.log(i)
-				// newdata.push(imgs[i])
-				// that.imgb = newdata
-				// var news1 = that.imgb.length
-				// if (news1 < 9 && i < imgs.length - 1) {
-				// 	i++
-				// 	that.upimg1(imgs, i)
-				// }
-				// return
-				// console.log(img1)
+				/*if(type==-1){
+					const imglen = that.problem.img.length
+					
+					if (imglen == 9) {
+						wx.showToast({
+							icon: 'none',
+							title: '最多可上传九张'
+						})
+						return
+					}
+				}*/
 				uni.uploadFile({
-					url: service.IPurl+'/api/upload', //仅为示例，非真实的接口地址
+					url: service.IPurl+'/upload/streamImg', //仅为示例，非真实的接口地址
 					filePath: imgs[i],
 					name: 'file',
 					formData: {
-						token: that.loginDatas.token
+						type:1,
+						token: that.loginDatas.userToken
 					},
 					success(res) {
 						// console.log(res.data)
 						var ndata = JSON.parse(res.data)
 						if (ndata.code == 1) {
-							console.log(imgs[i], i, ndata.data)
-							var newdata = that.imgb
-							console.log(i)
-							newdata.push(ndata.data)
-							that.imgb = newdata
-							// i++
-							// that.upimg(imgs, i)
-							var news1 = that.imgb.length
-							
-							var news1 = that.imgb.length
-							if (news1 < 9 && i < imgs.length - 1) {
-								i++
-								that.upimg1(imgs, i)
+							console.log(imgs[i], i, ndata.msg)
+							if(type==-1){
+								
+									var newimgs=that.problem.img.concat( ndata.msg)
+									that.$set(that.problem,'img',newimgs)
+									// var news1 =newimgs.length
+									// if (news1 < 9 && i < imgs.length - 1) {
+										i++
+										that.upimg1(imgs,type, i)
+									// }
+								
+							}else{
+								var idx_img=[ndata.msg]
+								that.$set(that.answer[type],'img',idx_img)
+								
 							}
+							
+							
+							
 						} else {
 							uni.showToast({
 								icon: "none",
@@ -373,6 +346,9 @@
 			},
 			pveimg(e){
 				service.pveimg(e)
+			},
+			getimg(img){
+				return service.getimg(img)
 			},
 			jump(e){
 				service.jump(e)

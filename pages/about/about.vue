@@ -69,10 +69,11 @@
 			
 			if(Option.type=='yszc'){
 				that.type=Option.type
-				that.title='隐私协议'
+				that.title='隐私政策'
 				uni.setNavigationBarTitle({
-					title:'隐私协议'
+					title:'隐私政策'
 				})
+				this.getdata('ysxy')
 			}
 			if(Option.type=='about'){
 				that.type=Option.type
@@ -88,10 +89,12 @@
 				uni.setNavigationBarTitle({
 					title:'使用说明'
 				})
+				this.getdata('sysm')
 			}
 			if(Option.type==3){
 				that.type=Option.type
 				that.title='用户协议'
+				this.getdata('yhxy')
 			}
 			if(Option.type==4){
 				that.type=Option.type
@@ -104,62 +107,39 @@
 		},
 		
 		methods: {
-			getdata(){
+			getdata(keyword){
 				
 				///api/info/list
 				var that =this
 				var data = {
-					keyword:'Privacy_agreement'
+					keyword:keyword
 				}
-				if(that.type==2){
-					data={
-						keyword:'about_us'
-					}
-				}
-				if(that.type==4){
-					data={
-						keyword:'zdxfxy'
-					}
-				}
+				
 				//selectSaraylDetailByUserCard
-				var jkurl = '/api/info/list'
+				var jkurl = '/getClause'
 				uni.showLoading({
 					title: '正在获取数据'
 				})
-				service.get(jkurl, data,
-					function(res) {
-						
-						if (res.data.code == 1) {
-							var datas = res.data.data
-							console.log(typeof datas)
+				service.P_get(jkurl, data).then(res => {
+					that.btn_kg = 0
+					console.log(res)
+					if (res.code == 1) {
+						var datas = res.data
+						console.log(typeof datas)
 							
-							if (typeof datas == 'string') {
-								datas = JSON.parse(datas)
-							}
-							console.log(datas)
-							that.datas = datas
-				
-				
-						} else {
-							if (res.data.msg) {
-								uni.showToast({
-									icon: 'none',
-									title: res.data.msg
-								})
-							} else {
-								uni.showToast({
-									icon: 'none',
-									title: '操作失败'
-								})
-							}
+						if (typeof datas == 'string') {
+							datas = JSON.parse(datas)
 						}
-					},
-					function(err) {
 						
-						if (err.data.msg) {
+						that.datas = datas[0].content
+						console.log(datas)
+							
+							
+					} else {
+						if (res.msg) {
 							uni.showToast({
 								icon: 'none',
-								title: err.data.msg
+								title: res.msg
 							})
 						} else {
 							uni.showToast({
@@ -168,7 +148,14 @@
 							})
 						}
 					}
-				)
+				}).catch(e => {
+					that.btn_kg = 0
+					console.log(e)
+					uni.showToast({
+						icon: 'none',
+						title: '获取数据失败'
+					})
+				})
 			}
 		}
 	}

@@ -9,14 +9,15 @@
 				<image class="user_tx" :src="loginDatas.avatarurl"></image>
 				<view class="flex_1">
 					<view class="user_name">{{loginDatas.nickname}}</view>
-					<view class="user_time" v-if="loginDatas.dy_status==3">调研者有效期：{{gettime(loginDatas.dy_start_status)}}-{{gettime(loginDatas.dy_start_status)}}</view>
+					<view class="user_time" v-if="loginDatas.dy_status==3">调研者有效期：{{gettime(loginDatas.dy_start_status)}}--{{gettime(loginDatas.dy_end_status)}}</view>
 					<view class="user_time" v-if="loginDatas.dy_status==2">调研者审核状态：待审核</view>
 					<view class="user_time" v-if="loginDatas.dy_status==4">调研者审核状态：审核失败</view>
 				</view>
 			</view>
 		</view>
 		<view v-else class="my_box">
-			<image class="my_box_bg" src="/static/images/my_01.jpg"></image>
+			<image class="my_box_bg" src="/static/images/my_01.jpg"></image>137549
+			
 			<view class="user_box dis_flex aic">
 				<image class="user_tx" src="/static/images/tx_m2.jpg"></image>
 				<view class="flex_1">
@@ -28,7 +29,7 @@
 			<image src="/static/images/mysq_04.png" @tap="jump" data-url="../shenqin/shenqin?type=about" :data-login='false' :data-haslogin='hasLogin'></image>
 		</view>
 		<view class="my_list" >
-			<view v-if="loginDatas.dy_status==3" class="my_li" @tap="jump" data-url="../my_fabu/my_fabu?type=about" :data-login='false' :data-haslogin='hasLogin'>
+			<view v-if="fabu_status()" class="my_li" @tap="jump" data-url="../my_fabu/my_fabu?type=about" :data-login='false' :data-haslogin='hasLogin'>
 				<view class="my_icon"><text class="iconfont icon-fabu"></text></view>
 				<view class="flex_1">我的发布</view>
 				<text class="iconfont icon-next-m"></text>
@@ -142,6 +143,22 @@
 		},
 		methods: {
 			...mapMutations(['login','logindata','logout','setplatform']),
+			fabu_status(){
+				var that =this
+				if(that.loginDatas.dy_status==3){
+					var now = Date.parse(new Date())
+					console.log(now)
+					console.log(that.loginDatas.dy_start_status*1000)
+					console.log(that.loginDatas.dy_end_status*1000)
+					console.log(1667567600000<now)
+					console.log(that.loginDatas.dy_end_status*1000>now)
+					console.log(1667567600000<now&&that.loginDatas.dy_end_status*1000>now)
+					if(that.loginDatas.dy_start_status*1000<now&&that.loginDatas.dy_end_status*1000>now){
+						return true
+					}
+				}
+				return false
+			},
 			gettime(time){
 				var time = new Date(time*1000);
 				var year = time.getFullYear();

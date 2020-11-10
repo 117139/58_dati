@@ -15,6 +15,7 @@
 		onLaunch: function() {
 			var that =this
 			console.log('App Launch')
+			service.wxlogin()
 			uni.getSystemInfo({
 				success: function(e) {
 					console.log(e);
@@ -49,7 +50,7 @@
 					// #endif
 				}
 			})
-			service.wxlogin()
+			
 		},
 		onShow: function() {
 			console.log('App Show')

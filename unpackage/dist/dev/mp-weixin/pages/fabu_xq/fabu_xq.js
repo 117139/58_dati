@@ -97,6 +97,110 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
+  var l4 = _vm.__map(_vm.datas, function(item, index) {
+    var $orig = _vm.__get_orig(item)
+
+    var l0 =
+      item.problem.problem_img.length > 0
+        ? _vm.__map(item.problem.problem_img, function(item1, index) {
+            var $orig = _vm.__get_orig(item1)
+
+            var m0 = _vm.getimg(item1)
+            var m1 = _vm.getimg(item1)
+            return {
+              $orig: $orig,
+              m0: m0,
+              m1: m1
+            }
+          })
+        : null
+    var l1 =
+      item.type == 1
+        ? _vm.__map(item.answer, function(item1, idx1) {
+            var $orig = _vm.__get_orig(item1)
+
+            var m2 =
+              item1.answer.img.length > 0
+                ? _vm.getimg(item1.answer.img[0])
+                : null
+            var m3 =
+              item1.answer.img.length > 0
+                ? _vm.getimg(item1.answer.img[0])
+                : null
+            return {
+              $orig: $orig,
+              m2: m2,
+              m3: m3
+            }
+          })
+        : null
+    var l2 =
+      item.type == 2
+        ? _vm.__map(item.answer, function(item1, idx1) {
+            var $orig = _vm.__get_orig(item1)
+
+            var m4 =
+              item1.answer.img.length > 0
+                ? _vm.getimg(item1.answer.img[0])
+                : null
+            var m5 =
+              item1.answer.img.length > 0
+                ? _vm.getimg(item1.answer.img[0])
+                : null
+            var m6 =
+              item1.answer.img.length > 0
+                ? _vm.getimg(item1.answer.img[0])
+                : null
+            var m7 =
+              item1.answer.img.length > 0
+                ? _vm.getimg(item1.answer.img[0])
+                : null
+            return {
+              $orig: $orig,
+              m4: m4,
+              m5: m5,
+              m6: m6,
+              m7: m7
+            }
+          })
+        : null
+    var l3 =
+      item.type == 4
+        ? _vm.__map(item.answer, function(item1, idx1) {
+            var $orig = _vm.__get_orig(item1)
+
+            var m8 =
+              item1.answer.img.length > 0
+                ? _vm.getimg(item1.answer.img[0])
+                : null
+            var m9 =
+              item1.answer.img.length > 0
+                ? _vm.getimg(item1.answer.img[0])
+                : null
+            return {
+              $orig: $orig,
+              m8: m8,
+              m9: m9
+            }
+          })
+        : null
+    return {
+      $orig: $orig,
+      l0: l0,
+      l1: l1,
+      l2: l2,
+      l3: l3
+    }
+  })
+
+  _vm.$mp.data = Object.assign(
+    {},
+    {
+      $root: {
+        l4: l4
+      }
+    }
+  )
 }
 var recyclableRender = false
 var staticRenderFns = []
@@ -131,6 +235,20 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -284,19 +402,51 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
       console.log(e);
     },
     down_fuc: function down_fuc() {
-      return;
+      // return
+      var that = this;
+      uni.showLoading({
+        title: '正在拉取数据' });
+
+      console.log(_service.default.IPurl + '/user/getExcel?id=' + that.id + '&token=' + that.loginDatas.userToken);
+      var now = Date.parse(new Date());
       uni.downloadFile({
         url: _service.default.IPurl + '/user/getExcel?id=' + that.id + '&token=' + that.loginDatas.userToken, //仅为示例，并非真实的资源
+        // filePath: wx.env.USER_DATA_PATH + '/' + now + '.xlsx',
         success: function success(res) {
           if (res.statusCode === 200) {
             console.log('下载成功');
-            uni.saveFile({
-              tempFilePath: res.tempFilePath,
+            console.log(res);
+            uni.hideLoading();
+            // uni.showToast({
+            // 	icon: 'none',
+            // 	title: '保存成功'
+            // })
+            var filePath = res.tempFilePath;
+            wx.openDocument({
+              filePath: filePath,
+              showMenu: true,
               success: function success(res) {
+                console.log('打开文档成功');
+              },
+              fail: function fail(res) {
                 console.log(res);
-                // var savedFilePath = res.savedFilePath;
+              },
+              complete: function complete(res) {
+                console.log(res);
               } });
 
+            // uni.saveFile({
+            //      tempFilePath: res.tempFilePath,
+            //      success: function (res) {
+            // 			uni.hideLoading()
+            // 			uni.showToast({
+            // 				icon:'none',
+            // 				title:'保存成功'
+            // 			})
+            // 			console.log(res)
+            //        // var savedFilePath = res.savedFilePath;
+            //      }
+            //    });
           }
         } });
 
@@ -374,6 +524,12 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
     },
     jump: function jump(e) {
       _service.default.jump(e);
+    },
+    pveimg: function pveimg(e) {
+      _service.default.pveimg(e);
+    },
+    getimg: function getimg(img) {
+      return _service.default.getimg(img);
     } }) };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 

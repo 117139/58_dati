@@ -89,6 +89,9 @@
 	line-height: 35rpx;
 	color: #333;
 }
+.ans_v_text.data-v-f329d474{
+	margin-bottom: 15rpx;
+}
 .ans_file.data-v-f329d474 {
 	display: -webkit-box;
 	display: -webkit-flex;

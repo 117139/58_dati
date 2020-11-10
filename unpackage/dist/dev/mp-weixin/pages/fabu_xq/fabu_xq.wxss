@@ -1,11 +1,11 @@
 
-.fabu_list.data-v-b99953c8{
+.fabu_list.data-v-b99953c8 {
 	width: 100%;
 	padding: 20rpx 0;
 	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
 }
-.fabu_li.data-v-b99953c8{
+.fabu_li.data-v-b99953c8 {
 	width: 100%;
 	min-height: 160rpx;
 	background: #FFFFFF;
@@ -26,17 +26,17 @@
 	-webkit-justify-content: space-between;
 	        justify-content: space-between;
 }
-.fabu_name.data-v-b99953c8{
+.fabu_name.data-v-b99953c8 {
 	margin-bottom: 27rpx;
 	font-size: 30rpx;
 	color: #333;
 	font-weight: bold;
 }
-.fabu_time.data-v-b99953c8{
+.fabu_time.data-v-b99953c8 {
 	font-size: 24rpx;
 	color: #999;
 }
-.dynum_box.data-v-b99953c8{
+.dynum_box.data-v-b99953c8 {
 	width: 100%;
 	padding: 0 30rpx;
 	-webkit-box-sizing: border-box;
@@ -55,7 +55,7 @@
 	color: #666;
 	margin-bottom: 20rpx;
 }
-.down_btns.data-v-b99953c8{
+.down_btns.data-v-b99953c8 {
 	width: 100%;
 	padding: 30rpx;
 	-webkit-box-sizing: border-box;
@@ -70,7 +70,7 @@
 	-webkit-justify-content: center;
 	        justify-content: center;
 }
-.down_btns view.data-v-b99953c8{
+.down_btns view.data-v-b99953c8 {
 	width: 529rpx;
 	height: 80rpx;
 	background: -webkit-gradient(linear, left top, right top, from(#65AEE1), to(#326CFA));
@@ -92,7 +92,7 @@
 	-webkit-justify-content: center;
 	        justify-content: center;
 }
-.down_tip.data-v-b99953c8{
+.down_tip.data-v-b99953c8 {
 	width: 100%;
 	display: -webkit-box;
 	display: -webkit-flex;
@@ -106,7 +106,7 @@
 	font-size: 26rpx;
 	color: #999;
 }
-.fabu_msg.data-v-b99953c8{
+.fabu_msg.data-v-b99953c8 {
 	margin-top: 20rpx;
 	margin-bottom: 20rpx;
 	width: 100%;
@@ -213,15 +213,23 @@
 	line-height: 35rpx;
 	color: #333;
 }
+.ans_v_text.data-v-b99953c8{
+	margin-bottom: 15rpx;
+}
 .ans_file.data-v-b99953c8 {
 	display: -webkit-box;
 	display: -webkit-flex;
 	display: flex;
+	-webkit-flex-wrap: wrap;
+	        flex-wrap: wrap;
+	margin-top: 15rpx;
 }
 .ans_file image.data-v-b99953c8 {
 
 	width: 158rpx;
 	height: 158rpx;
+	margin-right: 15rpx;
+	margin-bottom: 15rpx;
 }
 .ans_list textarea.data-v-b99953c8 {
 	width: 100%;

@@ -161,6 +161,9 @@ var that;var _default = { data: function data() {return { id: '', problem: { "ti
         return;
       }
       that.btnkg = 1;
+      // uni.showLoading({
+      // 	title:'正在添加问题'
+      // })
       if (this.idx == -1) {
 
         var datas = {
@@ -182,6 +185,10 @@ var that;var _default = { data: function data() {return { id: '', problem: { "ti
 
         this.edit_problem(edit_data);
       }
+      // uni.hideLoading()
+      uni.showToast({
+        icon: 'none',
+        title: '操作成功' });
 
       // return
       setTimeout(function () {
@@ -214,85 +221,76 @@ var that;var _default = { data: function data() {return { id: '', problem: { "ti
     upimg: function upimg(e) {
       var that = this;
       console.log(e.currentTarget.dataset.type);
+      if (e.currentTarget.dataset.type == -1) {
+        // 从相册选择1张图  标题
+        uni.chooseImage({
+          count: 9,
+          sizeType: ['original', 'compressed'],
+          sourceType: ['album'],
+          success: function success(res) {
+            console.log(res);
+            var tempFilePaths = res.tempFilePaths;
+            console.log(e);
 
-      // 从相册选择1张图
-      uni.chooseImage({
-        count: 9,
-        sizeType: ['original', 'compressed'],
-        sourceType: ['album'],
-        success: function success(res) {
-          console.log(res);
-          var tempFilePaths = res.tempFilePaths;
-          console.log(e);
+            // return
+            that.upimg1(tempFilePaths, e.currentTarget.dataset.type, 0);
 
-          var imglen = that.problem.img.length;
+          } });
 
-          if (imglen == 9) {
-            wx.showToast({
-              icon: 'none',
-              title: '最多可上传九张' });
+      } else {
+        // 从相册选择1张图-答案
+        uni.chooseImage({
+          count: 1,
+          sizeType: ['original', 'compressed'],
+          sourceType: ['album'],
+          success: function success(res) {
+            console.log(res);
+            var tempFilePaths = res.tempFilePaths;
+            console.log(e);
+            var idx = e.currentTarget.dataset.type;
+            // that.$set(that.answer[idx],'img',res.tempFilePaths)
 
-            return;
-          } else {
-            var newimgs = that.problem.img.concat(res.tempFilePaths);
-            that.$set(that.problem, 'img', newimgs);
-          }
+            that.upimg1(tempFilePaths, idx, 0);
 
 
-          return;
-          that.upimg1(tempFilePaths, 0);
+          } });
 
-        } });
-
-
-    },
-    upimg1: function upimg1(imgs, i) {
-      var that = this;
-      var imglen = that.problem.img.length;
-      var newlen = Number(imglen) + Number(i);
-      if (imglen == 9) {
-        wx.showToast({
-          icon: 'none',
-          title: '最多可上传九张' });
-
-        return;
       }
-      var newdata = that.problem.img;
-      // console.log(i)
-      // newdata.push(imgs[i])
-      // that.imgb = newdata
-      // var news1 = that.imgb.length
-      // if (news1 < 9 && i < imgs.length - 1) {
-      // 	i++
-      // 	that.upimg1(imgs, i)
-      // }
-      // return
-      // console.log(img1)
+    },
+    upimg1: function upimg1(imgs, type, i) {
+      var that = this;
+
       uni.uploadFile({
-        url: _service.default.IPurl + '/api/upload', //仅为示例，非真实的接口地址
+        url: _service.default.IPurl + '/upload/streamImg', //仅为示例，非真实的接口地址
         filePath: imgs[i],
         name: 'file',
         formData: {
-          token: that.loginDatas.token },
+          type: 1,
+          token: that.loginDatas.userToken },
 
         success: function success(res) {
           // console.log(res.data)
           var ndata = JSON.parse(res.data);
           if (ndata.code == 1) {
-            console.log(imgs[i], i, ndata.data);
-            var newdata = that.imgb;
-            console.log(i);
-            newdata.push(ndata.data);
-            that.imgb = newdata;
-            // i++
-            // that.upimg(imgs, i)
-            var news1 = that.imgb.length;
+            console.log(imgs[i], i, ndata.msg);
+            if (type == -1) {
 
-            var news1 = that.imgb.length;
-            if (news1 < 9 && i < imgs.length - 1) {
+              var newimgs = that.problem.img.concat(ndata.msg);
+              that.$set(that.problem, 'img', newimgs);
+              // var news1 =newimgs.length
+              // if (news1 < 9 && i < imgs.length - 1) {
               i++;
-              that.upimg1(imgs, i);
+              that.upimg1(imgs, type, i);
+              // }
+
+            } else {
+              var idx_img = [ndata.msg];
+              that.$set(that.answer[type], 'img', idx_img);
+
             }
+
+
+
           } else {
             uni.showToast({
               icon: "none",
@@ -304,6 +302,9 @@ var that;var _default = { data: function data() {return { id: '', problem: { "ti
     },
     pveimg: function pveimg(e) {
       _service.default.pveimg(e);
+    },
+    getimg: function getimg(img) {
+      return _service.default.getimg(img);
     },
     jump: function jump(e) {
       _service.default.jump(e);
@@ -438,6 +439,26 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
+  var l0 = _vm.__map(_vm.problem.img, function(item, index) {
+    var $orig = _vm.__get_orig(item)
+
+    var m0 = _vm.problem.img.length > 0 ? _vm.getimg(item) : null
+    var m1 = _vm.problem.img.length > 0 ? _vm.getimg(item) : null
+    return {
+      $orig: $orig,
+      m0: m0,
+      m1: m1
+    }
+  })
+
+  _vm.$mp.data = Object.assign(
+    {},
+    {
+      $root: {
+        l0: l0
+      }
+    }
+  )
 }
 var recyclableRender = false
 var staticRenderFns = []

@@ -386,7 +386,7 @@
 			},
 			jumpurl(e) {
 				var that = this
-
+				
 				if (that.btn_kg == 1) {
 					return
 				} else {
@@ -407,7 +407,12 @@
 			},
 			jump(e) {
 				var that = this
-
+				if(!that.hasLogin){
+					uni.navigateTo({
+						url:'/pages/login/login'
+					})
+					return
+				}
 				if (that.btn_kg == 1) {
 					return
 				} else {

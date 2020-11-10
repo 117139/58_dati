@@ -18,9 +18,10 @@
 						<text>({{item.type==1?'单选题':item.type==2?'多选题':item.type==3?'填空题':item.type==4?'排序题':"滑动题"}})</text>
 					</view>
 					
-					<view v-if="item.problem.img.length>0" class="ans_file">
+					<view v-if="item.problem.img&&item.problem.img.length>0" class="ans_file">
 						
-						<image v-for="(item1,index) in item.problem.img" :src="item1" @tap="pveimg" :data-src="item1"></image>
+						<image v-for="(item1,index) in item.problem.img" :src="getimg(item1)" @tap="pveimg" mode="aspectFit" lazy-load="true" 
+						:data-src="getimg(item1)"></image>
 					</view>
 					<!-- 单选 -->
 					<view class="ans_list" v-if="item.type==1">
@@ -29,12 +30,14 @@
 								<view class="ans_xzicon">
 									<image src="../../static/images/danxuan.png"></image>
 								</view>
-								<view class="ans_xztext">{{item1.title}}</view>
+								<view class="ans_xztext">
+									<view class="ans_v_text">{{item1.title}}</view>
+									<view v-if="item1.img.length>0" class="ans_file">
+										<image :src="getimg(item1.img[0])"  @tap="pveimg" mode="aspectFit" lazy-load="true" :data-src="getimg(item1.img[0])"></image>
+									</view>
+								</view>
 							</view>
-							<view v-if="item1.img.length>0" class="ans_file">
-								<view class="ans_xzicon"> </view>
-								<image :src="item1.img[0]"></image>
-							</view>
+							
 						</view>
 					</view>
 					<!-- 多选 -->
@@ -44,12 +47,17 @@
 								<view class="ans_xzicon">
 									<image src="../../static/images/duoxuan.png"></image>
 								</view>
-								<view class="ans_xztext">{{item1.title}}</view>
+								<view class="ans_xztext">
+								
+								<view class="ans_xztext">
+									<view class="ans_v_text">{{item1.title}}</view>
+									<view v-if="item1.img.length>0" class="ans_file">
+										<image :src="getimg(item1.img[0])"  @tap="pveimg" mode="aspectFit" lazy-load="true" :data-src="getimg(item1.img[0])"></image>
+									</view>
+								</view>
+								</view>
 							</view>
-							<view v-if="item1.img.length>0" class="ans_file">
-								<view class="ans_xzicon"> </view>
-								<image :src="item1.img[0]"></image>
-							</view>
+							
 						</view>
 					</view>
 					<!-- 填空 -->
@@ -62,7 +70,10 @@
 							<view class="ans_tit dis_flex">
 
 								<view class="ans_xztext">
-									{{item1.title}}
+									<view class="ans_v_text">{{item1.title}}</view>
+									<view v-if="item1.img.length>0" class="ans_file">
+										<image :src="getimg(item1.img[0])"  @tap="pveimg" mode="aspectFit" lazy-load="true" :data-src="getimg(item1.img[0])"></image>
+									</view>
 								</view>
 								<view class="ans_xzicon">
 									<text class="iconfont icon-shangyi"></text>
@@ -70,11 +81,6 @@
 								<view class="ans_xzicon">
 									<text class="iconfont icon-xiayi"></text>
 								</view>
-							</view>
-							<view v-if="item1.img.length>0" class="ans_file">
-								<image :src="item1.img[0]"></image>
-								<view class="ans_xzicon"> </view>
-								<view class="ans_xzicon"> </view>
 							</view>
 						</view>
 					</view>
@@ -386,9 +392,7 @@
 		},
 		methods: {
 			...mapMutations(['setnew_problem','edit_problem','setls_prodata']),
-			pveimg(e){
-				service.pveimg(e)
-			},
+			
 			sliderChange(e) {
 				console.log(e)
 			},
@@ -529,6 +533,12 @@
 			},
 			jump(e) {
 				service.jump(e)
+			},
+			getimg(img){
+				return service.getimg(img)
+			},
+			pveimg(e){
+				service.pveimg(e)
 			}
 		}
 	}
@@ -625,7 +635,9 @@
 		line-height: 35upx;
 		color: #333;
 	}
-
+	.ans_v_text{
+		margin-bottom: 15upx;
+	}
 	.ans_file {
 		display: flex;
 		flex-wrap: wrap;

@@ -201,10 +201,11 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
 
     if (Option.type == 'yszc') {
       that.type = Option.type;
-      that.title = '隐私协议';
+      that.title = '隐私政策';
       uni.setNavigationBarTitle({
-        title: '隐私协议' });
+        title: '隐私政策' });
 
+      this.getdata('ysxy');
     }
     if (Option.type == 'about') {
       that.type = Option.type;
@@ -220,10 +221,12 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
       uni.setNavigationBarTitle({
         title: '使用说明' });
 
+      this.getdata('sysm');
     }
     if (Option.type == 3) {
       that.type = Option.type;
       that.title = '用户协议';
+      this.getdata('yhxy');
     }
     if (Option.type == 4) {
       that.type = Option.type;
@@ -236,47 +239,39 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
 
 
   methods: {
-    getdata: function getdata() {
+    getdata: function getdata(keyword) {
 
       ///api/info/list
       var that = this;
       var data = {
-        keyword: 'Privacy_agreement' };
+        keyword: keyword };
 
-      if (that.type == 2) {
-        data = {
-          keyword: 'about_us' };
 
-      }
-      if (that.type == 4) {
-        data = {
-          keyword: 'zdxfxy' };
-
-      }
       //selectSaraylDetailByUserCard
-      var jkurl = '/api/info/list';
+      var jkurl = '/getClause';
       uni.showLoading({
         title: '正在获取数据' });
 
-      _service.default.get(jkurl, data,
-      function (res) {
-
-        if (res.data.code == 1) {
-          var datas = res.data.data;
+      _service.default.P_get(jkurl, data).then(function (res) {
+        that.btn_kg = 0;
+        console.log(res);
+        if (res.code == 1) {
+          var datas = res.data;
           console.log(typeof datas);
 
           if (typeof datas == 'string') {
             datas = JSON.parse(datas);
           }
+
+          that.datas = datas[0].content;
           console.log(datas);
-          that.datas = datas;
 
 
         } else {
-          if (res.data.msg) {
+          if (res.msg) {
             uni.showToast({
               icon: 'none',
-              title: res.data.msg });
+              title: res.msg });
 
           } else {
             uni.showToast({
@@ -285,22 +280,14 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
 
           }
         }
-      },
-      function (err) {
+      }).catch(function (e) {
+        that.btn_kg = 0;
+        console.log(e);
+        uni.showToast({
+          icon: 'none',
+          title: '获取数据失败' });
 
-        if (err.data.msg) {
-          uni.showToast({
-            icon: 'none',
-            title: err.data.msg });
-
-        } else {
-          uni.showToast({
-            icon: 'none',
-            title: '操作失败' });
-
-        }
       });
-
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 

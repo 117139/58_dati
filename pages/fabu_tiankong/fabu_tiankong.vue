@@ -58,6 +58,9 @@
 					return
 				}
 				that.btnkg=1
+				// uni.showLoading({
+				// 	title:'正在添加问题'
+				// })
 				if(this.idx==-1){
 					var datas={
 						problem: {
@@ -79,10 +82,17 @@
 					}
 					this.edit_problem(edit_data)
 				}
-				
-				uni.navigateBack({
-					delta:1
+				// uni.hideLoading()
+				uni.showToast({
+					icon:'none',
+					title:'操作成功'
 				})
+				setTimeout(()=>{
+					uni.navigateBack({
+						delta:1
+					})
+				},1000)
+				
 			}
 		}
 	}

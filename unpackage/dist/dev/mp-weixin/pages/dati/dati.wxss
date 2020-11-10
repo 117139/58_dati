@@ -99,15 +99,22 @@
 	line-height: 35rpx;
 	color: #333;
 }
+.ans_v_text.data-v-0757d774{
+	margin-bottom: 15rpx;
+}
 .ans_file.data-v-0757d774 {
 	display: -webkit-box;
 	display: -webkit-flex;
 	display: flex;
+	-webkit-flex-wrap: wrap;
+	        flex-wrap: wrap;
 }
 .ans_file image.data-v-0757d774 {
 
 	width: 158rpx;
 	height: 158rpx;
+	margin-right: 15rpx;
+	margin-bottom: 15rpx;
 }
 .ans_list textarea.data-v-0757d774 {
 	width: 100%;
