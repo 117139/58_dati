@@ -175,7 +175,8 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
   computed: _objectSpread({},
   (0, _vuex.mapState)([
   'hasLogin',
-  'loginMsg'])),
+  'loginMsg',
+  'loginDatas'])),
 
 
   methods: {
@@ -200,64 +201,74 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
       console.log(e.detail.errMsg);
       console.log(e.detail.iv);
       console.log(e.detail.encryptedData);
-      return;
-      if (e.detail.userInfo) {
+      console.log(e.detail.encryptedData);
+      // return
+      if (e.detail.iv) {
         //用户按了允许授权按钮后需要处理的逻辑方法体
-        console.log(e.detail.userInfo);
-        var data = {
-          encryptedData: e.detail.encryptedData,
-          iv: e.detail.iv,
-          code: that.code };
+        wx.login({
+          success: function success(res) {
+            if (res.code) {//微信登录成功 已拿到code  
+              console.log(e.detail.iv);
+              var token = uni.getStorageSync('token');
+              var data = {
+                encryptedData: e.detail.encryptedData,
+                iv: e.detail.iv,
+                code: res.code,
+                token: token };
 
-        //selectSaraylDetailByUserCard
-        var jkurl = '/user/decodePhone';
-
-
-        _service.default.post(jkurl, data,
-        function (res) {
-
-          // if (res.data.code == 1) {
-          if (res.data.code == 1) {
-            var datas = res.data.data;
-            console.log(typeof datas);
-
-            if (typeof datas == 'string') {
-              datas = JSON.parse(datas);
-            }
-            uni.showToast({
-              icon: 'none',
-              title: '操作成功' });
-
-            _service.default.wxlogin();
-            setTimeout(function () {
-              uni.navigateBack();
-            }, 1000);
+              //selectSaraylDetailByUserCard
+              var jkurl = '/user/decodePhone';
 
 
-          } else {
-            that.btnkg = 0;
-            if (res.data.msg) {
-              uni.showToast({
-                icon: 'none',
-                title: res.data.msg });
+              _service.default.post(jkurl, data,
+              function (res) {
+
+                // if (res.data.code == 1) {
+                if (res.data.code == 1) {
+                  var datas = res.data.data;
+                  console.log(typeof datas);
+
+                  if (typeof datas == 'string') {
+                    datas = JSON.parse(datas);
+                  }
+                  uni.showToast({
+                    icon: 'none',
+                    title: '操作成功' });
+
+                  _service.default.wxlogin(1);
+
+
+
+                } else {
+                  that.btnkg = 0;
+                  if (res.data.msg) {
+                    uni.showToast({
+                      icon: 'none',
+                      title: res.data.msg });
+
+                  } else {
+                    uni.showToast({
+                      icon: 'none',
+                      title: '操作失败' });
+
+                  }
+                }
+              },
+              function (err) {
+                that.btnkg = 0;
+
+                uni.showToast({
+                  icon: 'none',
+                  title: '获取数据失败' });
+
+
+              });
 
             } else {
-              uni.showToast({
-                icon: 'none',
-                title: '操作失败' });
-
+              console.log('登录失败！' + res.errMsg);
             }
-          }
-        },
-        function (err) {
-          that.btnkg = 0;
+          } });
 
-          uni.showToast({
-            icon: 'none',
-            title: '获取数据失败' });
-
-
-        });
 
 
       } else {

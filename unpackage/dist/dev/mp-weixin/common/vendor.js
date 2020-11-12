@@ -8139,16 +8139,23 @@ var wxlogin = function wxlogin(num) {
                       if (res.data.code == 1) {
                         console.log('登录成功');
                         console.log(res.data);
+                        uni.setStorageSync('token', res.data.data.userToken);
                         //获取手机号
                         if (!res.data.data.phone) {
-                          uni.redirectTo({
-                            url: '/pages/login_tel/login_tel' });
+                          if (num == 1) {
+                            uni.redirectTo({
+                              url: '/pages/login_tel/login_tel' });
+
+                          } else {
+                            uni.navigateTo({
+                              url: '/pages/login_tel/login_tel' });
+
+                          }
 
                           return;
                         }
                         _index.default.commit('logindata', res.data.data);
                         _index.default.commit('login', res.data.data.nickname);
-                        uni.setStorageSync('token', res.data.data.userToken);
                         uni.setStorageSync('loginmsg', res.data.data);
 
                         _event.default.trigger({
@@ -8176,7 +8183,7 @@ var wxlogin = function wxlogin(num) {
 
                           setTimeout(function () {
                             uni.navigateBack();
-                          }, 1000);
+                          }, 1500);
                         }
                       } else {
                         uni.removeStorageSync('userInfo');

@@ -43,7 +43,8 @@
 		computed: {
 			...mapState([
 				'hasLogin',
-				'loginMsg'
+				'loginMsg',
+				'loginDatas'
 			])
 		},
 		methods: {
@@ -68,65 +69,75 @@
 				console.log(e.detail.errMsg)
 				console.log(e.detail.iv)
 				console.log(e.detail.encryptedData)
-				return
-				if (e.detail.userInfo) {
+				console.log(e.detail.encryptedData)
+				// return
+				if (e.detail.iv) {
 					//用户按了允许授权按钮后需要处理的逻辑方法体
-					console.log(e.detail.userInfo)
-					var data = {
-						encryptedData:e.detail.encryptedData,
-						iv:e.detail.iv,
-						code:that.code,
-					}
-					//selectSaraylDetailByUserCard
-					var jkurl = '/user/decodePhone'
-					
-					
-					service.post(jkurl, data,
-						function(res) {
-							
-							// if (res.data.code == 1) {
-							if (res.data.code == 1) {
-								var datas = res.data.data
-								console.log(typeof datas)
-								
-								if (typeof datas == 'string') {
-									datas = JSON.parse(datas)
+					wx.login({
+						success: (res) => {
+							if (res.code) { //微信登录成功 已拿到code  
+								console.log(e.detail.iv)
+								var token=uni.getStorageSync('token')
+								var data = {
+									encryptedData:e.detail.encryptedData,
+									iv:e.detail.iv,
+									code:res.code,
+									token:token
 								}
-								uni.showToast({
-									icon: 'none',
-									title: '操作成功'
-								})
-								service.wxlogin()
-								setTimeout(()=>{
-									uni.navigateBack()
-								},1000)
+								//selectSaraylDetailByUserCard
+								var jkurl = '/user/decodePhone'
 								
-					
+								
+								service.post(jkurl, data,
+									function(res) {
+										
+										// if (res.data.code == 1) {
+										if (res.data.code == 1) {
+											var datas = res.data.data
+											console.log(typeof datas)
+											
+											if (typeof datas == 'string') {
+												datas = JSON.parse(datas)
+											}
+											uni.showToast({
+												icon: 'none',
+												title: '操作成功'
+											})
+											service.wxlogin(1)
+											
+											
+								
+										} else {
+											that.btnkg=0
+											if (res.data.msg) {
+												uni.showToast({
+													icon: 'none',
+													title: res.data.msg
+												})
+											} else {
+												uni.showToast({
+													icon: 'none',
+													title: '操作失败'
+												})
+											}
+										}
+								},
+									function(err) {
+										that.btnkg=0
+										
+											uni.showToast({
+												icon: 'none',
+												title: '获取数据失败'
+											})
+									
+									}
+								)
 							} else {
-								that.btnkg=0
-								if (res.data.msg) {
-									uni.showToast({
-										icon: 'none',
-										title: res.data.msg
-									})
-								} else {
-									uni.showToast({
-										icon: 'none',
-										title: '操作失败'
-									})
-								}
+								console.log('登录失败！' + res.errMsg)
 							}
-					},
-						function(err) {
-							that.btnkg=0
-							
-								uni.showToast({
-									icon: 'none',
-									title: '获取数据失败'
-								})
-						
 						}
-					)
+					})
+					
 
 				} else {
 					//用户按了拒绝按钮

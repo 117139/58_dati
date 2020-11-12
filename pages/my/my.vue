@@ -16,7 +16,7 @@
 			</view>
 		</view>
 		<view v-else class="my_box">
-			<image class="my_box_bg" src="/static/images/my_01.jpg"></image>137549
+			<image class="my_box_bg" src="/static/images/my_01.jpg"></image>
 			
 			<view class="user_box dis_flex aic">
 				<image class="user_tx" src="/static/images/tx_m2.jpg"></image>
