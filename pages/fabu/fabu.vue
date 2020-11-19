@@ -253,7 +253,7 @@
 	export default {
 		data() {
 			return {
-				// #ifdef h5
+				// #ifdef H5
 				uid:'',
 				uids:'',
 				// #endif 
@@ -371,6 +371,7 @@
 			this.setls_pro_yh(option.uids)
 			this.uids=options.uids
 			this.uid=option.uid
+			this.set_h5_uid(option.uid)
 			// #endif
 		},
 		mounted() {  
@@ -405,7 +406,7 @@
 			...mapState(['new_problem','bj_prodata']),
 		},
 		methods: {
-			...mapMutations(['setnew_problem','edit_problem','setls_prodata','setls_pro_yh']),
+			...mapMutations(['setnew_problem','edit_problem','setls_prodata','setls_pro_yh','set_h5_uid']),
 			
 			sliderChange(e) {
 				console.log(e)
@@ -533,7 +534,7 @@
 								url: '../fabu2/fabu2'
 							})
 							// #endif
-							// #ifndef MP-WEIXIN
+							// #ifdef H5
 							uni.navigateTo({
 								url: '../fabu3/fabu3?uid='+that.uid+'&uids='+that.uids
 							})

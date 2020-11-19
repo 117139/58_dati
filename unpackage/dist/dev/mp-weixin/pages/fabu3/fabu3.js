@@ -256,7 +256,7 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
     document.getElementsByTagName('uni-page-head')[0].style.display = 'none';
   },
   computed: _objectSpread({},
-  (0, _vuex.mapState)(['hasLogin', 'forcedLogin', 'userName', 'loginDatas', 'ls_prodata', 'ls_pro_yh'])),
+  (0, _vuex.mapState)(['hasLogin', 'forcedLogin', 'userName', 'loginDatas', 'ls_prodata', 'ls_pro_yh', 'h5_uid'])),
 
   methods: _objectSpread(_objectSpread({},
   (0, _vuex.mapMutations)(['clearls_pro'])), {}, {

@@ -580,6 +580,7 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
 
 
 
+
   },
   mounted: function mounted() {
     document.getElementsByTagName('uni-page-head')[0].style.display = 'none';
@@ -613,7 +614,7 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
   (0, _vuex.mapState)(['new_problem', 'bj_prodata'])),
 
   methods: _objectSpread(_objectSpread({},
-  (0, _vuex.mapMutations)(['setnew_problem', 'edit_problem', 'setls_prodata', 'setls_pro_yh'])), {}, {
+  (0, _vuex.mapMutations)(['setnew_problem', 'edit_problem', 'setls_prodata', 'setls_pro_yh', 'set_h5_uid'])), {}, {
 
     sliderChange: function sliderChange(e) {
       console.log(e);

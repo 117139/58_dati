@@ -99,7 +99,7 @@
 			document.getElementsByTagName('uni-page-head')[0].style.display = 'none'  
 		},
 		computed: {
-			...mapState(['hasLogin', 'forcedLogin', 'userName', 'loginDatas' ,'ls_prodata', 'ls_pro_yh']),
+			...mapState(['hasLogin', 'forcedLogin', 'userName', 'loginDatas' ,'ls_prodata', 'ls_pro_yh','h5_uid']),
 		},
 		methods: {
 			...mapMutations(['clearls_pro']),
@@ -172,7 +172,7 @@
 						token:that.loginDatas.userToken,
 						// #endif
 						// #ifndef MP-WEIXIN
-						id:that.uid,
+						id:that.h5_uid,
 						// #endif
 						dy_title:that.ls_prodata.dy_title,
 						dy_explain:that.ls_prodata.dy_explain,
@@ -190,7 +190,7 @@
 						token:that.loginDatas.userToken,
 						// #endif
 						// #ifndef MP-WEIXIN
-						id:that.uid,
+						id:that.h5_uid,
 						// #endif
 						dy_title:that.ls_prodata.dy_title,
 						dy_explain:that.ls_prodata.dy_explain,

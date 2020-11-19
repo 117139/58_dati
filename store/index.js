@@ -27,9 +27,15 @@ const store = new Vuex.Store({
 		ls_prodata:'',
 		ls_pro_yh:'',
 		fj_data:'',
-		bj_prodata:''
+		bj_prodata:'',
+		
+		
+		h5_uid:''
 	},
 	mutations: {
+		set_h5_uid(state, h5_uid){//h5_uid
+			state.h5_uid = h5_uid || '';
+		},
 		edit_problem(state, bj_prodata){//编辑问题
 			state.bj_prodata = bj_prodata || '';
 		},
