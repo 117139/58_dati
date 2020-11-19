@@ -369,7 +369,7 @@
 		onLoad(option) {
 			// #ifdef H5
 			this.setls_pro_yh(option.uids)
-			this.uids=options.uids
+			this.uids=option.uids
 			this.uid=option.uid
 			this.set_h5_uid(option.uid)
 			// #endif
