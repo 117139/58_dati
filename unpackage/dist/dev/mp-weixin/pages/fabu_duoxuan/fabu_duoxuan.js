@@ -256,6 +256,9 @@ var that;var _default = { data: function data() {return { id: '', problem: { "ti
   },
 
 
+  mounted: function mounted() {
+    document.getElementsByTagName('uni-page-head')[0].style.display = 'none';
+  },
   onShow: function onShow() {
     console.log(this.new_xz);
     if (this.new_xz.length > 0) {
@@ -417,7 +420,11 @@ var that;var _default = { data: function data() {return { id: '', problem: { "ti
             console.log(e);
 
             // return
+
             that.upimg1(tempFilePaths, e.currentTarget.dataset.type, 0);
+
+
+
 
           } });
 
@@ -435,6 +442,10 @@ var that;var _default = { data: function data() {return { id: '', problem: { "ti
             // that.$set(that.answer[idx],'img',res.tempFilePaths)
 
             that.upimg1(tempFilePaths, idx, 0);
+
+
+
+
             return;
             var imglen = that.answer[idx].img.length;
 
@@ -473,10 +484,13 @@ var that;var _default = { data: function data() {return { id: '', problem: { "ti
       uni.uploadFile({
         url: _service.default.IPurl + '/upload/streamImg', //仅为示例，非真实的接口地址
         filePath: imgs[i],
+        // filePath: '',
         name: 'file',
         formData: {
           type: 1,
+
           token: that.loginDatas.userToken },
+
 
         success: function success(res) {
           // console.log(res.data)
@@ -490,7 +504,10 @@ var that;var _default = { data: function data() {return { id: '', problem: { "ti
               // var news1 =newimgs.length
               // if (news1 < 9 && i < imgs.length - 1) {
               i++;
-              that.upimg1(imgs, type, i);
+              if (i < imgs.length) {
+                that.upimg1(imgs, type, i);
+              }
+
               // }
 
             } else {
@@ -507,6 +524,96 @@ var that;var _default = { data: function data() {return { id: '', problem: { "ti
               title: "上传失败" });
 
           }
+        } });
+
+    },
+    upimg1_h5: function upimg1_h5(imgs, type, i) {
+      var that = this;
+      // var base64 = that.urlTobase64(imgs[i]);
+
+      uni.request({
+        url: imgs[i],
+        method: 'GET',
+        responseType: 'arraybuffer',
+        success: function success(res) {
+          var base64 = wx.arrayBufferToBase64(res.data); //把arraybuffer转成base64
+          console.log('base64');
+          // console.log(base64)
+          base64 = 'data:image/jpeg;base64,' + base64; //不加上这串字符，在页面无法显示
+          // return base64
+          var datas = {
+            file: base64,
+            type: 1 };
+
+          var jkurl = '/upload/base64Img';
+          console.log('h5 upload');
+          // 单个请求
+          _service.default.P_post(jkurl, datas).then(function (res) {
+            that.btn_kg = 0;
+            console.log(res);
+            // var ndata = JSON.parse(res.data)
+            if (res.code == 1) {
+              console.log(imgs[i], i, res.msg);
+              if (type == -1) {
+
+                var newimgs = that.problem.img.concat(res.msg);
+                that.$set(that.problem, 'img', newimgs);
+                // var news1 =newimgs.length
+                // if (news1 < 9 && i < imgs.length - 1) {
+                i++;
+                if (i < imgs.length) {
+                  that.upimg1_h5(imgs, type, i);
+                }
+
+                // }
+
+              } else {
+                var idx_img = [res.msg];
+                that.$set(that.answer[type], 'img', idx_img);
+
+              }
+
+
+
+            } else {
+              uni.showToast({
+                icon: "none",
+                title: "上传失败" });
+
+            }
+          }).catch(function (e) {
+            that.btn_kg = 0;
+            console.log(e);
+            uni.showToast({
+              icon: 'none',
+              title: '获取数据失败' });
+
+          });
+        },
+        fail: function fail(err) {
+          console.log(err);
+        } });
+
+
+
+    },
+    // 转base64码
+    urlTobase64: function urlTobase64(url) {
+      console.log('url');
+      // console.log(url)
+      uni.request({
+        url: url,
+        method: 'GET',
+        responseType: 'arraybuffer',
+        success: function success(res) {
+          var base64 = wx.arrayBufferToBase64(res.data); //把arraybuffer转成base64
+          console.log('base64');
+          console.log(base64);
+          base64 = 'data:image/jpeg;base64,' + base64; //不加上这串字符，在页面无法显示
+          return base64;
+        },
+        fail: function fail(err) {
+          console.log(err);
         } });
 
     },

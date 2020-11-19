@@ -89,7 +89,10 @@
 			}
 		},
 		
-			
+		
+		mounted() {  
+			document.getElementsByTagName('uni-page-head')[0].style.display = 'none'  
+		},
 		onShow(){
 			console.log(this.new_xz)
 			if(this.new_xz.length>0){
@@ -251,8 +254,12 @@
 							console.log(e)
 							
 							// return
+							// #ifdef MP-WEIXIN
 							that.upimg1(tempFilePaths,e.currentTarget.dataset.type, 0)
-				
+							// #endif
+							// #ifndef MP-WEIXIN
+							that.upimg1_h5(tempFilePaths,e.currentTarget.dataset.type, 0)
+							// #endif
 						}
 					});
 				}else{
@@ -267,8 +274,12 @@
 							console.log(e)
 							var idx=e.currentTarget.dataset.type
 							// that.$set(that.answer[idx],'img',res.tempFilePaths)
-							
-								that.upimg1(tempFilePaths,idx, 0)
+							// #ifdef MP-WEIXIN
+							that.upimg1(tempFilePaths,idx, 0)
+							// #endif
+							// #ifndef MP-WEIXIN
+							that.upimg1_h5(tempFilePaths,idx, 0)
+							// #endif
 							return
 							const imglen = that.answer[idx].img.length
 							
@@ -307,10 +318,13 @@
 				uni.uploadFile({
 					url: service.IPurl+'/upload/streamImg', //仅为示例，非真实的接口地址
 					filePath: imgs[i],
+					// filePath: '',
 					name: 'file',
 					formData: {
 						type:1,
-						token: that.loginDatas.userToken
+						// #ifdef MP-WEIXIN
+						token: that.loginDatas.userToken,
+						// #endif
 					},
 					success(res) {
 						// console.log(res.data)
@@ -324,7 +338,10 @@
 									// var news1 =newimgs.length
 									// if (news1 < 9 && i < imgs.length - 1) {
 										i++
-										that.upimg1(imgs,type, i)
+										if(i<imgs.length){
+											that.upimg1(imgs,type, i)
+										}
+										
 									// }
 								
 							}else{
@@ -343,6 +360,96 @@
 						}
 					}
 				})
+			},
+			upimg1_h5(imgs,type, i) {
+				var that = this
+				 // var base64 = that.urlTobase64(imgs[i]);
+				
+				uni.request({
+						url: imgs[i],
+						method: 'GET',
+						responseType: 'arraybuffer',
+						success: (res) => {
+								let base64 = wx.arrayBufferToBase64(res.data); //把arraybuffer转成base64
+								console.log('base64')
+								// console.log(base64)
+								base64 = 'data:image/jpeg;base64,' + base64; //不加上这串字符，在页面无法显示
+								// return base64
+								var datas={
+									file:base64,
+									type:1,
+								}
+								var jkurl='/upload/base64Img'
+								console.log('h5 upload')
+								// 单个请求
+								service.P_post(jkurl, datas).then(res => {
+									that.btn_kg=0
+									console.log(res)
+									// var ndata = JSON.parse(res.data)
+									if (res.code == 1) {
+										console.log(imgs[i], i, res.msg)
+										if(type==-1){
+											
+												var newimgs=that.problem.img.concat( res.msg)
+												that.$set(that.problem,'img',newimgs)
+												// var news1 =newimgs.length
+												// if (news1 < 9 && i < imgs.length - 1) {
+													i++
+													if(i<imgs.length){
+														that.upimg1_h5(imgs,type, i)
+													}
+													
+												// }
+											
+										}else{
+											var idx_img=[res.msg]
+											that.$set(that.answer[type],'img',idx_img)
+											
+										}
+										
+										
+										
+									} else {
+										uni.showToast({
+											icon: "none",
+											title: "上传失败"
+										})
+									}
+								}).catch(e => {
+									that.btn_kg=0
+									console.log(e)
+									uni.showToast({
+										icon: 'none',
+										title: '获取数据失败'
+									})
+								})
+						},
+						fail: (err) => {
+							console.log(err)
+						}
+				});
+				
+				
+			},
+			// 转base64码
+			urlTobase64(url) {
+				console.log('url')
+				// console.log(url)
+					uni.request({
+							url: url,
+							method: 'GET',
+							responseType: 'arraybuffer',
+							success: (res) => {
+									let base64 = wx.arrayBufferToBase64(res.data); //把arraybuffer转成base64
+									console.log('base64')
+									console.log(base64)
+									base64 = 'data:image/jpeg;base64,' + base64; //不加上这串字符，在页面无法显示
+									return base64
+							},
+							fail: (err) => {
+								console.log(err)
+							}
+					});
 			},
 			pveimg(e){
 				service.pveimg(e)

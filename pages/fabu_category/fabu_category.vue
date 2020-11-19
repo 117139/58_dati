@@ -47,6 +47,9 @@
 				
 			}
 		},
+		mounted() {  
+			document.getElementsByTagName('uni-page-head')[0].style.display = 'none'  
+		},
 		methods: {
 			jump(e){
 				service.jump(e)
@@ -56,6 +59,9 @@
 </script>
 
 <style scoped>
+	body{
+		background: #fff;
+	}
 	.title_list{
 		width: 100%;
 		padding: 15upx 15upx;

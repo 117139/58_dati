@@ -225,6 +225,9 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
 {
   data: function data() {
     return {
+
+
+
       time: '',
       time1: '',
       add_type: 1, //1：手动添加  2：随机添加    调研时间类型
@@ -241,6 +244,16 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
       btnkg: 0,
       now_time: new Date() };
 
+  },
+  onLoad: function onLoad(option) {
+
+
+
+
+  },
+
+  mounted: function mounted() {
+    document.getElementsByTagName('uni-page-head')[0].style.display = 'none';
   },
   computed: _objectSpread({},
   (0, _vuex.mapState)(['hasLogin', 'forcedLogin', 'userName', 'loginDatas', 'ls_prodata', 'ls_pro_yh'])),
@@ -294,17 +307,30 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
     sub: function sub() {
       var that = this;
       var datas;
-      if (that.add_type == 1) {
-        if (that.time_list.length == 0) {
-          uni.showToast({
-            icon: 'none',
-            title: '请添加时间' });
+      if (that.time_list.length == 0) {
+        uni.showToast({
+          icon: 'none',
+          title: '请添加时间' });
 
-          return;
-        }
-        var times = JSON.stringify(that.time_list);
+        return;
+      }
+      if (!that.sm_ty) {
+        uni.showToast({
+          icon: 'none',
+          title: '请先阅读并同意说明' });
+
+        return;
+      }
+      var times = JSON.stringify(that.time_list);
+      if (that.add_type == 1) {
+
         datas = {
+
           token: that.loginDatas.userToken,
+
+
+
+
           dy_title: that.ls_prodata.dy_title,
           dy_explain: that.ls_prodata.dy_explain,
           dy_addition_explain: that.ls_prodata.dy_addition_explain,
@@ -317,7 +343,12 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
 
       } else {//随机
         datas = {
+
           token: that.loginDatas.userToken,
+
+
+
+
           dy_title: that.ls_prodata.dy_title,
           dy_explain: that.ls_prodata.dy_explain,
           dy_addition_explain: that.ls_prodata.dy_addition_explain,
@@ -334,6 +365,12 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
 
       var jkurl = '/user/research/add';
 
+
+
+
+
+
+
       if (this.btnkg == 1) {
         return;
       }
@@ -342,6 +379,7 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
         title: '正在提交' });
 
       // 单个请求
+      // service.P_get(jkurl, datas).then(res => {
       _service.default.P_post(jkurl, datas).then(function (res) {
         that.btn_kg = 0;
         console.log(res);
@@ -357,8 +395,13 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
             title: '发布成功，等待审核' });
 
           setTimeout(function () {
+
             uni.navigateBack({
               delta: 3 });
+
+
+
+
 
           }, 1000);
         } else {
@@ -376,7 +419,7 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
           }
         }
       }).catch(function (e) {
-        that.btn_kg = 0;
+        that.btnkg = 0;
         console.log(e);
         uni.showToast({
           icon: 'none',

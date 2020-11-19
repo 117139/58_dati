@@ -75,5 +75,12 @@
     },
     "uniStatistics" : {
         "enable" : false
+    },
+    "h5" : {
+        "title" : "58_dati",
+        "domain" : "http://datixcx.com.aa.800123456.top",
+        "router" : {
+            "base" : "/suxin/58_dati"
+        }
     }
 }

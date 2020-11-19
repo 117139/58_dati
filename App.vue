@@ -15,7 +15,9 @@
 		onLaunch: function() {
 			var that =this
 			console.log('App Launch')
+			// #ifdef MP-WEIXIN
 			service.wxlogin()
+			// #endif
 			uni.getSystemInfo({
 				success: function(e) {
 					console.log(e);

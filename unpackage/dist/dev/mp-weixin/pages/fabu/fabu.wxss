@@ -1,4 +1,8 @@
 
+.h_content.data-v-f329d474{
+	background: #fff;
+	min-height: 100%;
+}
 .fabu_int.data-v-f329d474 {
 	width: 100%;
 	height: 94rpx;

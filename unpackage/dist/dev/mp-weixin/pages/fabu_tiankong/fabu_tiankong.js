@@ -172,6 +172,10 @@ var that;var _default = { data: function data() {return { problem: '', type: '',
       this.idx = this.bj_prodata.idx;
     }
   },
+
+  mounted: function mounted() {
+    document.getElementsByTagName('uni-page-head')[0].style.display = 'none';
+  },
   computed: _objectSpread({},
   (0, _vuex.mapState)(['bj_prodata'])),
 

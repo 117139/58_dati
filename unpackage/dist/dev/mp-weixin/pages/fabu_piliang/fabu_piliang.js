@@ -154,6 +154,10 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
       content: '' };
 
   },
+
+  mounted: function mounted() {
+    document.getElementsByTagName('uni-page-head')[0].style.display = 'none';
+  },
   computed: {
     // ...mapState(['hasLogin', 'forcedLogin', 'userName']),
   },

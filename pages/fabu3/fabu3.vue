@@ -68,6 +68,9 @@
 	export default {
 		data() {
 			return {
+				// #ifdef h5
+				uid:'',
+				// #endif 
 				time: '',
 				time1: '',
 				add_type: 1,    //1：手动添加  2：随机添加    调研时间类型
@@ -84,6 +87,16 @@
 				btnkg:0,
 				now_time:new Date()
 			}
+		},
+		onLoad(option) {
+			// #ifdef H5
+			
+			this.uid=option.uid
+			// #endif
+		},
+		
+		mounted() {  
+			document.getElementsByTagName('uni-page-head')[0].style.display = 'none'  
 		},
 		computed: {
 			...mapState(['hasLogin', 'forcedLogin', 'userName', 'loginDatas' ,'ls_prodata', 'ls_pro_yh']),
@@ -137,17 +150,30 @@
 			sub() {
 				var that =this
 				var datas
+				if(that.time_list.length==0){
+					uni.showToast({
+						icon: 'none',
+						title: '请添加时间'
+					})
+					return
+				}
+				if(!that.sm_ty){
+					uni.showToast({
+						icon: 'none',
+						title: '请先阅读并同意说明'
+					})
+					return
+				}
+				var times=JSON.stringify(that.time_list)
 				if(that.add_type==1){
-					if(that.time_list.length==0){
-						uni.showToast({
-							icon: 'none',
-							title: '请添加时间'
-						})
-						return
-					}
-					var times=JSON.stringify(that.time_list)
+					
 					datas = {
+						// #ifdef MP-WEIXIN
 						token:that.loginDatas.userToken,
+						// #endif
+						// #ifndef MP-WEIXIN
+						id:that.uid,
+						// #endif
 						dy_title:that.ls_prodata.dy_title,
 						dy_explain:that.ls_prodata.dy_explain,
 						dy_addition_explain:that.ls_prodata.dy_addition_explain,
@@ -160,7 +186,12 @@
 					}
 				}else{ //随机
 					datas = {
+						// #ifdef MP-WEIXIN
 						token:that.loginDatas.userToken,
+						// #endif
+						// #ifndef MP-WEIXIN
+						id:that.uid,
+						// #endif
 						dy_title:that.ls_prodata.dy_title,
 						dy_explain:that.ls_prodata.dy_explain,
 						dy_addition_explain:that.ls_prodata.dy_addition_explain,
@@ -177,6 +208,12 @@
 				
 				var jkurl = '/user/research/add'
 				
+				// #ifdef H5
+				console.log(service.adminurl)
+				// jkurl =service.adminurl+'/research_papers.ResearchPapers/saveResearch'
+				var adminurl='https://datixcx.com.aa.800123456.top/admin/'
+				jkurl=adminurl+'/research_papers.ResearchPapers/saveResearch'
+				// #endif
 				if(this.btnkg==1){
 					return
 				}
@@ -185,6 +222,7 @@
 					title:'正在提交'
 				})
 				// 单个请求
+				// service.P_get(jkurl, datas).then(res => {
 				service.P_post(jkurl, datas).then(res => {
 					that.btn_kg=0
 					console.log(res)
@@ -200,9 +238,14 @@
 							title: '发布成功，等待审核'
 						})
 						setTimeout(()=>{
+							// #ifdef MP-WEIXIN
 							uni.navigateBack({
 								delta:3
 							})
+							// #endif
+							// #ifdef H5
+								window.open(adminurl+'/research_papers.ResearchPapers/index.html')
+							// #endif
 						},1000)
 					} else {
 						that.btnkg=0
@@ -219,7 +262,7 @@
 						}
 					}
 				}).catch(e => {
-					that.btn_kg=0
+					that.btnkg=0
 					console.log(e)
 					uni.showToast({
 						icon: 'none',

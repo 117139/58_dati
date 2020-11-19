@@ -6,14 +6,14 @@ const USERS_KEY = 'USERS_KEY';
 const STATE_KEY = 'STATE_KEY';
 const IPurl = 'https://datixcx.com.aa.800123456.top/api/';
 const imgurl = 'https://datixcx.com.aa.800123456.top/';
-
+// const adminurl='https://datixcx.com.aa.800123456.top/admin/';
 // appid:wx4c41cc50c5a53df9
 // appid:wx49a560f7feac0feb   cj
 /**
  * 请求头
  */
 var header = {
-	'content-type': 'application/x-www-form-urlencoded'
+	'content-type': 'application/x-www-form-urlencoded',
 }
 
 /**
@@ -373,7 +373,7 @@ const http =({url ='',param ={},method='',header={'content-type': 'application/x
 		
 		console.log("请求头：", header)
 		console.log("param：", param)
-    wx.request({
+    uni.request({
       url: getUrl(url),
       data:param,
       method: method,

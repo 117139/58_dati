@@ -1,5 +1,5 @@
 <template>
-	<view>
+	<view class="h_content">
 		<view class="fabu_int">
 			<input type="text" placeholder="请输入调研标题" v-model="dy_title">
 		</view>
@@ -253,6 +253,10 @@
 	export default {
 		data() {
 			return {
+				// #ifdef h5
+				uid:'',
+				uids:'',
+				// #endif 
 				dy_title:'',
 				dy_explain:'',
 				dy_addition_explain:'',
@@ -362,6 +366,16 @@
 				]
 			}
 		},
+		onLoad(option) {
+			// #ifdef H5
+			this.setls_pro_yh(option.uids)
+			this.uids=options.uids
+			this.uid=option.uid
+			// #endif
+		},
+		mounted() {  
+			document.getElementsByTagName('uni-page-head')[0].style.display = 'none'  
+		},
 		onUnload() {
 			this.setnew_problem('')
 			this.edit_problem('')
@@ -391,7 +405,7 @@
 			...mapState(['new_problem','bj_prodata']),
 		},
 		methods: {
-			...mapMutations(['setnew_problem','edit_problem','setls_prodata']),
+			...mapMutations(['setnew_problem','edit_problem','setls_prodata','setls_pro_yh']),
 			
 			sliderChange(e) {
 				console.log(e)
@@ -521,7 +535,7 @@
 							// #endif
 							// #ifndef MP-WEIXIN
 							uni.navigateTo({
-								url: '../fabu3/fabu3'
+								url: '../fabu3/fabu3?uid='+that.uid+'&uids='+that.uids
 							})
 							// #endif
 						} else if (res.cancel) {
@@ -545,6 +559,10 @@
 </script>
 
 <style scoped>
+	.h_content{
+		background: #fff;
+		min-height: 100%;
+	}
 	.fabu_int {
 		width: 100%;
 		height: 94upx;

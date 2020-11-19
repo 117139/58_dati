@@ -1,14 +1,22 @@
 
-.login_box.data-v-f664dadc {
+.login_box.data-v-f664dadc{
 	width: 100%;
 	height: 690rpx;
 	font-size: 36rpx;
 	color: #333;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-box-orient: vertical;
+	-webkit-box-direction: normal;
+	-webkit-flex-direction: column;
+	        flex-direction: column;
 }
-.logo.data-v-f664dadc {
-	width: 311rpx;
-	height: 94rpx;
-	margin-bottom: 25rpx;
+.logo.data-v-f664dadc{
+	width: 150rpx;
+	height: 150rpx;
+	display: block;
+	margin: 50rpx auto;
 }
 .login_tip.data-v-f664dadc {
 	font-size: 26rpx;

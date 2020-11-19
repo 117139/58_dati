@@ -206,7 +206,7 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
 //
 //
 //
-var _default = { data: function data() {return {};}, methods: { jump: function jump(e) {_service.default.jump(e);} } };exports.default = _default;
+var _default = { data: function data() {return {};}, mounted: function mounted() {document.getElementsByTagName('uni-page-head')[0].style.display = 'none';}, methods: { jump: function jump(e) {_service.default.jump(e);} } };exports.default = _default;
 
 /***/ }),
 

@@ -102,7 +102,10 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
 //
 //
 var that;var _default = { data: function data() {return { id: '', problem: { "title": "", "img": [] }, "type": "5", //问题类别1：单选题  2：多选题  3：填空题  4：排序题  5：滑动题
-      "answer": { "min_num": "0", "min_text": "不好", "max_num": "100", "max_text": "非常好", "step_size": "1" }, idx: -1, btnkg: 0 };}, onLoad: function onLoad(option) {that = this;if (option.type) {this.type = option.type;} else {this.type = 5;}console.log(this.bj_prodata);if (this.bj_prodata.datas) {this.problem = this.bj_prodata.datas.problem;this.answer = this.bj_prodata.datas.answer;this.type = this.bj_prodata.datas.type;this.idx = this.bj_prodata.idx;}}, onShow: function onShow() {}, computed: _objectSpread({}, (0, _vuex.mapState)(['new_xz', 'bj_prodata'])), methods: _objectSpread(_objectSpread({}, (0, _vuex.mapMutations)(['setnew_problem', 'setnew_xz', 'edit_problem'])), {}, { sub: function sub() {
+      "answer": { "min_num": "0", "min_text": "不好", "max_num": "100", "max_text": "非常好", "step_size": "1" }, idx: -1, btnkg: 0 };}, onLoad: function onLoad(option) {that = this;if (option.type) {this.type = option.type;} else {this.type = 5;}console.log(this.bj_prodata);if (this.bj_prodata.datas) {this.problem = this.bj_prodata.datas.problem;this.answer = this.bj_prodata.datas.answer;this.type = this.bj_prodata.datas.type;this.idx = this.bj_prodata.idx;}}, mounted: function mounted() {document.getElementsByTagName('uni-page-head')[0].style.display = 'none';}, onShow: function onShow() {}, computed: _objectSpread({}, (0, _vuex.mapState)(['new_xz', 'bj_prodata'])), methods: _objectSpread(_objectSpread({},
+  (0, _vuex.mapMutations)(['setnew_problem', 'setnew_xz', 'edit_problem'])), {}, {
+
+    sub: function sub() {
       var that = this;
       if (!this.problem.title) {
         uni.showToast({
@@ -232,8 +235,13 @@ var that;var _default = { data: function data() {return { id: '', problem: { "ti
             var tempFilePaths = res.tempFilePaths;
             console.log(e);
 
-            // return
+
             that.upimg1(tempFilePaths, e.currentTarget.dataset.type, 0);
+
+
+
+
+
 
           } });
 
@@ -251,6 +259,11 @@ var that;var _default = { data: function data() {return { id: '', problem: { "ti
             // that.$set(that.answer[idx],'img',res.tempFilePaths)
 
             that.upimg1(tempFilePaths, idx, 0);
+
+
+
+
+
 
 
           } });
@@ -280,7 +293,10 @@ var that;var _default = { data: function data() {return { id: '', problem: { "ti
               // var news1 =newimgs.length
               // if (news1 < 9 && i < imgs.length - 1) {
               i++;
-              that.upimg1(imgs, type, i);
+              if (i < imgs.length) {
+                that.upimg1(imgs, type, i);
+              }
+
               // }
 
             } else {
@@ -300,6 +316,77 @@ var that;var _default = { data: function data() {return { id: '', problem: { "ti
         } });
 
     },
+    upimg1_h5: function upimg1_h5(imgs, type, i) {
+      var that = this;
+      // var base64 = that.urlTobase64(imgs[i]);
+
+      uni.request({
+        url: imgs[i],
+        method: 'GET',
+        responseType: 'arraybuffer',
+        success: function success(res) {
+          var base64 = wx.arrayBufferToBase64(res.data); //把arraybuffer转成base64
+          console.log('base64');
+          // console.log(base64)
+          base64 = 'data:image/jpeg;base64,' + base64; //不加上这串字符，在页面无法显示
+          // return base64
+          var datas = {
+            file: base64,
+            type: 1 };
+
+          var jkurl = '/upload/base64Img';
+          console.log('h5 upload');
+          // 单个请求
+          _service.default.P_post(jkurl, datas).then(function (res) {
+            that.btn_kg = 0;
+            console.log(res);
+            // var ndata = JSON.parse(res.data)
+            if (res.code == 1) {
+              console.log(imgs[i], i, res.msg);
+              if (type == -1) {
+
+                var newimgs = that.problem.img.concat(res.msg);
+                that.$set(that.problem, 'img', newimgs);
+                // var news1 =newimgs.length
+                // if (news1 < 9 && i < imgs.length - 1) {
+                i++;
+                if (i < imgs.length) {
+                  that.upimg1_h5(imgs, type, i);
+                }
+
+                // }
+
+              } else {
+                var idx_img = [res.msg];
+                that.$set(that.answer[type], 'img', idx_img);
+
+              }
+
+
+
+            } else {
+              uni.showToast({
+                icon: "none",
+                title: "上传失败" });
+
+            }
+          }).catch(function (e) {
+            that.btn_kg = 0;
+            console.log(e);
+            uni.showToast({
+              icon: 'none',
+              title: '获取数据失败' });
+
+          });
+        },
+        fail: function fail(err) {
+          console.log(err);
+        } });
+
+
+
+    },
+
     pveimg: function pveimg(e) {
       _service.default.pveimg(e);
     },

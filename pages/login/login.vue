@@ -190,11 +190,14 @@
 		height: 690upx;
 		font-size: 36upx;
 		color: #333;
+		display: flex;
+		flex-direction: column;
 	}
 	.logo{
-		width: 311upx;
-		height: 94upx;
-		margin-bottom: 25upx;
+		width: 150upx;
+		height: 150upx;
+		display: block;
+		margin: 50upx auto;
 	}
 	.login_tip{
 		font-size: 26upx;

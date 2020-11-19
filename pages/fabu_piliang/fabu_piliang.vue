@@ -22,6 +22,10 @@
 				content:''
 			}
 		},
+		
+		mounted() {  
+			document.getElementsByTagName('uni-page-head')[0].style.display = 'none'  
+		},
 		computed: {
 			// ...mapState(['hasLogin', 'forcedLogin', 'userName']),
 		},

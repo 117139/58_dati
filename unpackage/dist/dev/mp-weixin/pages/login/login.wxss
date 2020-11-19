@@ -4,11 +4,19 @@
 	height: 690rpx;
 	font-size: 36rpx;
 	color: #333;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-box-orient: vertical;
+	-webkit-box-direction: normal;
+	-webkit-flex-direction: column;
+	        flex-direction: column;
 }
 .logo.data-v-b237504c{
-	width: 311rpx;
-	height: 94rpx;
-	margin-bottom: 25rpx;
+	width: 150rpx;
+	height: 150rpx;
+	display: block;
+	margin: 50rpx auto;
 }
 .login_tip.data-v-b237504c{
 	font-size: 26rpx;

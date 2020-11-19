@@ -40,6 +40,10 @@
 				this.idx=this.bj_prodata.idx
 			}
 		},
+		
+		mounted() {  
+			document.getElementsByTagName('uni-page-head')[0].style.display = 'none'  
+		},
 		computed: {
 			...mapState(['bj_prodata']),
 		},

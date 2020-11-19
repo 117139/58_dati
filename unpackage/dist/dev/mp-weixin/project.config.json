@@ -11,6 +11,8 @@
   "libVersion": "",
   "appid": "wx9eab61f9c2c35072",
   "projectname": "58_dati",
+  "simulatorType": "wechat",
+  "simulatorPluginLibVersion": {},
   "condition": {
     "search": {
       "list": []
