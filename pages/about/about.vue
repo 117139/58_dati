@@ -1,7 +1,7 @@
 <template>
 	<view class="content_wrap">
 	
-		<view v-if="datas&&datas.body" class="xieyi_main" v-html="datas.body">
+		<view v-if="datas" class="xieyi_main" v-html="datas">
 		</view>
 		<view v-else-if="type=='about'" class="xieyi_main" v-html="fj_data.about" >
 			<view style="font-size: 45upx;font-weight: bold;text-align: center;margin-bottom: 40upx;">“答题小程序”关于我们</view>
@@ -107,6 +107,9 @@
 		},
 		
 		methods: {
+			get_fwb(str){
+				return service.get_fwb(str)
+			},
 			getdata(keyword){
 				
 				///api/info/list
@@ -130,8 +133,10 @@
 						if (typeof datas == 'string') {
 							datas = JSON.parse(datas)
 						}
+						if(datas.length>0){
+							that.datas = datas[0].content
+						}
 						
-						that.datas = datas[0].content
 						console.log(datas)
 							
 							

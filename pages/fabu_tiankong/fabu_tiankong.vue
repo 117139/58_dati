@@ -42,7 +42,7 @@
 		},
 		
 		mounted() {  
-			document.getElementsByTagName('uni-page-head')[0].style.display = 'none'  
+			// document.getElementsByTagName('uni-page-head')[0].style.display = 'none'  
 		},
 		computed: {
 			...mapState(['bj_prodata']),

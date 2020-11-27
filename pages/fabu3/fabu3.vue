@@ -96,7 +96,9 @@
 		},
 		
 		mounted() {  
+			// #ifdef H5
 			document.getElementsByTagName('uni-page-head')[0].style.display = 'none'  
+			// #endif
 		},
 		computed: {
 			...mapState(['hasLogin', 'forcedLogin', 'userName', 'loginDatas' ,'ls_prodata', 'ls_pro_yh','h5_uid']),
@@ -221,6 +223,7 @@
 				uni.showLoading({
 					title:'正在提交'
 				})
+				
 				// 单个请求
 				// service.P_get(jkurl, datas).then(res => {
 				service.P_post(jkurl, datas).then(res => {
@@ -244,7 +247,8 @@
 							})
 							// #endif
 							// #ifdef H5
-								window.open(adminurl+'/research_papers.ResearchPapers/index.html')
+								parent.parent_fuc();
+								// window.open(adminurl+'/research_papers.ResearchPapers/index.html')
 							// #endif
 						},1000)
 					} else {

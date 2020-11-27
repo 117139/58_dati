@@ -19,8 +19,8 @@
 			<scroll-view class="flex_1" scroll-y="true" refresher-enabled='true' :refresher-triggered="triggered"
 			 :refresher-threshold="100" @refresherpulling="onPulling" @refresherrefresh="onRefresh" @refresherrestore="onRestore"
 			 @refresherabort="onAbort" @scrolltolower="getdata">
-				<view>
-					<view class="i_li dis_flex aift" v-for="item in datas" @tap="jump" :data-url="'/pages/dati/dati?id='+item.id">
+				<view class="scroll_nbox">
+					<view class="i_li dis_flex aift" v-for="item in datas" @tap="jump"  :data-login='login_kg' :data-haslogin='hasLogin' :data-url="'/pages/dati/dati?id='+item.id">
 						<image class="i_li_tx" :src="item.head_portrait" mode="aspectFill" lazy-load="true"></image>
 						<view class="i_li_msg">
 							<view class="d1">{{item.user_nickname}}</view>
@@ -28,6 +28,7 @@
 							<view class="d3">{{item.title}}</view>
 						</view>
 					</view>
+					
 					<view v-if="datas.length==0" class="zanwu">暂无数据</view>
 					<view v-if="data_last" class="data_last">没有更多了~~~</view>
 				</view>
@@ -66,7 +67,8 @@
 				search_key: '',
 				sort: 1,
 				triggered: true, //设置当前下拉刷新状态
-				data_last:false
+				data_last:false,
+				login_kg:false
 			};
 		},
 		watch:{
@@ -221,10 +223,12 @@
 				} else if (this.sort == 2) {
 					this.sort = 1
 				}
+				
 				this.onRetry()
 			},
 			onRetry() {
 				this.page = 1
+				this.data_last=false
 				this.getdata()
 			},
 			xy_on() {
@@ -348,6 +352,12 @@
 						console.log(res)
 						if(res.fj_data){
 							that.setfj_data(res.fj_data)
+							if(res.fj_data.is_any_dy==1){
+								that.login_kg= true
+							}else if(res.fj_data.is_any_dy==2){
+								that.login_kg=false
+							}
+							
 						}
 						if(page_that==1){
 							
@@ -407,12 +417,12 @@
 			},
 			jump(e) {
 				var that = this
-				if(!that.hasLogin){
-					uni.navigateTo({
-						url:'/pages/login/login'
-					})
-					return
-				}
+				// if(!that.hasLogin){
+				// 	uni.navigateTo({
+				// 		url:'/pages/login/login'
+				// 	})
+				// 	return
+				// }
 				if (that.btn_kg == 1) {
 					return
 				} else {
@@ -611,7 +621,7 @@
 		position: fixed;
 		z-index: 1;
 		box-sizing: border-box;
-		padding: 0 30upx;
+		
 		width: 100%;
 		/* height: 100%; */
 		bottom: 0;
@@ -620,7 +630,11 @@
 	.list_box scroll-view {
 		height: 100%;
 	}
-
+	.scroll_nbox{
+		width: 100%;
+		padding: 0 30upx;
+		box-sizing: border-box;
+	}
 	.i_li {
 		width: 100%;
 		min-height: 191upx;

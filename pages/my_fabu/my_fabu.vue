@@ -45,6 +45,7 @@
 		methods: {
 			onRetry(){
 				this.page=1
+				this.data_last=false
 				this.getdata()
 			},
 			getdata(num) {

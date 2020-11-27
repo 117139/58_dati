@@ -27,8 +27,13 @@
 				code:''
 			}
 		},
-		onload() {
+		
+		onLoad() {
 			var that =this
+			uni.showToast({
+				icon:'none',
+				title:'请先绑定手机号'
+			})
 			wx.login({
 				success: (res) => {
 					if (res.code) { //微信登录成功 已拿到code  
@@ -87,7 +92,10 @@
 								//selectSaraylDetailByUserCard
 								var jkurl = '/user/decodePhone'
 								
-								
+								uni.showLoading({
+									title:'正在绑定手机号',
+									mask:true
+								})
 								service.post(jkurl, data,
 									function(res) {
 										
@@ -103,7 +111,9 @@
 												icon: 'none',
 												title: '操作成功'
 											})
-											service.wxlogin(1)
+											setTimeout(function (){
+												service.wxlogin(1)
+											},500)
 											
 											
 								

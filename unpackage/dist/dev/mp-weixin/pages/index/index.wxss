@@ -123,13 +123,19 @@
 	z-index: 1;
 	-webkit-box-sizing: border-box;
 	        box-sizing: border-box;
-	padding: 0 30rpx;
+	
 	width: 100%;
 	/* height: 100%; */
 	bottom: 0;
 }
 .list_box scroll-view.data-v-57280228 {
 	height: 100%;
+}
+.scroll_nbox.data-v-57280228{
+	width: 100%;
+	padding: 0 30rpx;
+	-webkit-box-sizing: border-box;
+	        box-sizing: border-box;
 }
 .i_li.data-v-57280228 {
 	width: 100%;

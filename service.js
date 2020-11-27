@@ -134,7 +134,8 @@ const gologin = function() {
 const jump = function(e) {
 	// console.log(e.currentTarget.dataset.type)
 	var datas=e.currentTarget.dataset
-	if(datas.login){
+	console.log(datas.login==true)
+	if(datas.login==true){
 		if(!datas.haslogin){
 			uni.navigateTo({
 				url: '../login/login',
@@ -243,9 +244,9 @@ const wxlogin=function (num){
 															url:'/pages/login_tel/login_tel'
 														})
 													}else{
-														uni.navigateTo({
-															url:'/pages/login_tel/login_tel'
-														})
+														// uni.navigateTo({
+														// 	url:'/pages/login_tel/login_tel'
+														// })
 													}
 													
 													return
@@ -386,6 +387,7 @@ const http =({url ='',param ={},method='',header={'content-type': 'application/x
           if(res.statusCode ==200){//请求成功
 					console.log(res)
 						if(res.data.code==-1){
+							store.commit('logout')
 							uni.navigateTo({
 								url:'/pages/login/login'
 							})
@@ -543,6 +545,27 @@ const gettime=function (mj){
 		}
 	}
 }
+
+
+const get_fwb=function (str){
+	if(!str){
+		return
+	}
+				str = str // .replace(/<p([\s\w"=\/\.:;]+)((?:(style="[^"]+")))/ig, '<p')
+				          .replace(/<p([\s\w"-=\/\.:;]+)((?:(class="[^"]+")))/ig, '<p $1')
+				          .replace(/<p([\s\w"-=\/\.:;]+)/ig, '<p$1 class="xcx_fwb_p"')
+									// .replace(/<div([\s\w"=\/\.:;]+)((?:(style="[^"]+")))/ig, '<div')
+				          .replace(/<div([\s\w"-=\/\.:;]+)((?:(class="[^"]+")))/ig, '<div $1')
+				          .replace(/<div([\s\w"-=\/\.:;]+)/ig, '<div$1 class="xcx_fwb_div"')
+				
+				          // .replace(/<img([\s\w"-=\/\.:;]+)((?:(height="[^"]+")))/ig, '<img $1')
+				          // .replace(/<img([\s\w"-=\/\.:;]+)((?:(width="[^"]+")))/ig, '<img $1')
+				          // .replace(/<img([\s\w"-=\/\.:;]+)((?:(style="[^"]+")))/ig, '<img $1')
+				          .replace(/<img([\s\w"-=\/\.:;]+)((?:(alt="[^"]+")))/ig, '<img $1')
+				          .replace(/<img([\s\w"-=\/\.:;]+)((?:(class="[^"]+")))/ig, '<img $1')
+				          .replace(/<img([\s\w"-=\/\.:;]+)/ig, '<img$1 class="xcx_fwb_img"')
+				return str
+			}
 export default {
 	getUsers,
 	addUser,
@@ -561,5 +584,6 @@ export default {
 	P_put,
 	P_delete,
 	gettime,
-	getimg
+	getimg,
+	get_fwb
 }

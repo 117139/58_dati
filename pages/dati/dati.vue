@@ -143,6 +143,15 @@
 			...mapState(['hasLogin','new_problem', 'loginDatas']),
 
 		},
+		watch:{
+			hasLogin(newval,oldval){
+				console.log(newval)
+				if(newval==true){
+					this.btn_kg=0
+					this.getdata()
+				}
+			}
+		},
 		methods: {
 			...mapMutations(['setnew_problem']),
 			sliderChange(e) {
@@ -284,7 +293,7 @@
 				}
 				var jkurl='/subResearch'
 				uni.showModal({
-					title: '请仔细确认提交，提交后不可修改',
+					title: '请仔细确认，提交后不可修改',
 					success: function(res) {
 						if (res.confirm) {
 							console.log('用户点击确定');

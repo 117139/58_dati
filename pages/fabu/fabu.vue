@@ -375,7 +375,9 @@
 			// #endif
 		},
 		mounted() {  
+			// #ifdef H5
 			document.getElementsByTagName('uni-page-head')[0].style.display = 'none'  
+			// #endif
 		},
 		onUnload() {
 			this.setnew_problem('')

@@ -48,7 +48,7 @@
 			}
 		},
 		mounted() {  
-			document.getElementsByTagName('uni-page-head')[0].style.display = 'none'  
+			// document.getElementsByTagName('uni-page-head')[0].style.display = 'none'  
 		},
 		methods: {
 			jump(e){

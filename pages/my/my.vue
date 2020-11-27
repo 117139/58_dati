@@ -19,7 +19,7 @@
 			<image class="my_box_bg" src="/static/images/my_01.jpg"></image>
 			
 			<view class="user_box dis_flex aic">
-				<image class="user_tx" src="/static/images/tx_m2.jpg"></image>
+				<image class="user_tx" src="/static/images/logo.png"></image>
 				<view class="flex_1">
 					<view class="user_name" @tap="jump" data-url="../login/login" >登录/注册</view>
 				</view>

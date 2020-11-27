@@ -72,7 +72,7 @@
 							
 								// #ifdef MP-WEIXIN
 								console.log('小程序口', e)
-								this.wxshouquan(e.userInfo)
+								// this.wxshouquan(e.userInfo)
 								service.wxlogin(1)
 			
 								// #endif
