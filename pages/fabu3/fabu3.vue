@@ -48,6 +48,9 @@
 				<input type="number" v-model="dt_num">
 			</view>
 		</view>
+		<view class="shuoming dis_flex aic">
+			注：每个时间间隔最低15分钟
+		</view>
 		<view class="shuoming dis_flex aic" @tap="sm_fuc">
 			<text class="iconfont icon-duigou-copy" :class="sm_ty?'active':''"></text> 同意
 			<view @tap.stop="jump" data-url="../about/about?type=sm" :data-login='false' :data-haslogin='hasLogin'>《申请调研者说明》</view>
