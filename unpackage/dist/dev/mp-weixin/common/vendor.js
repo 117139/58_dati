@@ -8157,8 +8157,8 @@ var wxlogin = function wxlogin(num) {
                         }
                         _index.default.commit('logindata', res.data.data);
                         _index.default.commit('login', res.data.data.nickname);
-                        uni.setStorageSync('loginmsg', res.data.data);
 
+                        uni.setStorageSync('loginmsg', res.data.data);
                         _event.default.trigger({
                           type: 'test',
                           page: '/pages/index/index',

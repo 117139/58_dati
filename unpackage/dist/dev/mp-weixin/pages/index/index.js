@@ -181,6 +181,19 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 var _service = _interopRequireDefault(__webpack_require__(/*! ../../service.js */ 8));
 var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function ownKeys(object, enumerableOnly) {var keys = Object.keys(object);if (Object.getOwnPropertySymbols) {var symbols = Object.getOwnPropertySymbols(object);if (enumerableOnly) symbols = symbols.filter(function (sym) {return Object.getOwnPropertyDescriptor(object, sym).enumerable;});keys.push.apply(keys, symbols);}return keys;}function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};if (i % 2) {ownKeys(Object(source), true).forEach(function (key) {_defineProperty(target, key, source[key]);});} else if (Object.getOwnPropertyDescriptors) {Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));} else {ownKeys(Object(source)).forEach(function (key) {Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));});}}return target;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}var _default =
 
@@ -210,13 +223,40 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
       sort: 1,
       triggered: true, //设置当前下拉刷新状态
       data_last: false,
-      login_kg: false };
+      login_kg: false,
+
+
+
+      show_tk: false };
 
   },
   watch: {
     hasLogin: function hasLogin() {
+      var that = this;
       this.btn_kg = 0;
       this.onRetry();
+      wx.getSetting({
+        withSubscriptions: true,
+        success: function success(res) {
+          console.log('res.authSetting');
+          console.log(res);
+          console.log(res.authSetting);
+          var itemSettings = res.subscriptionsSetting.itemSettings;
+          if (itemSettings) {
+            if (itemSettings['-I6lIPrxg8bcr5AdAUtzPuksKa9hodpyD58cKPHfR8I'] === 'accept') {
+              console.log('is accredit：ok');
+            } else {
+              that.show_tk = flase;
+            }
+          } else {
+            that.show_tk = flase;
+          }
+          // res.authSetting = {
+          //   "scope.userInfo": true,
+          //   "scope.userLocation": true
+          // }
+        } });
+
     } },
 
   onLoad: function onLoad() {
@@ -280,6 +320,44 @@ var _vuex = __webpack_require__(/*! vuex */ 10);function _interopRequireDefault(
   },
   methods: _objectSpread(_objectSpread({},
   (0, _vuex.mapMutations)(['login', 'logindata', 'logout', 'setplatform', 'setfj_data'])), {}, {
+
+    authMsg: function authMsg(event) {
+      var that = this;
+      uni.requestSubscribeMessage({
+        tmplIds: ['-I6lIPrxg8bcr5AdAUtzPuksKa9hodpyD58cKPHfR8I'],
+        success: function success(res) {
+          console.log(res);
+          that.show_tk = false;
+          uni.showToast({
+            icon: 'none',
+            title: '订阅消息成功' });
+
+        },
+        fail: function fail(err) {
+          console.log(err);
+          uni.showToast({
+            icon: 'none',
+            title: '订阅消息失败' });
+
+        } });
+
+
+
+    },
+    authMsg_on: function authMsg_on(e) {
+      var that = this;
+      uni.showModal({
+        title: '温馨提示',
+        content: '拒绝后您将无法获取提示消息',
+        confirmText: "知道了",
+        showCancel: false,
+        success: function success(res) {
+          ///点击知道了的后续操作 
+          ///如跳转首页面 
+          that.show_tk = false;
+        } });
+
+    },
     onPulling: function onPulling(e) {
       console.log("onpulling", e);
     },

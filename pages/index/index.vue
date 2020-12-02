@@ -20,7 +20,8 @@
 			 :refresher-threshold="100" @refresherpulling="onPulling" @refresherrefresh="onRefresh" @refresherrestore="onRestore"
 			 @refresherabort="onAbort" @scrolltolower="getdata">
 				<view class="scroll_nbox">
-					<view class="i_li dis_flex aift" v-for="item in datas" @tap="jump"  :data-login='login_kg' :data-haslogin='hasLogin' :data-url="'/pages/dati/dati?id='+item.id">
+					<view class="i_li dis_flex aift" v-for="item in datas" @tap="jump" :data-login='login_kg' :data-haslogin='hasLogin'
+					 :data-url="'/pages/dati/dati?id='+item.id">
 						<image class="i_li_tx" :src="item.head_portrait" mode="aspectFill" lazy-load="true"></image>
 						<view class="i_li_msg">
 							<view class="d1">{{item.user_nickname}}</view>
@@ -28,12 +29,24 @@
 							<view class="d3">{{item.title}}</view>
 						</view>
 					</view>
-					
+
 					<view v-if="datas.length==0" class="zanwu">暂无数据</view>
 					<view v-if="data_last" class="data_last">没有更多了~~~</view>
 				</view>
 			</scroll-view>
 
+		</view>
+		<view v-if="show_tk" class="tk_big_box dis_flex aic ju_c">
+			<view class="dis_flex_c aic ju_c">
+				<view class="dis_flex_c tk_box">
+					<view class="tk_tit">提示</view>
+					<view class="tk_msg">为了更好的服务，小程序需要在答题开始前向您发送消息</view>
+					<view class="dis_flex ju_a ">
+						<view class="dy_btn dy_btn1" @tap="authMsg">订阅</view>
+						<view class="dy_btn" @tap="authMsg_on">取消</view>
+					</view>
+				</view>
+			</view>
 		</view>
 	</view>
 </template>
@@ -67,14 +80,41 @@
 				search_key: '',
 				sort: 1,
 				triggered: true, //设置当前下拉刷新状态
-				data_last:false,
-				login_kg:false
+				data_last: false,
+				login_kg: false,
+				
+				
+				
+				show_tk:false
 			};
 		},
-		watch:{
-			hasLogin(){
-				this.btn_kg=0
+		watch: {
+			hasLogin() {
+				var that =this
+				this.btn_kg = 0
 				this.onRetry()
+				wx.getSetting({
+					withSubscriptions:true,
+				  success (res) {
+				    console.log('res.authSetting')
+				    console.log(res)
+				    console.log(res.authSetting)
+						var itemSettings = res.subscriptionsSetting.itemSettings
+						     if (itemSettings) {
+						       if (itemSettings['-I6lIPrxg8bcr5AdAUtzPuksKa9hodpyD58cKPHfR8I'] === 'accept') {
+						         console.log('is accredit：ok')
+						       }else{
+										 that.show_tk=flase
+									 }
+						     }else{
+									 that.show_tk=flase
+								 }
+				    // res.authSetting = {
+				    //   "scope.userInfo": true,
+				    //   "scope.userLocation": true
+				    // }
+				  }
+				})
 			}
 		},
 		onLoad() {
@@ -95,7 +135,7 @@
 
 		},
 		onShareAppMessage() {
-			
+
 		},
 		computed: {
 			...mapState(['hasLogin', 'forcedLogin', 'userName', 'loginDatas']),
@@ -137,12 +177,50 @@
 			console.log('上拉')
 		},
 		methods: {
-			...mapMutations(['login', 'logindata', 'logout', 'setplatform','setfj_data']),
+			...mapMutations(['login', 'logindata', 'logout', 'setplatform', 'setfj_data']),
+
+			authMsg(event) {
+				var that =this
+				uni.requestSubscribeMessage({
+					tmplIds: ['-I6lIPrxg8bcr5AdAUtzPuksKa9hodpyD58cKPHfR8I'],
+					success: function(res) {
+						console.log(res)
+						that.show_tk=false
+						uni.showToast({
+							icon:'none',
+							title:'订阅消息成功'
+						})
+					},
+					fail: function(err) {
+						console.log(err)
+						uni.showToast({
+							icon:'none',
+							title:'订阅消息失败'
+						})
+					}
+
+				})
+
+			},
+			authMsg_on(e){
+				var that =this
+				uni.showModal({
+						title: '温馨提示',
+						content: '拒绝后您将无法获取提示消息',
+						confirmText:"知道了",
+						showCancel:false,
+						success: function (res) {
+							///点击知道了的后续操作 
+							///如跳转首页面 
+							that.show_tk=false
+						}
+				});
+			},
 			onPulling(e) {
 				console.log("onpulling", e);
 			},
 			onRefresh() {
-				var that =this
+				var that = this
 				if (this._freshing) return;
 				this._freshing = true;
 				var datas = {
@@ -152,36 +230,36 @@
 					title: that.search_key,
 					sort: that.sort
 				}
-				if(that.btn_kg==1){
+				if (that.btn_kg == 1) {
 					return
 				}
-				that.btn_kg=1
+				that.btn_kg = 1
 				//selectSaraylDetailByUserCard
 				var jkurl = '/'
 				uni.showLoading({
 					title: '正在获取数据'
 				})
 				service.P_get(jkurl, datas).then(res => {
-					this.triggered=false
-					this._freshing =false
-					that.btn_kg=0
+					this.triggered = false
+					this._freshing = false
+					that.btn_kg = 0
 					console.log(res)
 					if (res.code == 1) {
 						var datas = res.data
 						console.log(typeof datas)
-					
+
 						if (typeof datas == 'string') {
 							datas = JSON.parse(datas)
 						}
 						console.log(datas)
-						if(res.resfj_data){
+						if (res.resfj_data) {
 							that.setfj_data(res.resfj_data)
 						}
-						
-							that.datas = datas
-						
-						that.page=2
-					
+
+						that.datas = datas
+
+						that.page = 2
+
 					} else {
 						if (res.msg) {
 							uni.showToast({
@@ -196,9 +274,9 @@
 						}
 					}
 				}).catch(e => {
-					this.triggered=false
-					this._freshing =false
-					that.btn_kg=0
+					this.triggered = false
+					this._freshing = false
+					that.btn_kg = 0
 					console.log(e)
 					uni.showToast({
 						icon: 'none',
@@ -223,12 +301,12 @@
 				} else if (this.sort == 2) {
 					this.sort = 1
 				}
-				
+
 				this.onRetry()
 			},
 			onRetry() {
 				this.page = 1
-				this.data_last=false
+				this.data_last = false
 				this.getdata()
 			},
 			xy_on() {
@@ -258,7 +336,7 @@
 				uni.showLoading({
 					title: '正在获取数据'
 				})
-				var page_that=that.page
+				var page_that = that.page
 				service.P_get(jkurl, data,
 					function(res) {
 
@@ -270,18 +348,18 @@
 								datas = JSON.parse(datas)
 							}
 							console.log(datas)
-							if(page_that==1){
-								
+							if (page_that == 1) {
+
 								that.datas = datas
-							}else{
-								if(datas.length==0){
-									that.data_last=true
+							} else {
+								if (datas.length == 0) {
+									that.data_last = true
 									return
 								}
-								that.datas =that.datas.concat(datas) 
+								that.datas = that.datas.concat(datas)
 							}
 							that.page++
-			
+
 						} else {
 							if (res.msg) {
 								uni.showToast({
@@ -318,8 +396,8 @@
 			},
 			getdata(num) {
 				var that = this
-				
-				if(that.data_last){
+
+				if (that.data_last) {
 					return
 				}
 				var datas = {
@@ -329,48 +407,48 @@
 					title: that.search_key,
 					sort: that.sort
 				}
-				if(this.btn_kg==1){
+				if (this.btn_kg == 1) {
 					return
 				}
-				this.btn_kg=1
+				this.btn_kg = 1
 				//selectSaraylDetailByUserCard
 				var jkurl = '/'
 				uni.showLoading({
 					title: '正在获取数据'
 				})
-				var page_that=that.page
+				var page_that = that.page
 				service.P_get(jkurl, datas).then(res => {
-					that.btn_kg=0
+					that.btn_kg = 0
 					console.log(res)
 					if (res.code == 1) {
 						var datas = res.data
 						console.log(typeof datas)
-					
+
 						if (typeof datas == 'string') {
 							datas = JSON.parse(datas)
 						}
 						console.log(res)
-						if(res.fj_data){
+						if (res.fj_data) {
 							that.setfj_data(res.fj_data)
-							if(res.fj_data.is_any_dy==1){
-								that.login_kg= true
-							}else if(res.fj_data.is_any_dy==2){
-								that.login_kg=false
+							if (res.fj_data.is_any_dy == 1) {
+								that.login_kg = true
+							} else if (res.fj_data.is_any_dy == 2) {
+								that.login_kg = false
 							}
-							
+
 						}
-						if(page_that==1){
-							
+						if (page_that == 1) {
+
 							that.datas = datas
-						}else{
-							if(datas.length==0){
-								that.data_last=true
+						} else {
+							if (datas.length == 0) {
+								that.data_last = true
 								return
 							}
-							that.datas =that.datas.concat(datas) 
+							that.datas = that.datas.concat(datas)
 						}
 						that.page++
-					
+
 					} else {
 						if (res.msg) {
 							uni.showToast({
@@ -385,18 +463,18 @@
 						}
 					}
 				}).catch(e => {
-					that.btn_kg=0
+					that.btn_kg = 0
 					console.log(e)
 					uni.showToast({
 						icon: 'none',
 						title: '获取数据失败'
 					})
 				})
-				
+
 			},
 			jumpurl(e) {
 				var that = this
-				
+
 				if (that.btn_kg == 1) {
 					return
 				} else {
@@ -507,6 +585,51 @@
 </script>
 
 <style scoped>
+	.tk_big_box {
+		position: fixed;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		z-index: 9999;
+		background: rgba(0, 0, 0, .5);
+	}
+
+	.tk_box {
+		width: 400rpx;
+		padding: 20upx;
+		background: #FFF;
+	}
+	.tk_tit{
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 24upx;
+		margin-bottom: 30upx;
+	}
+	.tk_msg{
+		font-size: 24upx;
+		margin-bottom: 20upx;
+		padding-bottom: 20upx;
+		border-bottom: 1px solid #ddd;
+	}
+	.dy_btn{
+		width: 150upx;
+		height: 60upx;
+		font-size: 24upx;
+		border: 1px solid #ddd;
+		color: #ddd;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	.dy_btn1{
+		width: 152upx;height: 62upx;
+		background: linear-gradient(90deg, rgba(61, 127, 255, 0.91), rgba(60, 142, 255, 0.91));
+		color: #fff;
+		border: 0;
+	}
+
 	.content_wrap {
 		position: relative;
 		min-height: 100vh;
@@ -514,7 +637,7 @@
 	}
 
 	.cu_custom_box {
-		z-index: 99999;
+		z-index: 800;
 	}
 
 	.index_bg {
@@ -535,7 +658,7 @@
 		font-family: PingFang SC;
 		font-weight: 500;
 		color: #FFFFFF;
-		z-index: 99999;
+		z-index: 800;
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -552,7 +675,7 @@
 		width: 100%;
 		padding: 10upx 30upx;
 		box-sizing: border-box;
-		z-index: 999;
+		z-index: 800;
 		position: fixed;
 		height: 92upx;
 		transition: all .5s;
@@ -621,7 +744,7 @@
 		position: fixed;
 		z-index: 1;
 		box-sizing: border-box;
-		
+
 		width: 100%;
 		/* height: 100%; */
 		bottom: 0;
@@ -630,11 +753,13 @@
 	.list_box scroll-view {
 		height: 100%;
 	}
-	.scroll_nbox{
+
+	.scroll_nbox {
 		width: 100%;
 		padding: 0 30upx;
 		box-sizing: border-box;
 	}
+
 	.i_li {
 		width: 100%;
 		min-height: 191upx;

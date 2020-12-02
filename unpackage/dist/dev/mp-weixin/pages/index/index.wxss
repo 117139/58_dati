@@ -1,4 +1,61 @@
 
+.tk_big_box.data-v-57280228 {
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	z-index: 9999;
+	background: rgba(0, 0, 0, .5);
+}
+.tk_box.data-v-57280228 {
+	width: 400rpx;
+	padding: 20rpx;
+	background: #FFF;
+}
+.tk_tit.data-v-57280228{
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-box-align: center;
+	-webkit-align-items: center;
+	        align-items: center;
+	-webkit-box-pack: center;
+	-webkit-justify-content: center;
+	        justify-content: center;
+	font-size: 24rpx;
+	margin-bottom: 30rpx;
+}
+.tk_msg.data-v-57280228{
+	font-size: 24rpx;
+	margin-bottom: 20rpx;
+	padding-bottom: 20rpx;
+	border-bottom: 1px solid #ddd;
+}
+.dy_btn.data-v-57280228{
+	width: 150rpx;
+	height: 60rpx;
+	font-size: 24rpx;
+	border: 1px solid #ddd;
+	color: #ddd;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-box-align: center;
+	-webkit-align-items: center;
+	        align-items: center;
+	-webkit-box-pack: center;
+	-webkit-justify-content: center;
+	        justify-content: center;
+}
+.dy_btn1.data-v-57280228{
+	width: 152rpx;height: 62rpx;
+	background: -webkit-gradient(linear, left top, right top, from(rgba(61, 127, 255, 0.91)), to(rgba(60, 142, 255, 0.91)));
+	background: -webkit-linear-gradient(left, rgba(61, 127, 255, 0.91), rgba(60, 142, 255, 0.91));
+	background: linear-gradient(90deg, rgba(61, 127, 255, 0.91), rgba(60, 142, 255, 0.91));
+	color: #fff;
+	border: 0;
+}
 .content_wrap.data-v-57280228 {
 	position: relative;
 	min-height: 100vh;
@@ -6,7 +63,7 @@
 	        box-sizing: border-box;
 }
 .cu_custom_box.data-v-57280228 {
-	z-index: 99999;
+	z-index: 800;
 }
 .index_bg.data-v-57280228 {
 	position: fixed;
@@ -25,7 +82,7 @@
 	font-family: PingFang SC;
 	font-weight: 500;
 	color: #FFFFFF;
-	z-index: 99999;
+	z-index: 800;
 	display: -webkit-box;
 	display: -webkit-flex;
 	display: flex;
@@ -49,7 +106,7 @@
 	padding: 10rpx 30rpx;
 	-webkit-box-sizing: border-box;
 	        box-sizing: border-box;
-	z-index: 999;
+	z-index: 800;
 	position: fixed;
 	height: 92rpx;
 	-webkit-transition: all .5s;
@@ -123,7 +180,7 @@
 	z-index: 1;
 	-webkit-box-sizing: border-box;
 	        box-sizing: border-box;
-	
+
 	width: 100%;
 	/* height: 100%; */
 	bottom: 0;
@@ -131,7 +188,7 @@
 .list_box scroll-view.data-v-57280228 {
 	height: 100%;
 }
-.scroll_nbox.data-v-57280228{
+.scroll_nbox.data-v-57280228 {
 	width: 100%;
 	padding: 0 30rpx;
 	-webkit-box-sizing: border-box;

@@ -253,8 +253,8 @@ const wxlogin=function (num){
 												}
 												store.commit('logindata', res.data.data)
 												store.commit('login', res.data.data.nickname)
-	                      uni.setStorageSync('loginmsg', res.data.data)
 												
+	                      uni.setStorageSync('loginmsg', res.data.data)
 												event.trigger({
 												    type:'test',
 												    page:'/pages/index/index',
