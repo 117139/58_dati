@@ -20,14 +20,13 @@
 		<view class="fabu_int">
 			<input style="color: #333;" type="text" :disabled="true" :value="title">
 		</view>
-		<view class="fabu_int">
+		<view v-if="explain" class="fabu_int">
 			<input style="color: #333;" type="text" :disabled="true" :value="explain">
 		</view>
-		<view class="fabu_int">
+		<view  v-if="addition_explain" class="fabu_int">
 			<input style="color: #333;" type="text" :disabled="true" :value="addition_explain">
 		</view>
 		<view class="problem_list">
-
 			<view class="problem_li" v-for="(item,index) in datas">
 				<view class="problem_msg">
 					<view class="problem_tit">
@@ -35,7 +34,6 @@
 						<text>({{item.type_value}})</text>
 					</view>
 					<view v-if="item.problem.problem_img.length>0" class="ans_file">
-
 						<image v-for="(item1,index) in item.problem.problem_img" :src="getimg(item1)" @tap="pveimg" mode="aspectFit" lazy-load="true"
 						 :data-src="getimg(item1)"></image>
 					</view>
@@ -110,12 +108,12 @@
 							<slider value="0" :min='item.answer.min_num' :max="item.answer.max_num" @change="sliderChange" activeColor="linear-gradient(-89deg, #65AEE1, #326CFA)"
 							 backgroundColor="#ECEBF1" block-color="#8A6DE9" block-size="10" :step="item.answer.step_size" />
 							<view class="step_d">
-								<view class="step_d_li"><text>{{item.answer.min_num}}</text></view>
-								<view class="step_d_li"><text>{{(item.answer.max_num-item.answer.min_num)*0.2}}</text></view>
+								<view class="step_d_li"  v-for="(item_hd,index_hd) in get_hd(item.answer.min_num,item.answer.max_num)"><text>{{item_hd}}</text></view>
+								<!-- <view class="step_d_li"><text>{{(item.answer.max_num-item.answer.min_num)*0.2}}</text></view>
 								<view class="step_d_li"><text>{{(item.answer.max_num-item.answer.min_num)*0.4}}</text></view>
 								<view class="step_d_li"><text>{{(item.answer.max_num-item.answer.min_num)*0.6}}</text></view>
 								<view class="step_d_li"><text>{{(item.answer.max_num-item.answer.min_num)*0.8}}</text></view>
-								<view class="step_d_li"><text>{{item.answer.max_num}}</text></view>
+								<view class="step_d_li"><text>{{item.answer.max_num}}</text></view> -->
 							</view>
 						</view>
 
@@ -162,6 +160,21 @@
 		},
 		methods: {
 			...mapMutations(['setnew_problem']),
+			get_hd(min_num,max_num){
+				var arr=[
+					min_num,
+					min_num,
+					min_num,
+					min_num,
+					min_num,
+					max_num,
+				]
+				arr[1]=((max_num-min_num)*0.2+min_num*1).toFixed(2)
+				arr[2]=((max_num-min_num)*0.4+min_num*1).toFixed(2)
+				arr[3]=((max_num-min_num)*0.6+min_num*1).toFixed(2)
+				arr[4]=((max_num-min_num)*0.8+min_num*1).toFixed(2)
+				return arr
+			},
 			sliderChange(e) {
 				console.log(e)
 			},

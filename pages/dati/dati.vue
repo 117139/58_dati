@@ -4,11 +4,23 @@
 			<view class="fabu_int">
 				<view>{{title}}</view>
 			</view>
-			<view class="fabu_int">
+			<view v-if="explain" class="fabu_int">
 				<view>{{explain}}</view>
 			</view>
-			<view class="fabu_int">
+			<view v-if="addition_explain" class="fabu_int">
 				<view>{{addition_explain}}</view>
+			</view>
+			
+			<view class="fabu_int">
+				<view class="dis_flex_c aic">
+					答题时间
+				<text style="margin-top: 30upx;font-size: 30upx; line-height: 40upx;font-weight: 400;">
+					<text v-for="(item,index) in dt_time" >
+						{{item.start_time}}-{{item.end_time}}{{index!=dt_time.length-1?'、':''}}    
+					</text>
+				</text>
+				</view>
+				
 			</view>
 			<view class="problem_list">
 			
@@ -59,7 +71,7 @@
 						</view>
 						<!-- 填空 -->
 						<view class="ans_list" v-if="item.type==3">
-							<textarea v-model="item.jieguo" :data-index="index" @input="tiankong_fuc" placeholder="请输入"></textarea>
+							<textarea v-model="item.jieguo" :data-index="index" @input="tiankong_fuc" placeholder="请输入" maxlength="-1"></textarea>
 						</view>
 						<!-- 排序 -->
 						<view class="ans_list" v-if="item.type==4">
@@ -93,12 +105,12 @@
 								activeColor="linear-gradient(-89deg, #65AEE1, #326CFA)"
 								 backgroundColor="#ECEBF1" block-color="#8A6DE9" block-size="10" :step="item.answer[0].step_size" />
 								<view class="step_d">
-									<view class="step_d_li"><text>{{item.answer[0].min_num}}</text></view>
-									<view class="step_d_li"><text>{{(item.answer[0].max_num-item.answer[0].min_num)*0.2}}</text></view>
+									<view class="step_d_li" v-for="(item_hd,index_hd) in get_hd(item.answer[0].min_num,item.answer[0].max_num)"><text>{{item_hd}}</text></view>
+								<!-- 	<view class="step_d_li"><text>{{(item.answer[0].max_num-item.answer[0].min_num)*0.2}}</text></view>
 									<view class="step_d_li"><text>{{(item.answer[0].max_num-item.answer[0].min_num)*0.4}}</text></view>
 									<view class="step_d_li"><text>{{(item.answer[0].max_num-item.answer[0].min_num)*0.6}}</text></view>
 									<view class="step_d_li"><text>{{(item.answer[0].max_num-item.answer[0].min_num)*0.8}}</text></view>
-									<view class="step_d_li"><text>{{item.answer[0].max_num}}</text></view>
+									<view class="step_d_li"><text>{{item.answer[0].max_num}}</text></view> -->
 								</view>
 							</view>
 			
@@ -129,7 +141,9 @@
 				title: '',
 				explain: '',
 				addition_explain: '',
-				datas: []
+				datas: [],
+				isTx:'',
+				dt_time:[]
 			}
 		},
 		onLoad(option) {
@@ -154,6 +168,21 @@
 		},
 		methods: {
 			...mapMutations(['setnew_problem']),
+			get_hd(min_num,max_num){
+				var arr=[
+					min_num,
+					min_num,
+					min_num,
+					min_num,
+					min_num,
+					max_num,
+				]
+				arr[1]=((max_num-min_num)*0.2+min_num*1).toFixed(2)
+				arr[2]=((max_num-min_num)*0.4+min_num*1).toFixed(2)
+				arr[3]=((max_num-min_num)*0.6+min_num*1).toFixed(2)
+				arr[4]=((max_num-min_num)*0.8+min_num*1).toFixed(2)
+				return arr
+			},
 			sliderChange(e) {
 				var that = this
 				console.log(e.detail.value)
@@ -376,6 +405,14 @@
 						that.explain = datas.explain
 						that.addition_explain = datas.addition_explain
 						that.datas = datas.problem
+						that.dt_time=datas.dtTimeData
+						that.isTx=datas.isTx
+						if(datas.isTx==1){
+							uni.showToast({
+								icon:'none',
+								title:'当前不在调研时间段'
+							})
+						}
 						console.log(datas)
 
 

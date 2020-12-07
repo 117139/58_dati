@@ -98,6 +98,10 @@
 	.dis_flex{
 		display: flex;
 	}
+	.dis_flex_c{
+		display: flex;
+		flex-direction: column;
+	}
 	.aic{
 		align-items: center;
 	}

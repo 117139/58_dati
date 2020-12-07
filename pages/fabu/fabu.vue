@@ -94,12 +94,12 @@
 							<slider value="0" :min='item.answer.min_num' :max="item.answer.max_num" @change="sliderChange" activeColor="linear-gradient(-89deg, #65AEE1, #326CFA)"
 							 backgroundColor="#ECEBF1" block-color="#8A6DE9" block-size="10" :step="item.answer.step_size" />
 							<view class="step_d">
-								<view class="step_d_li"><text>{{item.answer.min_num}}</text></view>
-								<view class="step_d_li"><text>{{(item.answer.max_num-item.answer.min_num)*0.2}}</text></view>
+								<view class="step_d_li" v-for="(item_hd,index_hd) in get_hd(item.answer.min_num,item.answer.max_num)"><text>{{item_hd}}</text></view>
+								<!-- <view class="step_d_li"><text>{{(item.answer.max_num-item.answer.min_num)*0.2}}</text></view>
 								<view class="step_d_li"><text>{{(item.answer.max_num-item.answer.min_num)*0.4}}</text></view>
 								<view class="step_d_li"><text>{{(item.answer.max_num-item.answer.min_num)*0.6}}</text></view>
 								<view class="step_d_li"><text>{{(item.answer.max_num-item.answer.min_num)*0.8}}</text></view>
-								<view class="step_d_li"><text>{{item.answer.max_num}}</text></view>
+								<view class="step_d_li"><text>{{item.answer.max_num}}</text></view> -->
 							</view>
 						</view>
 
@@ -409,7 +409,21 @@
 		},
 		methods: {
 			...mapMutations(['setnew_problem','edit_problem','setls_prodata','setls_pro_yh','set_h5_uid']),
-			
+			get_hd(min_num,max_num){
+				var arr=[
+					min_num,
+					min_num,
+					min_num,
+					min_num,
+					min_num,
+					max_num,
+				]
+				arr[1]=((max_num-min_num)*0.2 +min_num*1).toFixed(2)
+				arr[2]=((max_num-min_num)*0.4+min_num*1).toFixed(2)
+				arr[3]=((max_num-min_num)*0.6+min_num*1).toFixed(2)
+				arr[4]=((max_num-min_num)*0.8+min_num*1).toFixed(2)
+				return arr
+			},
 			sliderChange(e) {
 				console.log(e)
 			},
@@ -498,20 +512,20 @@
 					})
 					return
 				}	
-				if(!that.dy_explain){
-					uni.showToast({
-						icon:'none',
-						title:'请输入调研说明'
-					})
-					return
-				}	
-				if(!that.dy_addition_explain){
-					uni.showToast({
-						icon:'none',
-						title:'请输入调研附加说明'
-					})
-					return
-				}	
+				// if(!that.dy_explain){
+				// 	uni.showToast({
+				// 		icon:'none',
+				// 		title:'请输入调研说明'
+				// 	})
+				// 	return
+				// }	
+				// if(!that.dy_addition_explain){
+				// 	uni.showToast({
+				// 		icon:'none',
+				// 		title:'请输入调研附加说明'
+				// 	})
+				// 	return
+				// }	
 				if(that.datas.length==0){
 					uni.showToast({
 						icon:'none',

@@ -73,6 +73,7 @@ function request(url, params, method, onSuccess, onFailed) {
 					icon: 'none',
 					title: '请先授权登录'
 				})
+				store.commit('logout')
 				setTimeout(function (){
 					uni.navigateTo({
 						url: './pages/login/login?haslogin=false'
