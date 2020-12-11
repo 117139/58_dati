@@ -26,7 +26,8 @@
 			</view>
 		</view>
 		<view class="my_sq" v-if="loginDatas.dy_status==1||loginDatas.dy_status==4">
-			<image src="/static/images/mysq_04.png" @tap="jump" data-url="../shenqin/shenqin?type=about" :data-login='false' :data-haslogin='hasLogin'></image>
+			<image v-if="loginDatas.phone" src="/static/images/mysq_04.png" @tap="jump" data-url="../shenqin/shenqin?type=about" :data-login='false' :data-haslogin='hasLogin'></image>
+			<image v-else src="/static/images/mysq_04.png" @tap="jump" data-url="../login_tel/login_tel?type=0" :data-login='false' :data-haslogin='hasLogin'></image>
 		</view>
 		<view class="my_list" >
 			<view v-if="fabu_status()" class="my_li" @tap="jump" data-url="../my_fabu/my_fabu?type=about" :data-login='false' :data-haslogin='hasLogin'>
@@ -52,6 +53,11 @@
 			<view class="my_li" @tap="jump" data-url="../about/about?type=sm" :data-login='false' :data-haslogin='hasLogin'>
 				<view class="my_icon"><text class="iconfont icon-shiyongshuoming"></text></view>
 				<view class="flex_1">使用说明</view>
+				<text class="iconfont icon-next-m"></text>
+			</view>
+			<view class="my_li" @tap="jump" data-url="../login_tel/login_tel?type=1" :data-login='true' :data-haslogin='hasLogin'>
+				<view class="my_icon"><text class="iconfont icon-shiyongshuoming"></text></view>
+				<view class="flex_1">绑定手机号</view>
 				<text class="iconfont icon-next-m"></text>
 			</view>
 			<view class="zzc_box" v-if="fk_show" @tap="fk_show=false">

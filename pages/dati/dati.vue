@@ -113,7 +113,7 @@
 									<view class="step_d_li"><text>{{item.answer[0].max_num}}</text></view> -->
 								</view>
 							</view>
-			
+							<view style="margin-top: 10upx;font-size: 24upx;">当前选择：{{item.jieguo?item.jieguo:item.answer[0].min_num}}</view>
 						</view>
 			
 					</view>
@@ -169,18 +169,22 @@
 		methods: {
 			...mapMutations(['setnew_problem']),
 			get_hd(min_num,max_num){
-				var arr=[
-					min_num,
-					min_num,
-					min_num,
-					min_num,
-					min_num,
-					max_num,
-				]
-				arr[1]=((max_num-min_num)*0.2+min_num*1).toFixed(2)
-				arr[2]=((max_num-min_num)*0.4+min_num*1).toFixed(2)
-				arr[3]=((max_num-min_num)*0.6+min_num*1).toFixed(2)
-				arr[4]=((max_num-min_num)*0.8+min_num*1).toFixed(2)
+				// var arr=[
+				// 	min_num,
+				// 	min_num,
+				// 	min_num,
+				// 	min_num,
+				// 	min_num,
+				// 	max_num,
+				// ]
+				// arr[1]=((max_num-min_num)*0.2+min_num*1).toFixed(2)
+				// arr[2]=((max_num-min_num)*0.4+min_num*1).toFixed(2)
+				// arr[3]=((max_num-min_num)*0.6+min_num*1).toFixed(2)
+				// arr[4]=((max_num-min_num)*0.8+min_num*1).toFixed(2)
+				var arr=[]
+				for( var i=min_num;i<=max_num;i++){
+					arr.push(i)
+				}
 				return arr
 			},
 			sliderChange(e) {
@@ -291,7 +295,7 @@
 							}
 							Vue.set(that.datas[i], 'jieguo', jieguo)
 						}else if(that.datas[i].type==5){
-							Vue.set(that.datas[i], 'jieguo', 0)
+							Vue.set(that.datas[i], 'jieguo', that.datas[i].answer[0].min_num)
 						}else{
 							uni.showToast({
 								icon:'none',

@@ -20,10 +20,9 @@
 	display: -webkit-box;
 	display: -webkit-flex;
 	display: flex;
-	-webkit-box-orient: vertical;
-	-webkit-box-direction: normal;
-	-webkit-flex-direction: column;
-	        flex-direction: column;
+	-webkit-box-align: center;
+	-webkit-align-items: center;
+	        align-items: center;
 	-webkit-box-pack: justify;
 	-webkit-justify-content: space-between;
 	        justify-content: space-between;
@@ -37,6 +36,26 @@
 .fabu_time.data-v-135c05ec{
 	font-size: 24rpx;
 	color: #999;
+}
+.fabu_btn.data-v-135c05ec{
+	width: 150rpx;
+	height: 60rpx;
+	color: rgba(61, 127, 255, 0.91);
+	border:1px solid rgba(61, 127, 255, 0.91);
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-box-align: center;
+	-webkit-align-items: center;
+	        align-items: center;
+	-webkit-box-pack: center;
+	-webkit-justify-content: center;
+	        justify-content: center;
+	font-size: 24rpx;
+	-webkit-box-flex: 0;
+	-webkit-flex: none;
+	        flex: none;
+	margin-left: 15rpx;
 }
 .fabu_btns.data-v-135c05ec{
 	width: 100%;

@@ -8,9 +8,12 @@
 			<view class="an_li dis_flex aic" v-for="(item,index) in datas" @tap="xz_fuc(item,$event)">
 				<image class="an_li_tx" :src="item.head_portrait"></image>
 				<view class="an_li_name flex_1">{{item.nickname}}</view>
-				<image v-if="item.active"  :data-idx="index" class="an_li_xz" src="../../static/images/danxuan1.png"></image>
+				<image v-if="xuan_type(item)"  :data-idx="index" class="an_li_xz" src="../../static/images/danxuan1.png"></image>
 				<image v-else class="an_li_xz" src="../../static/images/danxuan.png"></image>
 			</view>
+		</view>
+		<view class="sub_box" style="opacity: 0;position: relative;">
+			<view class="sub_btn" >确认</view>
 		</view>
 		<view class="sub_box">
 			<view class="sub_btn" @tap="sub">确认</view>
@@ -31,41 +34,8 @@
 				page:1,
 				size:15,
 				keyword:'',
-				datas:[
-					{
-						name:'pndas'
-					},
-					{
-						name:'pndas'
-					},
-					{
-						name:'pndas1'
-					},
-					{
-						name:'pndas2'
-					},
-					{
-						name:'pndas3'
-					},
-					{
-						name:'pndas4'
-					},
-					{
-						name:'pndas5'
-					},
-					{
-						name:'pndas6'
-					},
-					{
-						name:'pndas7'
-					},
-					{
-						name:'pndas8'
-					},
-					{
-						name:'pndas9'
-					},
-				]
+				datas:[],
+				ids:[]
 			}
 		},
 		computed: {
@@ -80,11 +50,32 @@
 				console.log(e)
 			},
 			xz_fuc(item, index){
-				if (item.active) {
-					Vue.set(item, 'active', false); //为item添加不存在的属性，需要使用vue提供的Vue.set( object, key, value )方法。 
-				} else {
-					Vue.set(item, 'active', true);
+				for(var i=0;i<this.ids.length;i++){
+					if(item.id==this.ids[i]){
+						this.ids.splice(i,1)
+						return
+					}
 				}
+				this.ids.push(item.id)
+				// if (item.active) {
+				// 	// Vue.set(item, 'active', false); //为item添加不存在的属性，需要使用vue提供的Vue.set( object, key, value )方法。 
+				// 	for(var i=0;i<this.ids.length;i++){
+				// 		if(item.id==this.ids[i]){
+				// 			this.ids.splice(i,1)
+				// 		}
+				// 	}
+				// } else {
+				// 	// Vue.set(item, 'active', true);
+				// 	this.ids.push(item.id)
+				// }
+			},
+			xuan_type(item){
+				for(var i=0;i<this.ids.length;i++){
+					if(item.id==this.ids[i]){
+						return true
+					}
+				}
+				return false
 			},
 			onRetry(){
 				this.page=1
@@ -151,13 +142,14 @@
 			},
 			sub(){
 				console.log(this.datas)
-				var arr=[]
-				for(var i=0;i<this.datas.length;i++){
-					if(this.datas[i].active){
-						arr.push(this.datas[i].id)
-					}
-				}
-				console.log(arr)
+				// var arr=[]
+				// for(var i=0;i<this.datas.length;i++){
+				// 	if(this.datas[i].active){
+				// 		arr.push(this.datas[i].id)
+				// 	}
+				// }
+				// console.log(arr)
+				var arr=this.ids
 				if(arr.length==0){
 					uni.showToast({
 						icon:'none',

@@ -137,8 +137,13 @@
 	    display: -webkit-box;
 	    -webkit-line-clamp: 2;
 	    -webkit-box-orient: vertical;
+			 
 	}
-	
+	view{
+		word-break:break-all;
+		
+		word-wrap:break-word;   
+	}
 	.oh3 {
 	    overflow: hidden;
 	    text-overflow: ellipsis;

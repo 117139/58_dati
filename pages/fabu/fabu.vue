@@ -410,18 +410,22 @@
 		methods: {
 			...mapMutations(['setnew_problem','edit_problem','setls_prodata','setls_pro_yh','set_h5_uid']),
 			get_hd(min_num,max_num){
-				var arr=[
-					min_num,
-					min_num,
-					min_num,
-					min_num,
-					min_num,
-					max_num,
-				]
-				arr[1]=((max_num-min_num)*0.2 +min_num*1).toFixed(2)
-				arr[2]=((max_num-min_num)*0.4+min_num*1).toFixed(2)
-				arr[3]=((max_num-min_num)*0.6+min_num*1).toFixed(2)
-				arr[4]=((max_num-min_num)*0.8+min_num*1).toFixed(2)
+				// var arr=[
+				// 	min_num,
+				// 	min_num,
+				// 	min_num,
+				// 	min_num,
+				// 	min_num,
+				// 	max_num,
+				// ]
+				// arr[1]=((max_num-min_num)*0.2 +min_num*1).toFixed(2)
+				// arr[2]=((max_num-min_num)*0.4+min_num*1).toFixed(2)
+				// arr[3]=((max_num-min_num)*0.6+min_num*1).toFixed(2)
+				// arr[4]=((max_num-min_num)*0.8+min_num*1).toFixed(2)
+				var arr=[]
+				for( var i=min_num;i<=max_num;i++){
+					arr.push(i)
+				}
 				return arr
 			},
 			sliderChange(e) {

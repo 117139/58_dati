@@ -28,12 +28,15 @@
 			}
 		},
 		
-		onLoad() {
+		onLoad(option) {
 			var that =this
-			uni.showToast({
-				icon:'none',
-				title:'请先绑定手机号'
-			})
+			if(option.type!=1){
+				uni.showToast({
+					icon:'none',
+					title:'请先绑定手机号'
+				})
+			}
+			
 			wx.login({
 				success: (res) => {
 					if (res.code) { //微信登录成功 已拿到code  
@@ -112,8 +115,13 @@
 												title: '操作成功'
 											})
 											setTimeout(function (){
-												service.wxlogin(1)
+												service.wxlogin()
 											},500)
+											setTimeout(function (){
+												uni.navigateBack({
+													delta:1
+												})
+											},1500)
 											
 											
 								

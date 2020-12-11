@@ -17,7 +17,7 @@
 		<view class="xz_box">
 			<view class="xz_li">
 				<view>最小数值</view>
-				<input class="flex_1" type="number" placeholder="请输入" v-model="answer.min_num">
+				<input class="flex_1" type="number" placeholder="请输入" v-model="answer.min_num" @input="min_num_fuc" maxlength="1">
 			</view>
 			<view class="xz_li">
 				<view>最小数值显示文本</view>
@@ -25,7 +25,7 @@
 			</view>
 			<view class="xz_li">
 				<view>最大数值</view>
-				<input class="flex_1" type="number" placeholder="请输入" v-model="answer.max_num">
+				<input class="flex_1" type="number" placeholder="请输入" v-model="answer.max_num" @input="max_num_fuc" maxlength="2">
 			</view>
 			<view class="xz_li">
 				<view>最大数值显示文本</view>
@@ -60,11 +60,11 @@
 				},
 				"type": "5", //问题类别1：单选题  2：多选题  3：填空题  4：排序题  5：滑动题
 				"answer": {
-					"min_num": "0",
-					"min_text": "不好",
-					"max_num": "100",
-					"max_text": "非常好",
-					"step_size": "1"
+					"min_num": "",
+					"min_text": "",
+					"max_num": "",
+					"max_text": "",
+					"step_size": ""
 				},
 				idx:-1,
 				btnkg:0
@@ -94,7 +94,26 @@
 		},
 		methods: {
 			...mapMutations(['setnew_problem','setnew_xz','edit_problem']),
-			
+			min_num_fuc(e){
+				console.log(e.detail.value)
+				if(e.detail.value<19){
+					if(e.detail.value<0){
+						this.min_num=0
+					}
+				}else{
+					this.min_num=19
+				}
+			},
+			max_num_fuc(e){
+				console.log(e.detail.value)
+				if(e.detail.value<20){
+					if(e.detail.value<0){
+						this.min_num=1
+					}
+				}else{
+					this.max_num=20
+				}
+			},
 			sub(){
 				var that =this
 				if(!this.problem.title){

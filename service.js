@@ -239,37 +239,20 @@ const wxlogin=function (num){
 	                      console.log(res.data)
 	                      uni.setStorageSync('token', res.data.data.userToken)
 												//获取手机号
+												/*
 												if(!res.data.data.phone){
 													if(num==1){
 														uni.redirectTo({
 															url:'/pages/login_tel/login_tel'
 														})
-													}else{
-														// uni.navigateTo({
-														// 	url:'/pages/login_tel/login_tel'
-														// })
 													}
-													
 													return
-												}
+												}*/
 												store.commit('logindata', res.data.data)
 												store.commit('login', res.data.data.nickname)
 												
 	                      uni.setStorageSync('loginmsg', res.data.data)
-												event.trigger({
-												    type:'test',
-												    page:'/pages/index/index',
-												    //obj和test是举的例子，随意啥都行，这个传过去在on中的args中都可以获取到
-												    obj:{
 												
-												    },
-												    test:{
-															'loginmsg': res.data.data
-												    },
-												    success:function(data){
-												        //data为on中返回的数据
-												    }
-												});
 												// im login
 												
 												
@@ -280,8 +263,39 @@ const wxlogin=function (num){
 														title:'登录成功'
 													})
 													setTimeout(()=>{
+														event.trigger({
+														    type:'test',
+														    page:'/pages/index/index',
+														    //obj和test是举的例子，随意啥都行，这个传过去在on中的args中都可以获取到
+														    obj:{
+														
+														    },
+														    test:{
+																	'loginmsg': res.data.data
+														    },
+														    success:function(data){
+														        //data为on中返回的数据
+														    }
+														});
+													},1000)
+													setTimeout(()=>{
 														uni.navigateBack()
 													},1500)
+												}else{
+													event.trigger({
+													    type:'test',
+													    page:'/pages/index/index',
+													    //obj和test是举的例子，随意啥都行，这个传过去在on中的args中都可以获取到
+													    obj:{
+													
+													    },
+													    test:{
+																'loginmsg': res.data.data
+													    },
+													    success:function(data){
+													        //data为on中返回的数据
+													    }
+													});
 												}
 	                    } else {
 	                      uni.removeStorageSync('userInfo')

@@ -100,14 +100,16 @@
 				    console.log(res)
 				    console.log(res.authSetting)
 						var itemSettings = res.subscriptionsSetting.itemSettings
+						console.log('itemSettings')
+						console.log(itemSettings)
 						     if (itemSettings) {
 						       if (itemSettings['-I6lIPrxg8bcr5AdAUtzPuksKa9hodpyD58cKPHfR8I'] === 'accept') {
 						         console.log('is accredit：ok')
 						       }else{
-										 that.show_tk=flase
+										 that.show_tk=true
 									 }
 						     }else{
-									 that.show_tk=flase
+									 that.show_tk=true
 								 }
 				    // res.authSetting = {
 				    //   "scope.userInfo": true,

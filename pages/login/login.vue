@@ -73,6 +73,10 @@
 								// #ifdef MP-WEIXIN
 								console.log('小程序口', e)
 								// this.wxshouquan(e.userInfo)
+								uni.showLoading({
+									title:'正在登录',
+									mask:true
+								})
 								service.wxlogin(1)
 			
 								// #endif

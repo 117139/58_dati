@@ -2,10 +2,19 @@
 	<view>
 		<view class="fabu_list">
 			<view v-if="datas.length>0" class="fabu_li" v-for="(item,index) in datas" @tap="jump"  :data-url="'/pages/fabu_xq/fabu_xq?id='+item.id">
-				<view class="oh2 fabu_name" v-html="item.title"></view>
-				<view class="fabu_time" v-html="item.create_time"></view>
+				<view class="dis_flex_c ju_b">
+					<view class="fabu_name" >
+						<view class="oh2 " v-html="item.title"></view>
+					</view>
+					<view class="fabu_time" v-html="item.create_time"></view>
+				</view>
+				<view class="fabu_btn" @tap="fabu_del(item,index)">取消发布</view>
 			</view>
 			<view v-if="datas.length==0" class="zanwu">暂无数据</view>
+		</view>
+		
+		<view class="fabu_btns" style="opacity: 0;position: relative;">
+				<view><text class="iconfont icon-bianji1"></text> <text>|</text>发布</view>
 		</view>
 		<view class="fabu_btns">
 				<view @tap="jump" data-url="/pages/fabu/fabu"><text class="iconfont icon-bianji1"></text> <text>|</text>发布</view>
@@ -119,6 +128,67 @@
 				
 			},
 			
+			
+			// 取消发布
+			fabu_del(item,index){
+				var that =this
+				uni.showModal({
+				    title: '提示',
+				    content: '是否取消发布该调研',
+				    success: function (res) {
+				        if (res.confirm) {
+				            console.log('用户点击确定');
+										var jkurl='/order/orderDelete'
+										var datas={
+											token:that.loginDatas.userToken,
+											id:item.id
+										}
+										service.P_post(jkurl, datas).then(res => {
+											
+											that.btnkg = 0
+											console.log(res)
+											if (res.code == 1) {
+												var datas = res.data
+												console.log(typeof datas)
+										
+												if (typeof datas == 'string') {
+													datas = JSON.parse(datas)
+												}
+												console.log(datas)
+												uni.showToast({
+													icon:'none',
+													title:'操作成功'
+												})
+												that.datas.splice(index,1)
+										
+											} else {
+												if (res.msg) {
+													uni.showToast({
+														icon: 'none',
+														title: res.msg
+													})
+												} else {
+													uni.showToast({
+														icon: 'none',
+														title: '操作失败'
+													})
+												}
+											}
+										}).catch(e => {
+										
+											that.btnkg = 0
+											console.log(e)
+											uni.showToast({
+												icon: 'none',
+												title: '操作失败'
+											})
+										})
+				        } else if (res.cancel) {
+				            console.log('用户点击取消');
+				        }
+				    }
+				});
+			},
 			jump(e){
 				this.sm_ty=true
 				service.jump(e)
@@ -148,7 +218,7 @@
 		-moz-box-sizing: border-box;
 		box-sizing: border-box;
 		display: flex;
-		flex-direction: column;
+		align-items: center;
 		justify-content: space-between;
 	}
 	.fabu_name{
@@ -160,6 +230,19 @@
 	.fabu_time{
 		font-size: 24upx;
 		color: #999;
+		
+	}
+	.fabu_btn{
+		width: 150upx;
+		height: 60upx;
+		color: rgba(61, 127, 255, 0.91);
+		border:1px solid rgba(61, 127, 255, 0.91);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 24upx;
+		flex: none;
+		margin-left: 15upx;
 	}
 	.fabu_btns{
 		width: 100%;
