@@ -8,7 +8,7 @@
 					</view>
 					<view class="fabu_time" v-html="item.create_time"></view>
 				</view>
-				<view class="fabu_btn" @tap="fabu_del(item,index)">取消发布</view>
+				<view class="fabu_btn" @tap.stop="fabu_del(item,index)">取消发布</view>
 			</view>
 			<view v-if="datas.length==0" class="zanwu">暂无数据</view>
 		</view>
@@ -138,7 +138,7 @@
 				    success: function (res) {
 				        if (res.confirm) {
 				            console.log('用户点击确定');
-										var jkurl='/order/orderDelete'
+										var jkurl='/user/delIssue'
 										var datas={
 											token:that.loginDatas.userToken,
 											id:item.id
