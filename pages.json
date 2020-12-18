@@ -14,7 +14,8 @@
 			"path": "pages/my/my",
 			"style": {
 				"navigationBarTextStyle": "black",
-				"navigationStyle": "custom"
+				"navigationStyle": "custom",
+				"enablePullDownRefresh": true
 			}
 		}, {
 			"path": "pages/about/about",

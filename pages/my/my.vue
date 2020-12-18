@@ -106,7 +106,7 @@
 			
 		},
 		onShow() {
-			service.wxlogin()
+			// service.wxlogin()
 		},
 		onPageScroll(e){
 			console.log(e)
@@ -142,7 +142,7 @@
 		},
 		onPullDownRefresh() {
 			console.log('下拉')
-			this.getdata()
+			 service.wxlogin()
 		},
 		onReachBottom() {
 			console.log('上拉')

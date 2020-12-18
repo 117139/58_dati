@@ -232,6 +232,7 @@ const wxlogin=function (num){
 	                  dataType: 'json',
 	                  method: 'POST',
 	                  success(res) {
+											 uni.stopPullDownRefresh();
 											uni.hideLoading()
 	                    console.log(res.data)
 	                    if (res.data.code == 1) {
