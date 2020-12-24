@@ -595,6 +595,8 @@
 	.hd_box slider {
 		width: 100%;
 		margin: 0;
+		position: relative;
+		z-index: 10;
 	}
 
 	.hd_text {
@@ -639,6 +641,7 @@
 		width: 2upx;
 		height: 19upx;
 		background: #C4C4C4;
+		z-index: 0;
 	}
 
 	.problem_cz {
