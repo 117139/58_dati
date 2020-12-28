@@ -91,15 +91,13 @@
 								<view>{{item.answer.min_text}}（{{item.answer.min_num}}）</view>
 								<view>{{item.answer.max_text}}（{{item.answer.max_num}}）</view>
 							</view>
-							<slider value="0" :min='item.answer.min_num' :max="item.answer.max_num" @change="sliderChange" activeColor="linear-gradient(-89deg, #65AEE1, #326CFA)"
+							<slider value="0" :min='item.answer.min_num' :max="item.answer.max_num" @change="sliderChange"  :data-idx="index" activeColor="linear-gradient(-89deg, #65AEE1, #326CFA)"
 							 backgroundColor="#ECEBF1" block-color="#8A6DE9" block-size="10" :step="item.answer.step_size" />
 							<view class="step_d">
-								<view class="step_d_li" v-for="(item_hd,index_hd) in get_hd(item.answer.min_num,item.answer.max_num)"><text>{{item_hd}}</text></view>
-								<!-- <view class="step_d_li"><text>{{(item.answer.max_num-item.answer.min_num)*0.2}}</text></view>
-								<view class="step_d_li"><text>{{(item.answer.max_num-item.answer.min_num)*0.4}}</text></view>
-								<view class="step_d_li"><text>{{(item.answer.max_num-item.answer.min_num)*0.6}}</text></view>
-								<view class="step_d_li"><text>{{(item.answer.max_num-item.answer.min_num)*0.8}}</text></view>
-								<view class="step_d_li"><text>{{item.answer.max_num}}</text></view> -->
+								<view class="step_d_li" style="left: 0;"><text>{{item.answer.min_num}}</text></view>
+								<!-- <view class="step_d_li" v-for="(item_hd,index_hd) in get_hd(item.answer.min_num,item.answer.max_num)"><text>{{item_hd}}</text></view> -->
+								<view v-if="item.jleft1>item.answer.min_num &&item.jleft1<item.answer.max_num " class="step_d_li" :style="'left:'+ item.jleft"><text>{{item.jleft1?item.jleft1:0}}</text></view>
+								<view class="step_d_li" style="right: 0;"><text>{{item.answer.max_num}}</text></view>
 							</view>
 						</view>
 
@@ -409,6 +407,13 @@
 		},
 		methods: {
 			...mapMutations(['setnew_problem','edit_problem','setls_prodata','setls_pro_yh','set_h5_uid']),
+			getleft_dian(item){
+				var jieguo=item.jieguo-item.answer.min_num
+				var zum=item.answer.max_num-item.answer.min_num
+				var leftnum =jieguo*1 / zum*1
+				console.log(leftnum)
+				// var leftnum='left:'+leftnum+';'
+			},
 			get_hd(min_num,max_num){
 				// var arr=[
 				// 	min_num,
@@ -429,7 +434,23 @@
 				return arr
 			},
 			sliderChange(e) {
+				var that =this
 				console.log(e)
+				var idxs = e.currentTarget.dataset.idx
+				Vue.set(that.datas[idxs], 'jleft1', e.detail.value)
+				var jleft1=e.detail.value
+				var item=that.datas[idxs]
+				
+				var jieguo=jleft1-item.answer.min_num
+				console.log(jieguo)
+				var zum=item.answer.max_num-item.answer.min_num
+				console.log(zum)
+				var leftnum =jieguo / zum
+				console.log(leftnum)
+				leftnum=leftnum*100
+				leftnum=leftnum+'%'
+				Vue.set(that.datas[idxs], 'jleft',leftnum)
+				console.log(that.datas[idxs])
 			},
 			px_up(item,idx){
 				if(idx==0){
@@ -706,6 +727,8 @@
 	.hd_box slider {
 		width: 100%;
 		margin: 0;
+		position: relative;
+		z-index: 10;
 	}
 
 	.hd_text {
@@ -718,18 +741,18 @@
 
 	.step_d {
 		width: 100%;
-		display: flex;
+		/* display: flex;
 		align-items: center;
-		justify-content: space-between;
-		position: absolute;
-		bottom: -40upx;
+		justify-content: space-between; */
+		/* position: relative; */
+		/* bottom: -40upx; */
 	}
 
 	.step_d_li {
 		width: 2px;
 		font-size: 24upx;
 		color: #111;
-		position: relative;
+		position: absolute;
 		padding-top: 19upx;
 		text-align: center;
 	}
@@ -750,6 +773,7 @@
 		width: 2upx;
 		height: 19upx;
 		background: #C4C4C4;
+		z-index: 0;
 	}
 
 	.problem_cz {

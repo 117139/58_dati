@@ -17,7 +17,7 @@
 		<view class="xz_box">
 			<view class="xz_li">
 				<view>最小数值</view>
-				<input class="flex_1" type="number" placeholder="请输入" v-model="answer.min_num" @input="min_num_fuc" maxlength="1">
+				<input class="flex_1" type="number" placeholder="请输入" v-model="answer.min_num" @input="min_num_fuc" >
 			</view>
 			<view class="xz_li">
 				<view>最小数值显示文本</view>
@@ -25,16 +25,16 @@
 			</view>
 			<view class="xz_li">
 				<view>最大数值</view>
-				<input class="flex_1" type="number" placeholder="请输入" v-model="answer.max_num" @input="max_num_fuc" maxlength="2">
+				<input class="flex_1" type="number" placeholder="请输入" v-model="answer.max_num" @input="max_num_fuc" >
 			</view>
 			<view class="xz_li">
 				<view>最大数值显示文本</view>
 				<input class="flex_1" type="text" placeholder="请输入" v-model="answer.max_text">
 			</view>
-			<view class="xz_li">
+			<!-- <view class="xz_li">
 				<view>请输入步长</view>
 				<input class="flex_1" type="number" placeholder="请输入" v-model="answer.step_size">
-			</view>
+			</view> -->
 			
 		</view>
 		<view class="fbt_btns dis_flex aic ju_c">
@@ -45,6 +45,7 @@
 
 <script>
 	var that 
+	import Vue from 'vue'
 	import service from '../../service.js';
 	import {
 		mapState,
@@ -64,7 +65,7 @@
 					"min_text": "",
 					"max_num": "",
 					"max_text": "",
-					"step_size": ""
+					"step_size": "1"
 				},
 				idx:-1,
 				btnkg:0
@@ -95,24 +96,29 @@
 		methods: {
 			...mapMutations(['setnew_problem','setnew_xz','edit_problem']),
 			min_num_fuc(e){
+				var that=this
 				console.log(e.detail.value)
-				if(e.detail.value<19){
-					if(e.detail.value<0){
-						this.min_num=0
-					}
-				}else{
-					this.min_num=19
-				}
+				// if(e.detail.value<19){
+				// 	if(e.detail.value<0){
+				// 		// this.min_num=0
+				// 		Vue.set(that.answer,'max_num',0)
+				// 	}
+				// }else{
+				// 	// this.min_num=19
+				// 	Vue.set(that.answer,'max_num',19)
+				// }
 			},
 			max_num_fuc(e){
 				console.log(e.detail.value)
-				if(e.detail.value<20){
-					if(e.detail.value<0){
-						this.min_num=1
-					}
-				}else{
-					this.max_num=20
-				}
+				// if(e.detail.value<20){
+				// 	if(e.detail.value<0){
+				// 		// this.min_num=1
+				// 		Vue.set(that.answer,'max_num',1)
+				// 	}
+				// }else{
+				// 	// this.max_num=20
+				// 	Vue.set(that.answer,'max_num',20)
+				// }
 			},
 			sub(){
 				var that =this

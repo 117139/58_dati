@@ -104,16 +104,18 @@
 								:data-idx="index"
 								activeColor="linear-gradient(-89deg, #65AEE1, #326CFA)"
 								 backgroundColor="#ECEBF1" block-color="#8A6DE9" block-size="10" :step="item.answer[0].step_size" />
-								<view class="step_d">
+								 <view class="step_d">
+								 	<view class="step_d_li" style="left: 0;"><text>{{item.answer[0].min_num}}</text></view>
+								 	<!-- <view class="step_d_li" v-for="(item_hd,index_hd) in get_hd(item.answer.min_num,item.answer.max_num)"><text>{{item_hd}}</text></view> -->
+								 	<view v-if="item.jleft1>item.answer[0].min_num &&item.jleft1<item.answer[0].max_num " class="step_d_li" :style="'left:'+ item.jleft"><text>{{item.jleft1?item.jleft1:0}}</text></view>
+								 	<view class="step_d_li" style="right: 0;"><text>{{item.answer[0].max_num}}</text></view>
+								 </view>
+								<!-- <view class="step_d">
 									<view class="step_d_li" v-for="(item_hd,index_hd) in get_hd(item.answer[0].min_num,item.answer[0].max_num)"><text>{{item_hd}}</text></view>
-								<!-- 	<view class="step_d_li"><text>{{(item.answer[0].max_num-item.answer[0].min_num)*0.2}}</text></view>
-									<view class="step_d_li"><text>{{(item.answer[0].max_num-item.answer[0].min_num)*0.4}}</text></view>
-									<view class="step_d_li"><text>{{(item.answer[0].max_num-item.answer[0].min_num)*0.6}}</text></view>
-									<view class="step_d_li"><text>{{(item.answer[0].max_num-item.answer[0].min_num)*0.8}}</text></view>
-									<view class="step_d_li"><text>{{item.answer[0].max_num}}</text></view> -->
-								</view>
+								
+								</view> -->
 							</view>
-							<view style="margin-top: 10upx;font-size: 24upx;">当前选择：{{item.jieguo?item.jieguo:item.answer[0].min_num}}</view>
+							<!-- <view style="margin-top: 10upx;font-size: 24upx;">当前选择：{{item.jieguo?item.jieguo:item.answer[0].min_num}}</view> -->
 						</view>
 			
 					</view>
@@ -193,6 +195,20 @@
 				var idxs = e.currentTarget.dataset.idx
 				Vue.set(that.datas[idxs], 'jieguo', e.detail.value)
 				console.log(that.datas)
+				Vue.set(that.datas[idxs], 'jleft1', e.detail.value)
+				//显示
+				var jleft1=e.detail.value
+				var item=that.datas[idxs]
+				
+				var jieguo=jleft1-item.answer[0].min_num
+				console.log(jieguo)
+				var zum=item.answer[0].max_num-item.answer[0].min_num
+				console.log(zum)
+				var leftnum =jieguo / zum
+				console.log(leftnum)
+				leftnum=leftnum*100
+				leftnum=leftnum+'%'
+				Vue.set(that.datas[idxs], 'jleft',leftnum)
 			},
 			//单选
 			danxuan(item, index) {
@@ -609,22 +625,23 @@
 
 	.step_d {
 		width: 100%;
-		display: flex;
+		/* display: flex;
 		align-items: center;
-		justify-content: space-between;
-		position: absolute;
-		bottom: -40upx;
+		justify-content: space-between; */
+		/* position: relative; */
+		/* bottom: -40upx; */
 	}
-
+	
 	.step_d_li {
 		width: 2px;
 		font-size: 24upx;
 		color: #111;
-		position: relative;
+		position: absolute;
 		padding-top: 19upx;
 		text-align: center;
+		top: 20upx;
 	}
-
+	
 	.step_d_li text {
 		width: 3em;
 		margin-left: -1.5em;
@@ -632,7 +649,7 @@
 		display: flex;
 		justify-content: center;
 	}
-
+	
 	.step_d_li::before {
 		content: '';
 		position: absolute;
