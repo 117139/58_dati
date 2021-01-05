@@ -124,6 +124,8 @@
 .hd_box slider.data-v-f329d474 {
 	width: 100%;
 	margin: 0;
+	position: relative;
+	z-index: 10;
 }
 .hd_text.data-v-f329d474 {
 	width: 100%;
@@ -134,23 +136,17 @@
 }
 .step_d.data-v-f329d474 {
 	width: 100%;
-	display: -webkit-box;
-	display: -webkit-flex;
-	display: flex;
-	-webkit-box-align: center;
-	-webkit-align-items: center;
-	        align-items: center;
-	-webkit-box-pack: justify;
-	-webkit-justify-content: space-between;
-	        justify-content: space-between;
-	position: absolute;
-	bottom: -40rpx;
+	/* display: flex;
+	align-items: center;
+	justify-content: space-between; */
+	/* position: relative; */
+	/* bottom: -40upx; */
 }
 .step_d_li.data-v-f329d474 {
 	width: 2px;
 	font-size: 24rpx;
 	color: #111;
-	position: relative;
+	position: absolute;
 	padding-top: 19rpx;
 	text-align: center;
 }
@@ -173,6 +169,7 @@
 	width: 2rpx;
 	height: 19rpx;
 	background: #C4C4C4;
+	z-index: 0;
 }
 .problem_cz.data-v-f329d474 {
 	width: 100%;

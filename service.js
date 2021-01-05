@@ -15,7 +15,6 @@ const imgurl = 'https://datixcx.com.aa.800123456.top/';
 var header = {
 	'content-type': 'application/x-www-form-urlencoded',
 }
-
 /**
  * 供外部post请求调用  
  */
@@ -24,7 +23,6 @@ function post(url, params, onSuccess, onFailed) {
 	request(url, params, "POST", onSuccess, onFailed);
 
 }
-
 /**
  * 供外部get请求调用
  */
