@@ -15,9 +15,7 @@
 		onLaunch: function() {
 			var that =this
 			console.log('App Launch')
-			// #ifdef MP-WEIXIN
-			service.wxlogin()
-			// #endif
+			
 			uni.getSystemInfo({
 				success: function(e) {
 					console.log(e);
@@ -53,6 +51,12 @@
 				}
 			})
 			
+			
+			// service.wxlogin(2)
+			// return
+			// #ifdef MP-WEIXIN
+			service.wxlogin()
+			// #endif
 		},
 		onShow: function() {
 			console.log('App Show')
@@ -165,5 +169,42 @@
 		width: 100%;
 		font-size: 24rpx;
 		color: #666;
+	}
+	
+	.con_box {
+		width: 100%;
+		padding: 10upx 30upx;
+		box-sizing: border-box;
+	}
+	.con_box_tit{
+		width: 100%;
+		height: 80upx;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 32upx;
+		color: #333;
+		font-weight: bold;
+	}
+	.my_msg_li {
+		width: 100%;
+		min-height: 100upx;
+		border-bottom: 1px solid #F1F1F1;
+		font-size: 28upx;
+		color: #333;
+	}
+	
+	.my_msg_li input {
+		text-align: right;
+	}
+	
+	.tar {
+		text-align: right;
+	}
+	
+	.my_msg_li .iconfont {
+		font-size: 20upx;
+		color: #333;
+		margin-left: 8upx;
 	}
 </style>

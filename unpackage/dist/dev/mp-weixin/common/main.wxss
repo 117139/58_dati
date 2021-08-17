@@ -82,6 +82,10 @@
 
 
 
+
+
+
+
 /*每个页面公共css */
 @font-face {font-family: "iconfont";
   src: url('//at.alicdn.com/t/font_2160320_z6gz239bpcm.eot?t=1604642621030'); /* IE9 */
@@ -249,5 +253,45 @@ view{
 	width: 100%;
 	font-size: 24rpx;
 	color: #666;
+}
+.con_box {
+	width: 100%;
+	padding: 10rpx 30rpx;
+	-webkit-box-sizing: border-box;
+	        box-sizing: border-box;
+}
+.con_box_tit{
+	width: 100%;
+	height: 80rpx;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-box-align: center;
+	-webkit-align-items: center;
+	        align-items: center;
+	-webkit-box-pack: center;
+	-webkit-justify-content: center;
+	        justify-content: center;
+	font-size: 32rpx;
+	color: #333;
+	font-weight: bold;
+}
+.my_msg_li {
+	width: 100%;
+	min-height: 100rpx;
+	border-bottom: 1px solid #F1F1F1;
+	font-size: 28rpx;
+	color: #333;
+}
+.my_msg_li input {
+	text-align: right;
+}
+.tar {
+	text-align: right;
+}
+.my_msg_li .iconfont {
+	font-size: 20rpx;
+	color: #333;
+	margin-left: 8rpx;
 }
 

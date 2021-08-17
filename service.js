@@ -4,7 +4,10 @@ import event from 'common/event.js'
 // 管理账号信息
 const USERS_KEY = 'USERS_KEY';
 const STATE_KEY = 'STATE_KEY';
-const IPurl = 'https://datixcx.com.aa.800123456.top/api/';
+// const IPurl = 'https://datixcx.com.aa.800123456.top/api/';
+// const IPurl0 = 'http://hpkvkb.natappfree.cc/';
+const IPurl0 = 'https://datixcx.com.aa.800123456.top/';
+const IPurl = IPurl0+'api/';
 const imgurl = 'https://datixcx.com.aa.800123456.top/';
 // const adminurl='https://datixcx.com.aa.800123456.top/admin/';
 // appid:wx4c41cc50c5a53df9
@@ -194,6 +197,211 @@ const call=  function (e){
 
 const wxlogin=function (num){
 	var that =this
+	if(num==2){
+		var data={
+			token:store.state.loginDatas.userToken||'',
+			// token:'5e4096b5d116946cfb88fa0f17fa4d80',
+			type:2
+		}
+		uni.request({
+		  url: IPurl+'/login',
+		  data: data,
+		  header: {
+		    'content-type': 'application/x-www-form-urlencoded'
+		  },
+		  dataType: 'json',
+		  method: 'POST',
+		  success(res) {
+				 uni.stopPullDownRefresh();
+				uni.hideLoading()
+		    console.log(res.data)
+		    if (res.data.code == 1) {
+		      console.log('登录成功')
+		      console.log(res.data)
+		      uni.setStorageSync('token', res.data.data.userToken)
+					//获取手机号
+				
+					store.commit('logindata', res.data.data)
+					store.commit('login', res.data.data.nickname)
+					
+		      uni.setStorageSync('loginmsg', res.data.data)
+					
+					// im login
+					
+					if(num==1){
+						uni.showToast({
+							icon:'none',
+							title:'登录成功'
+						})
+						setTimeout(()=>{
+							event.trigger({
+							    type:'test',
+							    page:'/pages/index/index',
+							    //obj和test是举的例子，随意啥都行，这个传过去在on中的args中都可以获取到
+							    obj:{
+							
+							    },
+							    test:{
+										'loginmsg': res.data.data
+							    },
+							    success:function(data){
+							        //data为on中返回的数据
+							    }
+							});
+						},1000)
+						setTimeout(()=>{
+							uni.navigateBack()
+						},1500)
+					}else{
+						event.trigger({
+						    type:'test',
+						    page:'/pages/index/index',
+						    //obj和test是举的例子，随意啥都行，这个传过去在on中的args中都可以获取到
+						    obj:{
+						
+						    },
+						    test:{
+									'loginmsg': res.data.data
+						    },
+						    success:function(data){
+						        //data为on中返回的数据
+						    }
+						});
+					}
+		    } else {
+		      uni.removeStorageSync('userInfo')
+		      uni.removeStorageSync('token')
+		      uni.showToast({
+		        icon: 'none',
+		        title: '登录失败',
+		      })
+		    }
+					
+		  },
+		  fail() {
+				uni.hideLoading()
+		    uni.showToast({
+		      icon: 'none',
+		      title: '登录失败'
+		    })
+		  }
+		})
+		return
+	}
+	var userInfo = uni.getStorageSync('userInfo')
+	if (!userInfo) {
+			
+	} else {
+		uni.login({
+		  success: function (res) {
+				
+		    // 发送 res.code 到后台换取 openId, sessionKey, unionId
+		    var uinfo = userInfo
+		    let data = {
+		      code: res.code,
+		      nickname: uinfo.nickName,
+		      avatarurl: uinfo.avatarUrl
+		    }
+		    let rcode = res.code
+				
+		    // console.log(res.code)
+		    uni.request({
+		      url: IPurl+'/login',
+		      data: data,
+		      header: {
+		        'content-type': 'application/x-www-form-urlencoded'
+		      },
+		      dataType: 'json',
+		      method: 'POST',
+		      success(res) {
+						 uni.stopPullDownRefresh();
+						uni.hideLoading()
+		        console.log(res.data)
+		        if (res.data.code == 1) {
+		          console.log('登录成功')
+		          console.log(res.data)
+		          uni.setStorageSync('token', res.data.data.userToken)
+							//获取手机号
+							/*
+							if(!res.data.data.phone){
+								if(num==1){
+									uni.redirectTo({
+										url:'/pages/login_tel/login_tel'
+									})
+								}
+								return
+							}*/
+							store.commit('logindata', res.data.data)
+							store.commit('login', res.data.data.nickname)
+							
+		          uni.setStorageSync('loginmsg', res.data.data)
+							
+							// im login
+							
+							
+							
+							if(num==1){
+								uni.showToast({
+									icon:'none',
+									title:'登录成功'
+								})
+								setTimeout(()=>{
+									event.trigger({
+									    type:'test',
+									    page:'/pages/index/index',
+									    //obj和test是举的例子，随意啥都行，这个传过去在on中的args中都可以获取到
+									    obj:{
+									
+									    },
+									    test:{
+												'loginmsg': res.data.data
+									    },
+									    success:function(data){
+									        //data为on中返回的数据
+									    }
+									});
+								},1000)
+								setTimeout(()=>{
+									uni.navigateBack()
+								},1500)
+							}else{
+								event.trigger({
+								    type:'test',
+								    page:'/pages/index/index',
+								    //obj和test是举的例子，随意啥都行，这个传过去在on中的args中都可以获取到
+								    obj:{
+								
+								    },
+								    test:{
+											'loginmsg': res.data.data
+								    },
+								    success:function(data){
+								        //data为on中返回的数据
+								    }
+								});
+							}
+		        } else {
+		          uni.removeStorageSync('userInfo')
+		          uni.removeStorageSync('token')
+		          uni.showToast({
+		            icon: 'none',
+		            title: '登录失败',
+		          })
+		        }
+			
+		      },
+		      fail() {
+						uni.hideLoading()
+		        uni.showToast({
+		          icon: 'none',
+		          title: '登录失败'
+		        })
+		      }
+		    })
+		  }
+		})
+	}
+	return
 	// 获取用户信息
 	uni.getSetting({
 	  success: res => {
@@ -585,6 +793,7 @@ export default {
 	addUser,
 	get,
 	post,
+	IPurl0,
 	IPurl,
 	imgurl,
 	gologin,

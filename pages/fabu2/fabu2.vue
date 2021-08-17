@@ -28,20 +28,26 @@
 		mapState,
 		mapMutations
 	} from 'vuex'
+	var that
 	export default {
 		data() {
 			return {
+				id:'',
 				page:1,
 				size:15,
 				keyword:'',
 				datas:[],
-				ids:[]
+				ids:[],
+				qiyong_index:0
 			}
 		},
 		computed: {
 			...mapState(['new_problem','ls_prodata','loginDatas']),
 		},
-		onLoad() {
+		onLoad(option) {
+			that=this
+			this.id=option.id
+			this.qiyong_index=option.qiyong_index
 			this.onRetry()
 		},
 		methods: {
@@ -150,18 +156,19 @@
 				// }
 				// console.log(arr)
 				var arr=this.ids
-				if(arr.length==0){
-					uni.showToast({
-						icon:'none',
-						title:'请选择用户'
-					})
-					return
-				}
+				// 二期修改
+				// if(arr.length==0){
+				// 	uni.showToast({
+				// 		icon:'none',
+				// 		title:'请选择用户'
+				// 	})
+				// 	return
+				// }
 				arr=arr.join(',')
 				this.setls_pro_yh(arr)
 				// return
 				uni.navigateTo({
-					url:'../fabu3/fabu3'
+					url:'../fabu3/fabu3?id='+that.id+'&qiyong_index='+that.qiyong_index
 				})
 			},
 			jump(e) {

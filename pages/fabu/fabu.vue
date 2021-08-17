@@ -10,18 +10,44 @@
 			<input type="text" placeholder="请输入调研附加说明" v-model="dy_addition_explain">
 		</view>
 		<view class="problem_list">
-
+			
+			<view class="con_box">
+				<picker style="width: 100%;"  :range="qiyong" range-key="title" @change="set_op1"
+					:value="qiyong_index">
+					<view class="my_msg_li dis_flex aic ju_b" style="border-bottom: 0;">
+						<text>是否启用个人信息</text>
+						<view class="flex_1 tar">{{qiyong[qiyong_index].title}}</view>
+						<text class="iconfont icon-next-m"></text>
+					</view>
+				</picker>
+				<view v-if="qiyong_index==1" class="con_box_tit">个人信息</view>
+				<block v-if="qiyong_index==1" v-for="(item,index) in guding">
+					<view class="my_msg_li dis_flex aic ju_b" v-if="item.type==3">
+						<text>{{item.problem.title}}</text>
+						<input class="flex_1" type="text"  placeholder="请输入" />
+					</view>
+					<picker style="width: 100%;" v-if="item.type==1" :range="item.answer" range-key="title" @change="set_op"
+						:data-idx="index">
+						<view class="my_msg_li dis_flex aic ju_b">
+							<text>{{item.problem.title}}</text>
+							<view class="flex_1 tar">请选择</view>
+							<text class="iconfont icon-next-m"></text>
+						</view>
+					</picker>
+				</block>
+			</view>
+			<!-- <view v-if="qiyong_index==1" class="con_box_tit">个人信息</view> -->
 			<view class="problem_li" v-for="(item,index) in datas">
 				<view class="problem_msg">
 					<view class="problem_tit">
 						{{index+1}}.{{item.problem.title}}
 						<text>({{item.type==1?'单选题':item.type==2?'多选题':item.type==3?'填空题':item.type==4?'排序题':"滑动题"}})</text>
 					</view>
-					
+
 					<view v-if="item.problem.img&&item.problem.img.length>0" class="ans_file">
-						
-						<image v-for="(item1,index) in item.problem.img" :src="getimg(item1)" @tap="pveimg" mode="aspectFit" lazy-load="true" 
-						:data-src="getimg(item1)"></image>
+
+						<image v-for="(item1,index) in item.problem.img" :src="getimg(item1)" @tap="pveimg"
+							mode="aspectFit" lazy-load="true" :data-src="getimg(item1)"></image>
 					</view>
 					<!-- 单选 -->
 					<view class="ans_list" v-if="item.type==1">
@@ -33,11 +59,12 @@
 								<view class="ans_xztext">
 									<view class="ans_v_text">{{item1.title}}</view>
 									<view v-if="item1.img.length>0" class="ans_file">
-										<image :src="getimg(item1.img[0])"  @tap="pveimg" mode="aspectFit" lazy-load="true" :data-src="getimg(item1.img[0])"></image>
+										<image :src="getimg(item1.img[0])" @tap="pveimg" mode="aspectFit"
+											lazy-load="true" :data-src="getimg(item1.img[0])"></image>
 									</view>
 								</view>
 							</view>
-							
+
 						</view>
 					</view>
 					<!-- 多选 -->
@@ -48,16 +75,17 @@
 									<image src="../../static/images/duoxuan.png"></image>
 								</view>
 								<view class="ans_xztext">
-								
-								<view class="ans_xztext">
-									<view class="ans_v_text">{{item1.title}}</view>
-									<view v-if="item1.img.length>0" class="ans_file">
-										<image :src="getimg(item1.img[0])"  @tap="pveimg" mode="aspectFit" lazy-load="true" :data-src="getimg(item1.img[0])"></image>
+
+									<view class="ans_xztext">
+										<view class="ans_v_text">{{item1.title}}</view>
+										<view v-if="item1.img.length>0" class="ans_file">
+											<image :src="getimg(item1.img[0])" @tap="pveimg" mode="aspectFit"
+												lazy-load="true" :data-src="getimg(item1.img[0])"></image>
+										</view>
 									</view>
 								</view>
-								</view>
 							</view>
-							
+
 						</view>
 					</view>
 					<!-- 填空 -->
@@ -72,7 +100,8 @@
 								<view class="ans_xztext">
 									<view class="ans_v_text">{{item1.title}}</view>
 									<view v-if="item1.img.length>0" class="ans_file">
-										<image :src="getimg(item1.img[0])"  @tap="pveimg" mode="aspectFit" lazy-load="true" :data-src="getimg(item1.img[0])"></image>
+										<image :src="getimg(item1.img[0])" @tap="pveimg" mode="aspectFit"
+											lazy-load="true" :data-src="getimg(item1.img[0])"></image>
 									</view>
 								</view>
 								<view class="ans_xzicon">
@@ -91,12 +120,17 @@
 								<view>{{item.answer.min_text}}（{{item.answer.min_num}}）</view>
 								<view>{{item.answer.max_text}}（{{item.answer.max_num}}）</view>
 							</view>
-							<slider value="0" :min='item.answer.min_num' :max="item.answer.max_num" @change="sliderChange"  :data-idx="index" activeColor="linear-gradient(-89deg, #65AEE1, #326CFA)"
-							 backgroundColor="#ECEBF1" block-color="#8A6DE9" block-size="10" :step="item.answer.step_size" />
+							<!-- <slider value="0" :min='item.answer.min_num' :max="item.answer.max_num" @change="sliderChange"  :data-idx="index" activeColor="linear-gradient(-89deg, #65AEE1, #326CFA)"
+							 backgroundColor="#ECEBF1" block-color="#8A6DE9" block-size="10" :step="item.answer.step_size" /> -->
+							<slider value="0" :min='item.answer.min_num' :max="item.answer.max_num"
+								@change="sliderChange" :data-idx="index" activeColor="#ECEBF1" backgroundColor="#ECEBF1"
+								block-color="#8A6DE9" block-size="10" :step="item.answer.step_size" />
 							<view class="step_d">
 								<view class="step_d_li" style="left: 0;"><text>{{item.answer.min_num}}</text></view>
 								<!-- <view class="step_d_li" v-for="(item_hd,index_hd) in get_hd(item.answer.min_num,item.answer.max_num)"><text>{{item_hd}}</text></view> -->
-								<view v-if="item.jleft1>item.answer.min_num &&item.jleft1<item.answer.max_num " class="step_d_li" :style="'left:'+ item.jleft"><text>{{item.jleft1?item.jleft1:0}}</text></view>
+								<view v-if="item.jleft1>item.answer.min_num &&item.jleft1<item.answer.max_num "
+									class="step_d_li" :style="'left:'+ item.jleft">
+									<text>{{item.jleft1?item.jleft1:0}}</text></view>
 								<view class="step_d_li" style="right: 0;"><text>{{item.answer.max_num}}</text></view>
 							</view>
 						</view>
@@ -232,6 +266,7 @@
 			</view> -->
 		</view>
 		<view class="sub_box">
+			<view class="sub_btn" @tap="addcg">保存草稿</view>
 			<view class="sub_btn" @tap="sub">确认</view>
 		</view>
 		<view style="width: 100%;height: 160upx;"></view>
@@ -248,17 +283,204 @@
 		mapState,
 		mapMutations
 	} from 'vuex'
+	var that
 	export default {
 		data() {
 			return {
+				id: '',
+				qiyong:[
+					{
+						title:'不启用',
+					},
+					{
+						title:'启用',
+					},
+					
+				],
+				qiyong_index:0,
 				// #ifdef H5
-				uid:'',
-				uids:'',
+				uid: '',
+				uids: '',
 				// #endif 
-				dy_title:'',
-				dy_explain:'',
-				dy_addition_explain:'',
-				datas:[],
+				dy_title: '',
+				dy_explain: '',
+				dy_addition_explain: '',
+				datas: [],
+				guding: [
+					{
+						"type": "1",
+						"option": "",
+						"answer": [{
+							"img": [],
+							"title": "男",
+							"option": "A"
+						}, {
+							"img": [],
+							"title": "女",
+							"option": "B"
+						}],
+						"problem": {
+							"img": [],
+							"title": "性别"
+						}
+					}, {
+						"type": "3",
+						"option": "",
+						"problem": {
+							"title": "年龄"
+						}
+					}, {
+						"type": "1",
+						"option": "",
+						"answer": [{
+							"img": [],
+							"title": "是",
+							"option": "A"
+						}, {
+							"img": [],
+							"title": "否",
+							"option": "B"
+						}],
+						"problem": {
+							"img": [],
+							"title": "是否独生"
+						}
+					}, {
+						"type": "1",
+						"option": "",
+						"answer": [{
+							"img": [],
+							"title": "农村",
+							"option": "A"
+						}, {
+							"img": [],
+							"title": "乡镇",
+							"option": "B"
+						}, {
+							"img": [],
+							"title": "城市",
+							"option": "C"
+						}],
+						"problem": {
+							"img": [],
+							"title": "生源地"
+						}
+					}, {
+						"type": "3",
+						"option": "",
+						"problem": {
+							"title": "专业"
+						}
+					}, {
+						"type": "3",
+						"option": "",
+						"problem": {
+							"title": "年级"
+						}
+					}, {
+						"type": "3",
+						"option": "",
+						"problem": {
+							"title": "职业"
+						}
+					}, {
+						"type": "1",
+						"option": "",
+						"answer": [{
+							"img": [],
+							"title": "小学及以下",
+							"option": "A"
+						}, {
+							"img": [],
+							"title": "中学（含中职）",
+							"option": "B"
+						}, {
+							"img": [],
+							"title": "高中（含职高）",
+							"option": "C"
+						}, {
+							"img": [],
+							"title": "大学（含大专）",
+							"option": "D"
+						}, {
+							"img": [],
+							"title": "研究生及以上",
+							"option": "E"
+						}],
+						"problem": {
+							"img": [],
+							"title": "受教育程度"
+						}
+					}, {
+						"type": "1",
+						"option": "",
+						"answer": [{
+							"img": [],
+							"title": "小学及以下",
+							"option": "A"
+						}, {
+							"img": [],
+							"title": "中学（含中职）",
+							"option": "B"
+						}, {
+							"img": [],
+							"title": "高中（含职高）",
+							"option": "C"
+						}, {
+							"img": [],
+							"title": "大学（含大专）",
+							"option": "D"
+						}, {
+							"img": [],
+							"title": "研究生及以上",
+							"option": "E"
+						}],
+						"problem": {
+							"img": [],
+							"title": "父亲受教育程度"
+						}
+					}, {
+						"type": "1",
+						"option": "",
+						"answer": [{
+							"img": [],
+							"title": "小学及以下",
+							"option": "A"
+						}, {
+							"img": [],
+							"title": "中学（含中职）",
+							"option": "B"
+						}, {
+							"img": [],
+							"title": "高中（含职高）",
+							"option": "C"
+						}, {
+							"img": [],
+							"title": "大学（含大专）",
+							"option": "D"
+						}, {
+							"img": [],
+							"title": "研究生及以上",
+							"option": "E"
+						}],
+						"problem": {
+							"img": [],
+							"title": "母亲受教育程度"
+						}
+					}, {
+						"type": "3",
+						"option": "",
+						"problem": {
+							"title": "父亲职业"
+						}
+					}, {
+						"type": "3",
+						"option": "",
+						"problem": {
+							"title": "母亲职业"
+						}
+					},
+				],
 				datas_ceshi: [{
 						problem: {
 							title: '在紧急情况下为伤员止血时，须先用压迫法止血后再根据出血情况改用其他止血法。',
@@ -365,16 +587,26 @@
 			}
 		},
 		onLoad(option) {
+			that = this
+			// #ifndef H5
+			this.guding=this.loginDatas.research_info
+			// #endif
 			// #ifdef H5
-			this.setls_pro_yh(option.uids)
-			this.uids=option.uids
-			this.uid=option.uid
+			if(option.uids){
+				this.setls_pro_yh(option.uids)
+				this.uids = option.uids
+			}
+			this.uid = option.uid
 			this.set_h5_uid(option.uid)
 			// #endif
+			if (option.id) {
+				that.id = option.id
+				that.getcg()
+			}
 		},
-		mounted() {  
+		mounted() {
 			// #ifdef H5
-			document.getElementsByTagName('uni-page-head')[0].style.display = 'none'  
+			document.getElementsByTagName('uni-page-head')[0].style.display = 'none'
 			// #endif
 		},
 		onUnload() {
@@ -383,19 +615,18 @@
 			this.clearls_pro('')
 		},
 		onShow() {
-			var that =this
 			console.log(this.new_problem)
-			if(this.new_problem.problem){
+			if (this.new_problem.problem) {
 				this.datas.push(this.new_problem)
 				this.setnew_problem('')
 			}
-			
-			if(that.bj_prodata&&that.bj_prodata.datas){
-				var newdata=JSON.parse(JSON.stringify(this.bj_prodata.datas))
+
+			if (that.bj_prodata && that.bj_prodata.datas) {
+				var newdata = JSON.parse(JSON.stringify(this.bj_prodata.datas))
 				console.log('newdata')
 				console.log(this.bj_prodata)
 				console.log(newdata)
-				var edit_idx=this.bj_prodata.idx
+				var edit_idx = this.bj_prodata.idx
 				Vue.set(that.datas, edit_idx, newdata)
 				// that.datas[edit_idx]=newdata
 				console.log(that.datas)
@@ -403,18 +634,172 @@
 			}
 		},
 		computed: {
-			...mapState(['new_problem','bj_prodata']),
+			...mapState(['new_problem', 'bj_prodata', 'loginDatas']),
 		},
 		methods: {
-			...mapMutations(['setnew_problem','edit_problem','setls_prodata','setls_pro_yh','set_h5_uid']),
-			getleft_dian(item){
-				var jieguo=item.jieguo-item.answer.min_num
-				var zum=item.answer.max_num-item.answer.min_num
-				var leftnum =jieguo*1 / zum*1
+			...mapMutations(['setnew_problem', 'edit_problem', 'setls_prodata', 'setls_pro_yh', 'set_h5_uid']),
+			set_op1(e){
+				var ans_idx = e.detail.value
+				this.qiyong_index=e.detail.value
+			},
+			set_op(e) {
+				console.log(e.detail.value)
+				console.log(e.currentTarget.dataset.idx)
+				var ans_idx = e.detail.value
+				var idx = e.currentTarget.dataset.idx
+				Vue.set(that.guding[idx], 'option', that.guding[idx].answer[ans_idx].option)
+				Vue.set(that.guding[idx], 'option_text', that.guding[idx].answer[ans_idx].title)
+			},
+			addcg() {
+				var data = {
+					dy_title: that.dy_title,
+					dy_explain: that.dy_explain,
+					dy_addition_explain: that.dy_addition_explain,
+					datas: that.datas
+				}
+				var datas = {
+					// token: that.loginDatas.userToken || '',
+					// #ifdef MP-WEIXIN
+					token:that.loginDatas.userToken || '',
+					// #endif
+					// #ifndef MP-WEIXIN
+					user_id:that.uid,
+					// #endif
+					data: JSON.stringify(data)
+				}
+				var jkurl = '/user/draft/add'
+				// #ifdef H5
+				// console.log(service.adminurl)
+				// jkurl =service.adminurl+'/research_papers.ResearchPapers/saveResearch'
+				var adminurl=service.IPurl0+'admin/'
+				jkurl=adminurl+'/research_papers.ResearchPapers/draftsSave'
+				// #endif
+				if (that.id) {
+					datas = {
+						id: that.id,
+						// #ifdef MP-WEIXIN
+						token:that.loginDatas.userToken || '',
+						// #endif
+						// #ifndef MP-WEIXIN
+						user_id:that.uid,
+						// #endif
+						data: JSON.stringify(data)
+					}
+					jkurl = '/user/draft/modify'
+					// #ifdef H5
+					// console.log(service.adminurl)
+					// jkurl =service.adminurl+'/research_papers.ResearchPapers/saveResearch'
+					var adminurl=service.IPurl0+'admin/'
+					jkurl=adminurl+'/research_papers.ResearchPapers/draftsUpdate'
+					// #endif
+				}
+				service.P_post(jkurl, datas).then(res => {
+					that.btn_kg = 0
+					console.log(res)
+					if (res.code == 1) {
+						var datas = res.data
+						console.log(typeof datas)
+
+						if (typeof datas == 'string') {
+							datas = JSON.parse(datas)
+						}
+						uni.showToast({
+							icon: 'none',
+							title: '操作成功'
+						})
+
+
+					} else {
+						if (res.msg) {
+							uni.showToast({
+								icon: 'none',
+								title: res.msg
+							})
+						} else {
+							uni.showToast({
+								icon: 'none',
+								title: '操作失败'
+							})
+						}
+					}
+				}).catch(e => {
+					that.btn_kg = 0
+					console.log(e)
+					uni.showToast({
+						icon: 'none',
+						title: '获取数据失败'
+					})
+				})
+			},
+			getcg() {
+				var datas = {
+					// #ifdef MP-WEIXIN
+					token:that.loginDatas.userToken || '',
+					// #endif
+					// #ifndef MP-WEIXIN
+					user_id:that.uid,
+					// #endif
+					id: that.id
+				}
+
+				//selectSaraylDetailByUserCard
+				var jkurl = '/user/draft/look'
+				// #ifdef H5
+				// console.log(service.adminurl)
+				// jkurl =service.adminurl+'/research_papers.ResearchPapers/saveResearch'
+				var adminurl=service.IPurl0+'admin/'
+				jkurl=adminurl+'/research_papers.ResearchPapers/draftsLook'
+				// #endif
+				uni.showLoading({
+					title: '正在获取数据'
+				})
+				service.P_get(jkurl, datas).then(res => {
+					that.btn_kg = 0
+					console.log(res)
+					if (res.code == 1) {
+						var datas = res.data
+						console.log(typeof datas)
+
+						if (typeof datas == 'string') {
+							datas = JSON.parse(datas)
+						}
+						that.dy_title = datas.data.dy_title
+						that.dy_explain = datas.data.dy_explain
+						that.dy_addition_explain = datas.data.dy_addition_explain
+						that.datas = datas.data.datas
+						console.log(datas)
+
+
+					} else {
+						if (res.msg) {
+							uni.showToast({
+								icon: 'none',
+								title: res.msg
+							})
+						} else {
+							uni.showToast({
+								icon: 'none',
+								title: '操作失败'
+							})
+						}
+					}
+				}).catch(e => {
+					that.btn_kg = 0
+					console.log(e)
+					uni.showToast({
+						icon: 'none',
+						title: '获取数据失败'
+					})
+				})
+			},
+			getleft_dian(item) {
+				var jieguo = item.jieguo - item.answer.min_num
+				var zum = item.answer.max_num - item.answer.min_num
+				var leftnum = jieguo * 1 / zum * 1
 				console.log(leftnum)
 				// var leftnum='left:'+leftnum+';'
 			},
-			get_hd(min_num,max_num){
+			get_hd(min_num, max_num) {
 				// var arr=[
 				// 	min_num,
 				// 	min_num,
@@ -427,100 +812,100 @@
 				// arr[2]=((max_num-min_num)*0.4+min_num*1).toFixed(2)
 				// arr[3]=((max_num-min_num)*0.6+min_num*1).toFixed(2)
 				// arr[4]=((max_num-min_num)*0.8+min_num*1).toFixed(2)
-				var arr=[]
-				for( var i=min_num;i<=max_num;i++){
+				var arr = []
+				for (var i = min_num; i <= max_num; i++) {
 					arr.push(i)
 				}
 				return arr
 			},
 			sliderChange(e) {
-				var that =this
+				var that = this
 				console.log(e)
 				var idxs = e.currentTarget.dataset.idx
 				Vue.set(that.datas[idxs], 'jleft1', e.detail.value)
-				var jleft1=e.detail.value
-				var item=that.datas[idxs]
-				
-				var jieguo=jleft1-item.answer.min_num
+				var jleft1 = e.detail.value
+				var item = that.datas[idxs]
+
+				var jieguo = jleft1 - item.answer.min_num
 				console.log(jieguo)
-				var zum=item.answer.max_num-item.answer.min_num
+				var zum = item.answer.max_num - item.answer.min_num
 				console.log(zum)
-				var leftnum =jieguo / zum
+				var leftnum = jieguo / zum
 				console.log(leftnum)
-				leftnum=leftnum*100
-				leftnum=leftnum+'%'
-				Vue.set(that.datas[idxs], 'jleft',leftnum)
+				leftnum = leftnum * 100
+				leftnum = leftnum + '%'
+				Vue.set(that.datas[idxs], 'jleft', leftnum)
 				console.log(that.datas[idxs])
 			},
-			px_up(item,idx){
-				if(idx==0){
+			px_up(item, idx) {
+				if (idx == 0) {
 					return
 				}
-				var that =this
+				var that = this
 				// var newarr=item.answer
 				var temp = JSON.parse(JSON.stringify(item));
 				// newarr[idx] =newarr[idx-1];
 				// newarr[idx-1] = temp;
 				console.log('px_up')
-				var idx_1=idx*1-1
-				Vue.set(that.datas, idx, that.datas[idx-1])
+				var idx_1 = idx * 1 - 1
+				Vue.set(that.datas, idx, that.datas[idx - 1])
 				Vue.set(that.datas, idx_1, temp)
-				
+
 			},
-			px_down(item,idx){
-				if(idx==this.datas.length-1){
+			px_down(item, idx) {
+				if (idx == this.datas.length - 1) {
 					return
 				}
-				var that =this
+				var that = this
 				// var newarr=item.answer
 				var temp = JSON.parse(JSON.stringify(item));
 				// newarr[idx] =newarr[idx+1];
 				// newarr[idx+1] = temp;
-				
+
 				// console.log('datas')
 				// console.log(item)
 				// console.log(idx)
 				console.log('px_down')
-				var idx_1=idx*1+1
-				Vue.set(that.datas, idx, that.datas[idx+1])
+				var idx_1 = idx * 1 + 1
+				Vue.set(that.datas, idx, that.datas[idx + 1])
 				Vue.set(that.datas, idx_1, temp)
-				
+
 			},
-			pro_edit(item,idx){
-				var that =this
+			pro_edit(item, idx) {
+				var that = this
 				console.log(item.type)
-				var edit_data={
-					idx:idx,
-					datas:item,
+				var edit_data = {
+					idx: idx,
+					datas: item,
 				}
 				that.edit_problem(edit_data)
-				if(item.type==3){
+				if (item.type == 3) {
 					uni.navigateTo({
-						url:'/pages/fabu_tiankong/fabu_tiankong?type=3'
+						url: '/pages/fabu_tiankong/fabu_tiankong?type=3'
 					})
-				}else if(item.type==5){
+				} else if (item.type == 5) {
 					uni.navigateTo({
-						url:'/pages/fabu_huadong/fabu_huadong?type=5'
+						url: '/pages/fabu_huadong/fabu_huadong?type=5'
 					})
-				}else{
+				} else {
 					uni.navigateTo({
-						url:'/pages/fabu_duoxuan/fabu_duoxuan?type='+item.type
+						url: '/pages/fabu_duoxuan/fabu_duoxuan?type=' + item.type
 					})
 				}
 			},
-			pro_del(idx){
-				var that =this
+			pro_del(idx) {
+				var that = this
 				uni.showModal({
 					title: '提示',
-					content:'是否确认删除此题？',
+					content: '是否确认删除此题？',
 					success: function(res) {
 						if (res.confirm) {
 							console.log('用户点击确定');
 							uni.showToast({
-								icon:'none',
-								title:'操作成功'
+								icon: 'none',
+								title: '操作成功'
 							})
-							that.datas.splice(idx,1)
+							that.datas.splice(idx, 1)
 						} else if (res.cancel) {
 							console.log('用户点击取消');
 						}
@@ -528,15 +913,15 @@
 				})
 			},
 			sub() {
-				var that =this
+				var that = this
 				console.log(this.datas)
-				if(!that.dy_title){
+				if (!that.dy_title) {
 					uni.showToast({
-						icon:'none',
-						title:'请输入调研标题'
+						icon: 'none',
+						title: '请输入调研标题'
 					})
 					return
-				}	
+				}
 				// if(!that.dy_explain){
 				// 	uni.showToast({
 				// 		icon:'none',
@@ -551,18 +936,18 @@
 				// 	})
 				// 	return
 				// }	
-				if(that.datas.length==0){
+				if (that.datas.length == 0) {
 					uni.showToast({
-						icon:'none',
-						title:'请添加问题'
+						icon: 'none',
+						title: '请添加问题'
 					})
 					return
 				}
-				var ls_data ={
-					dy_title:that.dy_title,
-					dy_explain:that.dy_explain,
-					dy_addition_explain:that.dy_addition_explain,
-					datas:that.datas,
+				var ls_data = {
+					dy_title: that.dy_title,
+					dy_explain: that.dy_explain,
+					dy_addition_explain: that.dy_addition_explain,
+					datas: that.datas,
 				}
 				this.setls_prodata(ls_data)
 				uni.showModal({
@@ -572,12 +957,13 @@
 							console.log('用户点击确定');
 							// #ifdef MP-WEIXIN
 							uni.navigateTo({
-								url: '../fabu2/fabu2'
+								url: '../fabu2/fabu2?id=' + that.id+'&qiyong_index='+that.qiyong_index
 							})
 							// #endif
 							// #ifdef H5
 							uni.navigateTo({
-								url: '../fabu3/fabu3?uid='+that.uid+'&uids='+that.uids
+								url: '../fabu3/fabu3?uid=' + that.uid + '&uids=' + that.uids + '&id=' +
+									that.id+'&qiyong_index='+that.qiyong_index
 							})
 							// #endif
 						} else if (res.cancel) {
@@ -590,10 +976,10 @@
 			jump(e) {
 				service.jump(e)
 			},
-			getimg(img){
+			getimg(img) {
 				return service.getimg(img)
 			},
-			pveimg(e){
+			pveimg(e) {
 				service.pveimg(e)
 			}
 		}
@@ -601,10 +987,11 @@
 </script>
 
 <style scoped>
-	.h_content{
+	.h_content {
 		background: #fff;
 		min-height: 100%;
 	}
+
 	.fabu_int {
 		width: 100%;
 		height: 94upx;
@@ -695,9 +1082,11 @@
 		line-height: 35upx;
 		color: #333;
 	}
-	.ans_v_text{
+
+	.ans_v_text {
 		margin-bottom: 15upx;
 	}
+
 	.ans_file {
 		display: flex;
 		flex-wrap: wrap;
@@ -804,19 +1193,24 @@
 	}
 
 	.sub_box {
-		width: 100%;
 		height: 160upx;
 		display: flex;
 		align-items: center;
-		justify-content: center;
+		justify-content: space-around;
 		position: fixed;
 		bottom: 0;
 		z-index: 800;
+		left: 0;
+		right: 0;
 		background: #fff;
+		padding: 0 30upx;
 	}
 
 	.sub_btn {
-		width: 603upx;
+		width: 100%;
+		/* #ifndef H5 */
+		width: 300upx;
+		/* #endif */
 		height: 80upx;
 		background: linear-gradient(90deg, #65AEE1, #326CFA);
 		box-shadow: 0px 0px 7upx 0px rgba(67, 130, 243, 0.1);

@@ -30,9 +30,19 @@
 			<image v-else src="/static/images/mysq_04.png" @tap="jump" data-url="../login_tel/login_tel?type=0" :data-login='false' :data-haslogin='hasLogin'></image>
 		</view>
 		<view class="my_list" >
-			<view v-if="fabu_status()" class="my_li" @tap="jump" data-url="../my_fabu/my_fabu?type=about" :data-login='false' :data-haslogin='hasLogin'>
+			<view class="my_li" @tap="jump" data-url="../my_msg/my_msg?type=about" :data-login='true' :data-haslogin='hasLogin'>
+				<view class="my_icon"><text class="iconfont icon-guanyuwomen"></text></view>
+				<view class="flex_1">我的信息</view>
+				<text class="iconfont icon-next-m"></text>
+			</view>
+			<view v-if="fabu_status()" class="my_li" @tap="jump" data-url="../my_fabu/my_fabu?type=about" :data-login='true' :data-haslogin='hasLogin'>
 				<view class="my_icon"><text class="iconfont icon-fabu"></text></view>
 				<view class="flex_1">我的发布</view>
+				<text class="iconfont icon-next-m"></text>
+			</view>
+			<view v-if="fabu_status()" class="my_li" @tap="jump" data-url="../my_caogao/my_caogao?type=about" :data-login='true' :data-haslogin='hasLogin'>
+				<view class="my_icon"><text class="iconfont icon-fabu"></text></view>
+				<view class="flex_1">我的草稿</view>
 				<text class="iconfont icon-next-m"></text>
 			</view>
 			<view class="my_li" @tap="jump" data-url="../about/about?type=about" :data-login='false' :data-haslogin='hasLogin'>

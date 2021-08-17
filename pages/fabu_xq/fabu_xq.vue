@@ -27,6 +27,23 @@
 			<input style="color: #333;" type="text" :disabled="true" :value="addition_explain">
 		</view>
 		<view class="problem_list">
+			<view class="con_box">
+				<view v-if="guding.length>0" class="con_box_tit">个人信息</view>
+				<block v-if="guding.length>0" v-for="(item,index) in guding">
+					<view class="my_msg_li dis_flex aic ju_b" v-if="item.type==3">
+						<text>{{item.problem.title}}</text>
+						<input class="flex_1" type="text"  placeholder="请输入" />
+					</view>
+					<picker style="width: 100%;" v-if="item.type==1" :range="item.answer" range-key="title" @change="set_op"
+						:data-idx="index">
+						<view class="my_msg_li dis_flex aic ju_b">
+							<text>{{item.problem.title}}</text>
+							<view class="flex_1 tar">请选择</view>
+							<text class="iconfont icon-next-m"></text>
+						</view>
+					</picker>
+				</block>
+			</view>
 			<view class="problem_li" v-for="(item,index) in datas">
 				<view class="problem_msg">
 					<view class="problem_tit">
@@ -105,7 +122,9 @@
 								<view>{{item.answer.min_text}}（{{item.answer.min_num}}）</view>
 								<view>{{item.answer.max_text}}（{{item.answer.max_num}}）</view>
 							</view>
-							<slider value="0" :min='item.answer.min_num' :max="item.answer.max_num" @change="sliderChange" :data-idx="index" activeColor="linear-gradient(-89deg, #65AEE1, #326CFA)"
+							<!-- <slider value="0" :min='item.answer.min_num' :max="item.answer.max_num" @change="sliderChange" :data-idx="index" activeColor="linear-gradient(-89deg, #65AEE1, #326CFA)"
+							 backgroundColor="#ECEBF1" block-color="#8A6DE9" block-size="10" :step="item.answer.step_size" /> -->
+							<slider value="0" :min='item.answer.min_num' :max="item.answer.max_num" @change="sliderChange" :data-idx="index" activeColor="#ECEBF1"
 							 backgroundColor="#ECEBF1" block-color="#8A6DE9" block-size="10" :step="item.answer.step_size" />
 							<view class="step_d">
 								<view class="step_d_li" style="left: 0;"><text>{{item.answer.min_num}}</text></view>
@@ -143,9 +162,13 @@
 				participation_man: '', //已经参与调研的人数
 				research_number: '', //调研次数（提交调研的次数）
 				create_time: '', //发布时间
+				guding:[]
 			}
 		},
 		onLoad(option) {
+			// #ifndef H5
+			this.guding=this.loginDatas.research_info
+			// #endif
 			if (option.id) {
 				this.id = option.id
 				this.getdata()
@@ -159,6 +182,14 @@
 		},
 		methods: {
 			...mapMutations(['setnew_problem']),
+			set_op(e) {
+				console.log(e.detail.value)
+				console.log(e.currentTarget.dataset.idx)
+				var ans_idx = e.detail.value
+				var idx = e.currentTarget.dataset.idx
+				Vue.set(that.guding[idx], 'option', that.guding[idx].answer[ans_idx].option)
+				Vue.set(that.guding[idx], 'option_text', that.guding[idx].answer[ans_idx].title)
+			},
 			get_hd(min_num,max_num){
 				// var arr=[
 				// 	min_num,
@@ -276,6 +307,7 @@
 						that.research_number = datas.research_number
 						that.create_time = datas.create_time
 						that.datas = datas.problem
+						that.guding = datas.fixation||''
 						console.log(datas)
 
 

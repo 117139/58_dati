@@ -68,8 +68,7 @@
 .user_tx.data-v-0be17cc6{
 	width: 138rpx;
 	height: 138rpx;
-	-webkit-border-radius: 50%;
-	        border-radius: 50%;
+	border-radius: 50%;
 	margin-right: 22rpx;
 }
 .user_name.data-v-0be17cc6{
@@ -163,8 +162,7 @@
 	width: 600rpx;
 	height: 302rpx;
 	background: #FFFFFF;
-	-webkit-border-radius: 20rpx;
-	        border-radius: 20rpx;
+	border-radius: 20rpx;
 }
 .fk_box .d1.data-v-0be17cc6{
 	font-size: 32rpx;

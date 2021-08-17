@@ -131,8 +131,25 @@
 			}
 
 		}
-	    
-       
+
+
+		, {
+			"path": "pages/my_caogao/my_caogao",
+			"style": {
+				"navigationBarTitleText": "我的草稿",
+				"enablePullDownRefresh": true
+			}
+
+		}
+	    ,{
+            "path" : "pages/my_msg/my_msg",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "我的信息",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"tabBar": {
 		"color": "#C4C9D5",
@@ -152,7 +169,7 @@
 	},
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "uni-app",
+		"navigationBarTitleText": "答题小程序",
 		"navigationBarBackgroundColor": "#fff",
 		"backgroundColor": "#F8F8F8"
 	}

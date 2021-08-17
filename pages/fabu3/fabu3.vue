@@ -71,6 +71,7 @@
 	export default {
 		data() {
 			return {
+				id:'',
 				// #ifdef h5
 				uid:'',
 				// #endif 
@@ -88,10 +89,192 @@
 				sm_ty: false,
 				dt_num: 0,
 				btnkg:0,
-				now_time:new Date()
+				now_time:new Date(),
+				qiyong_index:0,
+				guding: [
+					{
+						"type": "1",
+						"option": "",
+						"answer": [{
+							"img": [],
+							"title": "男",
+							"option": "A"
+						}, {
+							"img": [],
+							"title": "女",
+							"option": "B"
+						}],
+						"problem": {
+							"img": [],
+							"title": "性别"
+						}
+					}, {
+						"type": "3",
+						"option": "",
+						"problem": {
+							"title": "年龄"
+						}
+					}, {
+						"type": "1",
+						"option": "",
+						"answer": [{
+							"img": [],
+							"title": "是",
+							"option": "A"
+						}, {
+							"img": [],
+							"title": "否",
+							"option": "B"
+						}],
+						"problem": {
+							"img": [],
+							"title": "是否独生"
+						}
+					}, {
+						"type": "1",
+						"option": "",
+						"answer": [{
+							"img": [],
+							"title": "农村",
+							"option": "A"
+						}, {
+							"img": [],
+							"title": "乡镇",
+							"option": "B"
+						}, {
+							"img": [],
+							"title": "城市",
+							"option": "C"
+						}],
+						"problem": {
+							"img": [],
+							"title": "生源地"
+						}
+					}, {
+						"type": "3",
+						"option": "",
+						"problem": {
+							"title": "专业"
+						}
+					}, {
+						"type": "3",
+						"option": "",
+						"problem": {
+							"title": "年级"
+						}
+					}, {
+						"type": "3",
+						"option": "",
+						"problem": {
+							"title": "职业"
+						}
+					}, {
+						"type": "1",
+						"option": "",
+						"answer": [{
+							"img": [],
+							"title": "小学及以下",
+							"option": "A"
+						}, {
+							"img": [],
+							"title": "中学（含中职）",
+							"option": "B"
+						}, {
+							"img": [],
+							"title": "高中（含职高）",
+							"option": "C"
+						}, {
+							"img": [],
+							"title": "大学（含大专）",
+							"option": "D"
+						}, {
+							"img": [],
+							"title": "研究生及以上",
+							"option": "E"
+						}],
+						"problem": {
+							"img": [],
+							"title": "受教育程度"
+						}
+					}, {
+						"type": "1",
+						"option": "",
+						"answer": [{
+							"img": [],
+							"title": "小学及以下",
+							"option": "A"
+						}, {
+							"img": [],
+							"title": "中学（含中职）",
+							"option": "B"
+						}, {
+							"img": [],
+							"title": "高中（含职高）",
+							"option": "C"
+						}, {
+							"img": [],
+							"title": "大学（含大专）",
+							"option": "D"
+						}, {
+							"img": [],
+							"title": "研究生及以上",
+							"option": "E"
+						}],
+						"problem": {
+							"img": [],
+							"title": "父亲受教育程度"
+						}
+					}, {
+						"type": "1",
+						"option": "",
+						"answer": [{
+							"img": [],
+							"title": "小学及以下",
+							"option": "A"
+						}, {
+							"img": [],
+							"title": "中学（含中职）",
+							"option": "B"
+						}, {
+							"img": [],
+							"title": "高中（含职高）",
+							"option": "C"
+						}, {
+							"img": [],
+							"title": "大学（含大专）",
+							"option": "D"
+						}, {
+							"img": [],
+							"title": "研究生及以上",
+							"option": "E"
+						}],
+						"problem": {
+							"img": [],
+							"title": "母亲受教育程度"
+						}
+					}, {
+						"type": "3",
+						"option": "",
+						"problem": {
+							"title": "父亲职业"
+						}
+					}, {
+						"type": "3",
+						"option": "",
+						"problem": {
+							"title": "母亲职业"
+						}
+					},
+				],
 			}
 		},
 		onLoad(option) {
+			
+			this.id=option.id
+			this.qiyong_index=option.qiyong_index
+			// #ifndef H5
+			this.guding=this.loginDatas.research_info
+			// #endif
 			// #ifdef H5
 			
 			this.uid=option.uid
@@ -187,7 +370,9 @@
 						problem:JSON.stringify(that.ls_prodata.datas),
 						uids:that.ls_pro_yh,
 						dy_time_type:that.add_type,
-						sd_time:times
+						sd_time:times,
+						draft_id:that.id,
+						fixation:JSON.stringify(that.guding)
 					}
 				}else{ //随机
 					datas = {
@@ -207,7 +392,9 @@
 						dy_time_type:that.add_type,
 						sj_start_time:that.sj_time.start_time,
 						sj_end_time:that.sj_time.end_time,
-						sj_number:that.dt_num
+						sj_number:that.dt_num,
+						draft_id:that.id,
+						fixation:JSON.stringify(that.guding)
 					}
 				}
 				
@@ -216,7 +403,7 @@
 				// #ifdef H5
 				console.log(service.adminurl)
 				// jkurl =service.adminurl+'/research_papers.ResearchPapers/saveResearch'
-				var adminurl='https://datixcx.com.aa.800123456.top/admin/'
+				var adminurl=service.IPurl0+'admin/'
 				jkurl=adminurl+'/research_papers.ResearchPapers/saveResearch'
 				// #endif
 				if(this.btnkg==1){

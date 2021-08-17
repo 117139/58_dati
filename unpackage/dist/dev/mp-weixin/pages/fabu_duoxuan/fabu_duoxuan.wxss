@@ -30,8 +30,7 @@ page.data-v-1894b166{
 	height: 116rpx;
 	background: #FFFFFF;
 	border: 1px solid #D8DADE;
-	-webkit-border-radius: 4rpx;
-	        border-radius: 4rpx;
+	border-radius: 4rpx;
 	padding: 10rpx;
 	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
@@ -53,8 +52,7 @@ page.data-v-1894b166{
 	background: linear-gradient(90deg, #65AEE1, #326CFA);
 	-webkit-box-shadow: 0px 0px 7rpx 0px rgba(67, 130, 243, 0.1);
 	        box-shadow: 0px 0px 7rpx 0px rgba(67, 130, 243, 0.1);
-	-webkit-border-radius: 40rpx;
-	        border-radius: 40rpx;
+	border-radius: 40rpx;
 	display: -webkit-box;
 	display: -webkit-flex;
 	display: flex;

@@ -9,6 +9,10 @@
 					<view class="fabu_time" v-html="item.create_time"></view>
 				</view>
 				<view class="fabu_btn" @tap.stop="fabu_del(item,index)">取消发布</view>
+				<view v-if="item.is_share_survey==2" class="fabu_btn" style="position: relative;" @tap.stop="test()">
+						<button type="default" open-type="share" :data-id="item.id" style="position: absolute;top: 0;opacity: 0;width: 100%;height: 100%;"></button>
+					分享答题
+				</view>
 			</view>
 			<view v-if="datas.length==0" class="zanwu">暂无数据</view>
 		</view>
@@ -45,13 +49,42 @@
 		onLoad() {
 			this.onRetry()
 		},
+		/**
+		 * 用户点击右上角分享
+		 */
+		onShareAppMessage(res) {
+		
+			if (res.from === 'button') {
+				console.log(res.target.dataset.type)
+				// this.setData({
+				// 	sharetype:'share'
+				// })
+			}
+			
+			return {
+				// title: '',
+				path: '/pages/dati/dati?id=' + res.target.dataset.id,
+				success: function(res) {
+					console.log('成功', res)
+				}
+			}
+		},
 		onShow(){
 			if(this.show_count>0){
 				this.onRetry()
 			}
 			this.show_count++
 		},
+		onPullDownRefresh() {
+			this.onRetry()
+		},
+		onReachBottom() {
+			this.getdata()
+		},
 		methods: {
+			test(){
+				
+			},
 			onRetry(){
 				this.page=1
 				this.data_last=false
